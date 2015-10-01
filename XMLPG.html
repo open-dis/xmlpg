@@ -1,0 +1,513 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>XMLPG</title>
+</head>
+<body>
+<div style="text-align: center;">XML Multi-Language Protocol Generator<br>
+</div>
+<br>
+<span style="font-weight: bold;">Introduction</span><br>
+<br>
+XML Multi-Language Protocol Generator uses an abstract, XML language
+description of Protocol Data Units to quickly generate Java and C++
+language protocol implementations that can match existing binary
+protocols. <br>
+<br>
+The user writes a simple, XML-based description of the protocol data
+units, including the names and types of the protocol elements. XMLPG
+generates Java and C++ language classes with getters, setters,
+constructors, and marshaling and unmarshaling code.<br>
+<br>
+The XML fragment below provides an abstract definition of a protocol
+class:<br>
+<br>
+<div style="margin-left: 40px;"><small><span
+ style="font-family: courier;">&lt;class name="EntityID"
+inheritsFrom="root" comment="The identifier for entities in a DIS
+world. It consists of three unsigned short values, which together are
+unique."&gt;</span></small><br style="font-family: courier;">
+<br style="font-family: courier;">
+<small><span style="font-family: courier;">&nbsp;&lt;attribute
+name="application" comment="The application ID"&gt;</span></small><br
+ style="font-family: courier;">
+<small><span style="font-family: courier;">&nbsp; &lt;primitive
+type="unsigned short"/&gt;</span></small><br
+ style="font-family: courier;">
+<small><span style="font-family: courier;">&nbsp;&lt;/attribute&gt;</span></small><br
+ style="font-family: courier;">
+<small><span style="font-family: courier;">&nbsp;</span></small><br
+ style="font-family: courier;">
+<small><span style="font-family: courier;">&nbsp;&lt;attribute
+name="site" comment="The site ID"&gt;</span></small><br
+ style="font-family: courier;">
+<small><span style="font-family: courier;">&nbsp;&nbsp; &lt;primitive
+type="unsigned short"/&gt;</span></small><br
+ style="font-family: courier;">
+<small><span style="font-family: courier;">&nbsp;&lt;/attribute&gt;</span></small><br
+ style="font-family: courier;">
+<small><span style="font-family: courier;">&nbsp;</span></small><br
+ style="font-family: courier;">
+<small><span style="font-family: courier;">&nbsp;&lt;attribute
+name="entity" comment="the entity ID"&gt;</span></small><br
+ style="font-family: courier;">
+<small><span style="font-family: courier;">&nbsp;&nbsp; &lt;primitive
+type="unsigned short"/&gt;</span></small><br
+ style="font-family: courier;">
+<small><span style="font-family: courier;">&nbsp;&lt;/attribute&gt;</span></small><br
+ style="font-family: courier;">
+<small><span style="font-family: courier;">&nbsp;</span></small><br
+ style="font-family: courier;">
+<small><span style="font-family: courier;">&lt;/class&gt;</span></small><br>
+</div>
+<br>
+<div style="text-align: center;"><span style="font-weight: bold;">Figure
+1. XML Protocol Class Description</span><br>
+</div>
+<br>
+XMLPG reads this XML and generates an abstract description of the
+class. This abstract description is compiled to Java and C++ classes. A
+fragment of the Java class generated is below in Figure 2:<br>
+<br>
+<div style="margin-left: 40px;"><small><span
+ style="font-family: courier new,courier,monospace;">/**</span></small><br
+ style="font-family: courier new,courier,monospace;">
+<small><span style="font-family: courier new,courier,monospace;">&nbsp;*
+The
+identifier for entities in a DIS world. It consists of three unsigned
+short values, which together are unique.</span></small><br
+ style="font-family: courier new,courier,monospace;">
+&nbsp;
+<small><span style="font-family: courier new,courier,monospace;">*/</span></small><br>
+</div>
+<div style="margin-left: 40px;"><small><span
+ style="font-family: courier new,courier,monospace;">public class
+EntityID extends Object</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">{</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+/** The application ID */</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+protected int&nbsp; application; </span><br
+ style="font-family: courier new,courier,monospace;">
+<br style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+/** The site ID */</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+protected int&nbsp; site; </span><br
+ style="font-family: courier new,courier,monospace;">
+<br style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+/** the entity ID */</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+protected int&nbsp; entity; </span><br
+ style="font-family: courier new,courier,monospace;">
+<br style="font-family: courier new,courier,monospace;">
+<br style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">public void
+setApplication(int pApplication)</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">{ application
+= pApplication;</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">}</span><br
+ style="font-family: courier new,courier,monospace;">
+<br style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">public int
+getApplication()</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">{ return
+application; }</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">}</span></small><br>
+</div>
+<br>
+<div style="text-align: center;"><span style="font-weight: bold;">Figure
+2. Java Language Class Created by XMLPG</span><br>
+</div>
+<br>
+A fragment of the C++ header file generated is below in Figure 3:<br>
+<br>
+<div style="margin-left: 40px;"><small><span
+ style="font-family: courier new,courier,monospace;">class
+XML_DIS_EXPORT EntityID</span></small><br
+ style="font-family: courier new,courier,monospace;">
+<small><span style="font-family: courier new,courier,monospace;">{</span></small><br
+ style="font-family: courier new,courier,monospace;">
+<small><span style="font-family: courier new,courier,monospace;">public:</span></small><br
+ style="font-family: courier new,courier,monospace;">
+<small><span style="font-family: courier new,courier,monospace;">&nbsp;
+unsigned short application;&nbsp; // The application ID</span></small><br
+ style="font-family: courier new,courier,monospace;">
+<small><span style="font-family: courier new,courier,monospace;">&nbsp;
+unsigned short site;&nbsp; // The site ID</span></small><br
+ style="font-family: courier new,courier,monospace;">
+<small><span style="font-family: courier new,courier,monospace;">&nbsp;
+unsigned short entity;&nbsp; // the entity ID</span></small><br
+ style="font-family: courier new,courier,monospace;">
+<br style="font-family: courier new,courier,monospace;">
+<small><span style="font-family: courier new,courier,monospace;">&nbsp;public:</span></small><br
+ style="font-family: courier new,courier,monospace;">
+<small><span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;
+EntityID();</span></small><br
+ style="font-family: courier new,courier,monospace;">
+<small><span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;
+~EntityID();</span></small><br
+ style="font-family: courier new,courier,monospace;">
+<br style="font-family: courier new,courier,monospace;">
+<small><span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;
+unsigned short getApplication() const; </span></small><br
+ style="font-family: courier new,courier,monospace;">
+<small><span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;
+void setApplication(unsigned short x); </span></small><br>
+</div>
+<br>
+<div style="text-align: center;"><span style="font-weight: bold;">Figure
+3. C++ Language Class Generated by XMLPG</span><br>
+</div>
+<br>
+As can be seen, the XML description acts as a template for the
+generation of the Java and C++ programming language classes. The code
+appropriate to each language, including marshaling and unmarshaling
+code, is generated by XMLPG. The programmer can then compile the
+generated code.<br>
+<br>
+XMLPG is an open source project with a BSD license.<br>
+<br>
+<span style="font-weight: bold;">XML Description Language</span><br>
+<br>
+The XML syntax used to describe the protocol is relatively simple. The
+objective is to be able to describe either completly new protocols, or
+match an existing binary protocol, such as Distributed Interactive
+Simulation (DIS). The abstract XML description should be much easier,
+faster, and with generate fewer errors than writing the code to
+implement the protocol from scratch. New languages, if desired, can be
+added fairly easily.<br>
+<br>
+The <span style="font-family: courier new,courier,monospace;">&lt;classes&gt;</span>
+tag encloses one or more class descriptions.<br>
+<br>
+The <span style="font-family: courier new,courier,monospace;">&lt;class&gt;
+</span>tag is used to describe one class in the protocol.<br>
+<br>
+<span style="font-family: courier new,courier,monospace;">&lt;class
+name="Pdu" inheritsFrom="root" comment="The superclass for all PDUs"&gt;</span><br>
+<br>
+In this case the Java and C++ class generated will be named Pdu and
+inherit from Object in the case of Java and nothing in the case of C++.
+A class can also inherit from another class defined in the XML file:<br>
+<br>
+<span style="font-family: courier new,courier,monospace;">&lt;class
+name="FirePdu" inheritsFrom="Pdu" comment="Information about someone
+firing something"&gt;</span><br>
+<br>
+In this case the FirePdu will inherit from Pdu. The comment tag is
+optional; it will be included as a javadoc class comment or C++ comment.<br>
+<br>
+The class tag contains one or more attribute tags. The attribute tags
+describe one field of the PDU. The simplest sort of attribute is a
+primitive, which corresponds to a programming language primitive type.<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp; <span
+ style="font-family: courier new,courier,monospace;">&lt;attribute
+name="quantity" comment="how many"&gt;</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&lt;primitive type="unsigned short"/&gt;</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;
+&lt;/attribute&gt;</span><br>
+<br>
+The attribute will cause a programming language instance variable to be
+created in the class. The ivar will appear in the same order as which
+it appears in the XML document. This is important for marshaling and
+unmarshaling. If you are reverse-engineering an existing protocol you
+should have attribute tags in exactly the same order in which the
+appear in the protocol.<br>
+<br>
+There are four basic types of attributes: primitives, references to
+other classes defined in the same document, fixed lists (or arrays),
+and variable lists. Each of these are described below.<br>
+<br>
+<span style="font-weight: bold;">Primitive Types.</span> These
+correspond to programming language primitive types.&nbsp; Legal values
+for these programming types include unsigned byte, unsigned short,
+unsigned int, long, byte, short, int, float, and double. The syntax for
+a primitive attribute description is as above.<br>
+<br>
+<span style="font-weight: bold;">Class References</span>. A class may
+include other classes, for example an EntityStatePdu including a
+EntityID object as one of its attributes. This is very similar to
+describing a primitive type:<br>
+<br>
+<span style="font-family: courier new,courier,monospace;">&lt;attribute
+name="entityID" comment="Uniquely identifies an entity in the world"&gt;</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+&lt;classRef name="EntityID"/&gt;</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;
+&lt;/attribute&gt;</span><br>
+<br>
+The name attribute must contain the name of another class defined in
+the XML file. Getter and setter methods will be generated for the
+attribute, and the attribute will be marshaled and unmarshaled. In this
+case the name of the attribute is "entityID" and the class is of the
+type is "EntityID" (note capitalization).&nbsp; The C++ ivar, getter
+and setter declarations look like this:<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span
+ style="font-family: courier new,courier,monospace;"> EntityID
+entityID;&nbsp; // Uniquely identifies an entity in the world</span><br
+ style="font-family: courier new,courier,monospace;">
+<br style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;
+EntityID&amp; getEntityID(); </span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;
+const EntityID&amp;&nbsp; getEntityID() const; </span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;
+void setEntityID(EntityID&nbsp;&nbsp;&nbsp; &amp;x);</span><br>
+<br>
+The java code generated looks like this:<br>
+<br>
+<span style="font-family: courier new,courier,monospace;">/** Uniquely
+identifies an entity in the world */</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+protected EntityID&nbsp; entityID = new EntityID(); </span><br
+ style="font-family: courier new,courier,monospace;">
+<br style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">public void
+setEntityID(EntityID pEntityID)</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">{ entityID =
+pEntityID;</span><br style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">}</span><br
+ style="font-family: courier new,courier,monospace;">
+<br style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">public
+EntityID getEntityID()</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">{ return
+entityID; }</span><br>
+<br>
+<br>
+<br>
+<span style="font-weight: bold;">Fixed List.</span>&nbsp; This
+corresponds to an array. The tags are as below:<br>
+<br>
+<span style="font-family: courier new,courier,monospace;">&lt;attribute
+name="marking"&gt;</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+&lt;list type="fixed" length="12"&gt;</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;
+&lt;primitive type="byte"/&gt;</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+&lt;/list&gt;</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&lt;/attribute&gt;</span><br>
+<br>
+The list tag defines a fixed length, which is used to generate an array
+in the source code. The list tag encloses either a primitive type or a
+classref field.<br>
+<br>
+The C++ code generated looks like this:<br>
+<br>
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;
+char marking[12];</span><br
+ style="font-family: courier new,courier,monospace;">
+<br style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;
+char*&nbsp; getMarking(); </span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;
+const char*&nbsp; getMarking() const; </span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;
+void setMarking( char*&nbsp;&nbsp;&nbsp; x);</span><br>
+<br>
+And the Java code like this:<br>
+<br>
+&nbsp;<span style="font-family: courier new,courier,monospace;">protected
+byte[]&nbsp; marking = new byte[12]; </span><br
+ style="font-family: courier new,courier,monospace;">
+<br style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">public void
+setMarking(byte[] pMarking)</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">{ marking =
+pMarking;</span><br style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">}</span><br
+ style="font-family: courier new,courier,monospace;">
+<br style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">public byte[]
+getMarking()</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">{ return
+marking; }</span><br>
+<br>
+<br>
+<span style="font-weight: bold;">Variable List</span> While fixed
+lists&nbsp; are always the same length, variable lists may&nbsp; have
+more or fewer list elements, and are implemented as vectors that can
+grow or shrink. Variable lists must be tied to an attribute field that
+is used to determine how many elements are in the lists. This is needed
+for unmarshaling; when processing a binary format packet we must know
+how many elements of the list to read.<br>
+<br>
+&nbsp;<span style="font-family: courier new,courier,monospace;">&lt;attribute
+name="articulationParameters" comment="variable length list of
+articulation parameters"&gt;</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+&lt;list type="variable" countFieldName="articulationParameterCount"&gt;</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;
+&lt;classRef name="ArticulationParameter"/&gt;</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+&lt;/list&gt; </span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&lt;/attribute&gt;</span><br>
+<br>
+<br>
+This specifies a field called "articulationParameters" that has a
+variable number of ArticulationParameter objects in it. The number of
+objects should be held in the field called
+"articulationParameterCount". During the unmarshaling process that
+field will be read and the value used to read that many
+ArticulationParameter objects. This means that the number of
+articulation parameters specified in articulationParameterCount should
+be current at the time the PDU is marshaled.<br>
+<br>
+<span style="font-weight: bold;">Marshaling and Unmarshaling</span><br>
+<br>
+The classes with get and set methods implements much of the code.
+However, a network protocol requires that these classes be able to
+marshal and unmarshal (aka serialize and deserialize) themselves to the
+network as PDUs. XMLPG is able to do this automatically. The order in
+which the ivars are marshaled and unmarshaled is determined by the
+order in which they appear in the XML description document. An example
+marshal method for the DIS Entity State PDU is shown below. All this
+code is generated automatically. Note that because ESPDU inherits from
+PDU the marshal method in the superclass is called first. Then each of
+the ivars is marshaled, in order. Primitive types are written directly,
+and embedded objects have their marshal method called.&nbsp; A similar
+method is generated to unmarshal the class from the network.<br>
+<br>
+<div style="margin-left: 40px;"><span
+ style="font-family: courier new,courier,monospace;">public void
+marshal(DataOutputStream dos)</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">{</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;
+super.marshal(dos);</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;try </span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;
+{</span><br style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; entityID.marshal(dos);</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; dos.writeByte( (byte)forceId);</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; dos.writeByte( (byte)articulationParameterCount);</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; entityType.marshal(dos);</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; alternativeEntityType.marshal(dos);</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; entityLinearVelocity.marshal(dos);</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; entityLocation.marshal(dos);</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; entityOrientation.marshal(dos);</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; dos.writeInt( (int)entityAppearance);</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; deadReckoningParameters.marshal(dos);</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; for(int idx = 0; idx &lt; marking.length; idx++)</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; {</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; dos.writeByte(marking[idx]);</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; } // end of array marshaling</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; dos.writeInt( (int)capabilities);</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; for(int idx = 0; idx &lt;
+articulationParameters.size(); idx++)</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; {</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; ArticulationParameter aArticulationParameter =
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+(ArticulationParameter)articulationParameters.get(idx);</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+aArticulationParameter.marshal(dos);</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; } // end of list marshalling</span><br
+ style="font-family: courier new,courier,monospace;">
+<span style="font-family: courier new,courier,monospace;">&nbsp;&nbsp;&nbsp;
+} // end try <br>
+<br>
+</span></div>
+Similar code is generated for the C++ implementation.<br>
+<br>
+<br>
+<span style="font-weight: bold;">Example: Distributed Interactive
+Simulation</span><br>
+<br>
+As a test case parts of the IEEE DIS standard have been described using
+XMLPG.&nbsp; This is in the file DIS.xml. Using this XML file java and
+C++ language files were generated and placed in the cpp and java
+directories of DIS. The Java source code is compiled via the ant build
+file with the <span style="font-family: Courier New,Courier,monospace;">ant
+compileDis</span> command.<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>
