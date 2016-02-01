@@ -321,7 +321,7 @@ public class JavaGenerator extends Generator
           {
               pw.println(" * " + aClass.getClassComments());
               pw.println(" *");
-              pw.println(" * Copyright (c) 2008-2014, MOVES Institute, Naval Postgraduate School. All rights reserved.");
+              pw.println(" * Copyright (c) 2008-2016, MOVES Institute, Naval Postgraduate School. All rights reserved.");
               pw.println(" * This work is licensed under the BSD open source license, available at https://www.movesinstitute.org/licenses/bsd.html");
               pw.println(" *");
               pw.println(" * @author DMcG");
@@ -370,9 +370,14 @@ public class JavaGenerator extends Generator
            pw.println();
         }
         List ivars = aClass.getClassAttributes();
+        
+        System.out.println("Ivars for class: " + aClass.getName());
+        
         for(int idx = 0; idx < ivars.size(); idx++)
         {
             ClassAttribute anAttribute = (ClassAttribute)ivars.get(idx);
+            
+            System.out.println("  Instance variable: " + anAttribute.getName() + " Attribute type:" + anAttribute.getAttributeKind());
             
             // This attribute is a primitive. 
             if(anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE)

@@ -629,27 +629,12 @@ public class Xmlpg
                 }
             }
             
-            // A list element, of either fixed length (generally an array) or variable length (a list of some sort).
-            if(qName.compareToIgnoreCase("list") == 0)
+            // A variable lenght list attribute (a list of some sort).
+            if(qName.compareToIgnoreCase("variablelist") == 0)
             {
+                currentClassAttribute.setAttributeKind(ClassAttribute.ClassAttributeType.VARIABLE_LIST);
                 for(int idx = 0; idx < attributes.getLength(); idx++)
                 {
-                    //System.out.println("list attribute name: " + attributes.getQName(idx));
-                    
-                    if(attributes.getQName(idx).compareToIgnoreCase("type") == 0)
-                    {
-                        String listType = attributes.getValue(idx);
-                        
-                        if(listType.equalsIgnoreCase("fixed"))
-                        {
-                            currentClassAttribute.setAttributeKind(ClassAttribute.ClassAttributeType.FIXED_LIST);
-                        }
-                        if(listType.equalsIgnoreCase("variable"))
-                        {
-                            currentClassAttribute.setAttributeKind(ClassAttribute.ClassAttributeType.VARIABLE_LIST);
-                        }
-                    } // end of type
-                    
                     // Variable list length fields require a name of another field that contains how many
                     // there are. This is used in unmarshalling.
                     if(attributes.getQName(idx).equalsIgnoreCase("countFieldName"))
@@ -682,6 +667,18 @@ public class Xmlpg
                         
                     }
                     
+                }
+            }
+                
+            
+            // A list element, of either fixed length (generally an array) or variable length (a list of some sort).
+            if(qName.compareToIgnoreCase("fixedlist") == 0)
+            {
+                currentClassAttribute.setAttributeKind(ClassAttribute.ClassAttributeType.FIXED_LIST);
+                
+                for(int idx = 0; idx < attributes.getLength(); idx++)
+                {
+                  
                     if(attributes.getQName(idx).equalsIgnoreCase("couldBeString"))
                     {
                         String val = attributes.getValue(idx);
