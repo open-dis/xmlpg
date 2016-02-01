@@ -60,7 +60,7 @@ public class JavaGenerator extends Generator
             String clUseHibernate = systemProperties.getProperty("xmlpg.useHibernate");
             String clUseJaxb = systemProperties.getProperty("xmlpg.useJaxb");
             String clDirectory = systemProperties.getProperty("xmlpg.generatedSourceDir");
-            System.out.println("clDirectory=" + clDirectory);
+            //System.out.println("clDirectory=" + clDirectory);
             String clPackage = systemProperties.getProperty("xmlpg.package");
 
             //System.out.println("System properties: " + systemProperties);
@@ -231,6 +231,8 @@ public class JavaGenerator extends Generator
 		pw.flush();
         this.writeGettersAndSetters(pw, aClass);
 		pw.flush();
+        this.writeBitflagMethods(pw, aClass);
+                pw.flush();
         this.writeMarshalMethod(pw, aClass);
 		pw.flush();
         this.writeUnmarshallMethod(pw, aClass);
@@ -371,13 +373,13 @@ public class JavaGenerator extends Generator
         }
         List ivars = aClass.getClassAttributes();
         
-        System.out.println("Ivars for class: " + aClass.getName());
+        //System.out.println("Ivars for class: " + aClass.getName());
         
         for(int idx = 0; idx < ivars.size(); idx++)
         {
             ClassAttribute anAttribute = (ClassAttribute)ivars.get(idx);
             
-            System.out.println("  Instance variable: " + anAttribute.getName() + " Attribute type:" + anAttribute.getAttributeKind());
+            //System.out.println("  Instance variable: " + anAttribute.getName() + " Attribute type:" + anAttribute.getAttributeKind());
             
             // This attribute is a primitive. 
             if(anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE)
@@ -813,6 +815,86 @@ public class JavaGenerator extends Generator
         } // End of loop trough writing getter/setter methods
         
     }
+    
+    /**
+     * Some fields have integers with bit fields defined, eg an integer where 
+     * bits 0-2 represent some value, while bits 3-4 represent another value, 
+     * and so on. This writes accessor and mutator methods for those fields.
+     * 
+     * @param pw
+     * @param aClass 
+     */
+    private void writeBitflagMethods(PrintWriter pw, GeneratedClass aClass)
+    {
+        List attributes = aClass.getClassAttributes();
+        
+        for(int idx = 0; idx < attributes.size(); idx++)
+        {
+            ClassAttribute anAttribute = (ClassAttribute)attributes.get(idx);
+           
+            
+            switch(anAttribute.getAttributeKind())
+            {
+                
+                // Anything with bitfields must be a primitive type
+                case PRIMITIVE:
+                    
+                    List bitfields = anAttribute.bitFieldList;
+                    String attributeType = types.getProperty(anAttribute.getType());
+                    String bitfieldIvarName = anAttribute.getName();
+   
+                    for(int jdx = 0; jdx < bitfields.size(); jdx++)
+                    {
+                        BitField bitfield = (BitField)bitfields.get(jdx);
+                        String capped = this.initialCap(bitfield.name);
+                        String cappedIvar = this.initialCap(bitfieldIvarName);
+                        int shiftBits = super.getBitsToShift(anAttribute, bitfield.mask);
+                        
+                        // write getter
+                        pw.println();
+                        if(bitfield.comment != null)
+                        {
+                            pw.println( "/**\n * " + bitfield.comment + "\n */");
+                        }
+                        
+                        pw.println("public int get" + cappedIvar + "_" + bitfield.name + "()");
+                        pw.println("{");
+                        
+                        
+                        pw.println("    " + attributeType + " val = (" + attributeType + ")(this." + bitfield.parentAttribute.getName() + "   & " + "(" + attributeType + ")" + bitfield.mask + ");");
+                        pw.println("    return (int)(val >> " + shiftBits + ");");
+                        pw.println("}\n");
+                        
+                        // Write the setter/mutator
+                        
+                        pw.println();
+                        if(bitfield.comment != null)
+                        {
+                            pw.println( "/** \n * " + bitfield.comment + "\n */");
+                        }
+                        pw.println("public void set" + cappedIvar + "_" + bitfield.name + "(int val)");
+                        pw.println("{");
+                        pw.println("    " + attributeType + " " + " aVal = 0;");
+                        pw.println("    this." + bitfield.parentAttribute.getName() + " &= (" + attributeType + ")(~" + bitfield.mask + "); // clear bits");
+                        pw.println("    aVal = (" + attributeType + ")(val << " + shiftBits + ");");
+                        pw.println("    this." + bitfield.parentAttribute.getName() + " = (" + attributeType + ")(this." + bitfield.parentAttribute.getName() + " | aVal);" );
+                        pw.println("}\n");
+                    }
+                    
+                    break;
+                    
+                default:
+                    bitfields = anAttribute.bitFieldList;
+                    if(!bitfields.isEmpty())
+                    {
+                        System.out.println("Attempted to use bit flags on a non-primitive field");
+                        System.out.println( "Field: " + anAttribute.getName() );
+                    }
+            }
+        
+        }
+    }
+    
     
     private void writeMarshalMethod(PrintWriter pw, GeneratedClass aClass)
     {

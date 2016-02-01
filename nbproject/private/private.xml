@@ -2,6 +2,12 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/Users/mcgredo/foo/xmlpg/src/edu/nps/moves/xmlpg/Generator.java</file>
+            <file>file:/Users/mcgredo/foo/xmlpg/build.xml</file>
+            <file>file:/Users/mcgredo/foo/xmlpg/src/edu/nps/moves/xmlpg/JavaGenerator.java</file>
+            <file>file:/Users/mcgredo/foo/xmlpg/src/edu/nps/moves/xmlpg/CsharpGenerator.java</file>
+            <file>file:/Users/mcgredo/foo/xmlpg/src/edu/nps/moves/xmlpg/Xmlpg.java</file>
+        </group>
     </open-files>
 </project-private>

@@ -373,7 +373,7 @@ public class Xmlpg
                 {
                     javaProperties.setProperty(attributes.getQName(idx), attributes.getValue(idx));
                 }
-                System.out.println("Got java properties of " + javaProperties);
+               // System.out.println("Got java properties of " + javaProperties);
             }
             
             // c++ element--place all the attributes and values into a property list
