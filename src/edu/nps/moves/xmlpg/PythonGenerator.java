@@ -284,7 +284,10 @@ public class PythonGenerator extends Generator
             
             // Some fields may be declared but shouldn't be serialized
             if(anAttribute.shouldSerialize == false)
+            {
+                pw.println(INDENT + INDENT + "# attribute " + anAttribute.getName() + " marked as do not serialize");
                 continue;
+            }
             
             switch(anAttribute.getAttributeKind())
             {
@@ -379,7 +382,10 @@ public class PythonGenerator extends Generator
             // Some fields may be declared but should not be serialized or
             // unserialized
             if(anAttribute.shouldSerialize == false)
+            {
+                pw.println(INDENT + INDENT + "# attribute " + anAttribute.getName() + " marked as do not serialize");
                 continue;
+            }
             
             switch(anAttribute.getAttributeKind())
             {

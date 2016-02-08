@@ -342,6 +342,12 @@ public class JavascriptGenerator extends Generator
         {
             ClassAttribute anAttribute = (ClassAttribute)allAttributes.get(idx);
             
+            // Some attributes can be marked as do-not-marshal
+            if(anAttribute.shouldSerialize == false)
+            {
+                pw.println("    // attribute " + anAttribute.getName() + " marked as not serialized");
+                continue;
+            }
             // Write out a method call to deserialize a primitive type
             if(anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE)
             {
@@ -456,6 +462,13 @@ public class JavascriptGenerator extends Generator
         for(int idx = 0; idx < allAttributes.size(); idx++)
         {
             ClassAttribute anAttribute = (ClassAttribute)allAttributes.get(idx);
+            
+            // Some attributes can be marked as do-not-marshal
+            if(anAttribute.shouldSerialize == false)
+            {
+                 pw.println("    // attribute " + anAttribute.getName() + " marked as not serialized");
+                 continue;
+            }
             
             // Write out a method call to deserialize a primitive type
             if(anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE)

@@ -379,6 +379,12 @@ public class JavaGenerator extends Generator
         {
             ClassAttribute anAttribute = (ClassAttribute)ivars.get(idx);
             
+            if(anAttribute.shouldSerialize == false)
+            {
+                 pw.println("    // attribute " + anAttribute.getName() + " marked as not serialized");
+                 continue;
+            }
+            
             //System.out.println("  Instance variable: " + anAttribute.getName() + " Attribute type:" + anAttribute.getAttributeKind());
             
             // This attribute is a primitive. 
@@ -922,6 +928,12 @@ public class JavaGenerator extends Generator
         for(int idx = 0; idx < ivars.size(); idx++)
         {
             ClassAttribute anAttribute = (ClassAttribute)ivars.get(idx);
+            
+            if(anAttribute.shouldSerialize == false)
+            {
+                 pw.println("    // attribute " + anAttribute.getName() + " marked as not serialized");
+                 continue;
+            }
         
             // Write out a method call to serialize a primitive type
             if(anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE)
@@ -1048,6 +1060,12 @@ public class JavaGenerator extends Generator
         {
             ClassAttribute anAttribute = (ClassAttribute)ivars.get(idx);
             
+            if(anAttribute.shouldSerialize == false)
+            {
+                 pw.println("    // attribute " + anAttribute.getName() + " marked as not serialized");
+                 continue;
+            }
+            
             // Write out a method call to deserialize a primitive type
             if(anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE)
             {
@@ -1173,6 +1191,12 @@ public class JavaGenerator extends Generator
         {
             ClassAttribute anAttribute = (ClassAttribute)ivars.get(idx);
 
+            if(anAttribute.shouldSerialize == false)
+            {
+                 pw.println("    // attribute " + anAttribute.getName() + " marked as not serialized");
+                 continue;
+            }
+            
             // Write out a method call to serialize a primitive type
             if(anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE)
             {
@@ -1322,6 +1346,12 @@ public class JavaGenerator extends Generator
         {
             ClassAttribute anAttribute = (ClassAttribute)ivars.get(idx);
 
+            if(anAttribute.shouldSerialize == false)
+            {
+                 pw.println("    // attribute " + anAttribute.getName() + " marked as not serialized");
+                 continue;
+            }
+            
             // Write out a method call to deserialize a primitive type
             if(anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE)
             {
@@ -1687,6 +1717,12 @@ public class JavaGenerator extends Generator
         for(int idx = 0; idx < ivars.size(); idx++)
         {
             ClassAttribute anAttribute = (ClassAttribute)ivars.get(idx);
+    
+            if(anAttribute.shouldSerialize == false)
+            {
+                 pw.println("    // attribute " + anAttribute.getName() + " marked as not serialized");
+                 continue;
+            }
         
             // Write out a method call to serialize a primitive type
             if(anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE)

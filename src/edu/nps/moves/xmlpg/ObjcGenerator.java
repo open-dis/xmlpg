@@ -487,6 +487,12 @@ public void writeMarshalMethod(PrintWriter pw, GeneratedClass aClass)
         {
             ClassAttribute anAttribute = (ClassAttribute)aClass.getClassAttributes().get(idx);
 
+            if(anAttribute.shouldSerialize == false)
+            {
+                pw.println("     // attribute " + anAttribute.getName() + " marked as do not serialize");
+                continue;
+            }
+            
             // Write out the code to marshal this, depending on the type of attribute
 
             if(anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE)
@@ -591,6 +597,12 @@ public void writeUnmarshalMethod(PrintWriter pw, GeneratedClass aClass)
     {
         ClassAttribute anAttribute = (ClassAttribute)aClass.getClassAttributes().get(idx);
 
+        if(anAttribute.shouldSerialize == false)
+        {
+             pw.println("     // attribute " + anAttribute.getName() + " marked as do not serialize");
+             continue;
+        }
+        
         // Write out the code to marshal this, depending on the type of attribute
 
         if(anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE)

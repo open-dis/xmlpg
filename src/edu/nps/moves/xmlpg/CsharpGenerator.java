@@ -21,6 +21,8 @@ import java.util.StringTokenizer;
  */
 public class CsharpGenerator extends Generator {
 
+    protected boolean useDotNet = true;
+    
     /** Maps the primitive types listed in the XML file to the C# types */
     Properties types = new Properties();
 
@@ -78,6 +80,12 @@ public class CsharpGenerator extends Generator {
         
 
         super.setDirectory(pCsharpProperties.getProperty("directory"));
+        
+        String dotNet = pCsharpProperties.getProperty("useDotNet");
+        if(dotNet.equalsIgnoreCase("false"))
+            useDotNet = false;
+            
+                
 
         // Set up a mapping between the strings used in the XML file and the strings used
         // in the C# file, specifically the data types. This could be externalized to
@@ -347,10 +355,13 @@ public class CsharpGenerator extends Generator {
         // Class declaration
         String parentClass = aClass.getParentClass();
 
-        // Added serializable attribute, additional tags will be needed for non-serializable and
-        // if XML serialization will be used
-        pw.println(indent, "[Serializable]");
-        pw.println(indent, "[XmlRoot]");	// PES added for XML compatiblity
+        if(useDotNet)
+        {
+            // Added serializable attribute, additional tags will be needed for non-serializable and
+            // if XML serialization will be used
+            pw.println(indent, "[Serializable]");
+            pw.println(indent, "[XmlRoot]");	// PES added for XML compatiblity
+        }
 
         //Following will find the classes that are referenced within the current class being processed
         //These will then be added to the Xmlinclude attribute to allow the reflection of those classes
@@ -365,7 +376,7 @@ public class CsharpGenerator extends Generator {
             //if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE)
             //{
 
-            if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.CLASSREF) {
+            if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.CLASSREF && useDotNet) {
                 if (!referencedClasses.contains(anAttribute.getType())) {
                     referencedClasses.add(anAttribute.getType());
                     pw.println(indent, "[XmlInclude(typeof(" + anAttribute.getType() + "))]");
@@ -375,7 +386,7 @@ public class CsharpGenerator extends Generator {
             }
             //}
 
-            if (anAttribute.listIsClass() == true) {
+            if (anAttribute.listIsClass() == true && useDotNet) {
                 pw.println(indent, "[XmlInclude(typeof(" + anAttribute.getType() + "))]");
             }
         }
@@ -805,7 +816,11 @@ public class CsharpGenerator extends Generator {
 //                    pw.println();
 
                     writePropertySummary(pw, anAttribute, indent);
-                    pw.println(indent, "[XmlElement(Type = typeof(" + beanType + "), ElementName = \"" + anAttribute.getName() + "\")]");
+                    if(useDotNet)
+                    {
+                        pw.println(indent, "[XmlElement(Type = typeof(" + beanType + "), ElementName = \"" + anAttribute.getName() + "\")]");
+                    }
+                    
                     pw.println(indent, "public " + beanType + " " + this.initialCap(anAttribute.getName()) + classNameConflictModifier);
                     pw.println(indent, "{");
                     pw.println(indent + 1, "get");
@@ -841,7 +856,11 @@ public class CsharpGenerator extends Generator {
                     pw.println(indent, "/// The get" + anAttribute.getName() + " method will also be based on the actual list length rather than this value. ");
                     pw.println(indent, "/// The method is simply here for completeness and should not be used for any computations.");
                     pw.println(indent, "/// </summary>");
-                    pw.println(indent, "[XmlElement(Type = typeof(" + beanType + "), ElementName = \"" + anAttribute.getName() + "\")]");
+                    if(useDotNet)
+                    {
+                        pw.println(indent, "[XmlElement(Type = typeof(" + beanType + "), ElementName = \"" + anAttribute.getName() + "\")]");
+                    }
+                    
                     pw.println(indent, "public " + beanType + " " + this.initialCap(anAttribute.getName()) + classNameConflictModifier);
                     pw.println(indent, "{");
                     pw.println(indent + 1, "get");
@@ -877,7 +896,10 @@ public class CsharpGenerator extends Generator {
 //                pw.println();
 
                 writePropertySummary(pw, anAttribute, indent);
-                pw.println(indent, "[XmlElement(Type = typeof(" + anAttribute.getType() + "), ElementName = \"" + anAttribute.getName() + "\")]");
+                if(useDotNet)
+                {
+                    pw.println(indent, "[XmlElement(Type = typeof(" + anAttribute.getType() + "), ElementName = \"" + anAttribute.getName() + "\")]");
+                }
                 pw.println(indent, "public " + anAttribute.getType() + " " + this.initialCap(anAttribute.getName()) + classNameConflictModifier);
                 pw.println(indent, "{");
                 pw.println(indent + 1, "get");
@@ -912,7 +934,10 @@ public class CsharpGenerator extends Generator {
 //                    pw.println();
 
                     writePropertySummary(pw, anAttribute, indent);
-                    pw.println(indent, "[XmlArray(ElementName = \"" + anAttribute.getName() + "\")]");
+                    if(useDotNet)
+                    {
+                         pw.println(indent, "[XmlArray(ElementName = \"" + anAttribute.getName() + "\")]");
+                    }
                     pw.println(indent, "public " + types.getProperty(anAttribute.getType()) + "[] " + this.initialCap(anAttribute.getName()) + classNameConflictModifier);
                     pw.println(indent, "{");
                     pw.println(indent + 1, "get");
@@ -944,7 +969,10 @@ public class CsharpGenerator extends Generator {
 //                    pw.println();
 
                     writePropertySummary(pw, anAttribute, indent);
-                    pw.println(indent, "[XmlArrayItem(ElementName = \"" + anAttribute.getName() + "Array\", DataType = \"" + anAttribute.getType() + "\"))]");
+                    if(useDotNet)
+                    {
+                        pw.println(indent, "[XmlArrayItem(ElementName = \"" + anAttribute.getName() + "Array\", DataType = \"" + anAttribute.getType() + "\"))]");
+                    }
                     pw.println(indent, "public " + anAttribute.getType() + "[] " + this.initialCap(anAttribute.getName()));
                     pw.println(indent, "{");
                     pw.println(indent + 1, "get");
@@ -981,7 +1009,11 @@ public class CsharpGenerator extends Generator {
 //                    pw.println();
 
                     writePropertySummary(pw, anAttribute, indent);
-                    pw.println(indent, "[XmlElement(ElementName = \"" + anAttribute.getName() + "List\", DataType = \"hexBinary\")]");
+                    if(useDotNet)
+                    {
+                        pw.println(indent, "[XmlElement(ElementName = \"" + anAttribute.getName() + "List\", DataType = \"hexBinary\")]");
+                    }
+                    
                     pw.println(indent, "public byte[] " + this.initialCap(anAttribute.getName()));
                     pw.println(indent, "{");
                     pw.println(indent + 1, "get");
@@ -1013,7 +1045,10 @@ public class CsharpGenerator extends Generator {
 //                    pw.println();
 
                     writePropertySummary(pw, anAttribute, indent);
-                    pw.println(indent, "[XmlElement(ElementName = \"" + anAttribute.getName() + "List\", Type = typeof(List<" + anAttribute.getType() + ">))]");
+                    if(useDotNet)
+                    {
+                        pw.println(indent, "[XmlElement(ElementName = \"" + anAttribute.getName() + "List\", Type = typeof(List<" + anAttribute.getType() + ">))]");
+                    }
                     pw.println(indent, "public List<" + anAttribute.getType() + "> " + this.initialCap(anAttribute.getName()));
                     pw.println(indent, "{");
                     pw.println(indent + 1, "get");
@@ -1143,6 +1178,13 @@ public class CsharpGenerator extends Generator {
 
         for (int idx = 0; idx < ivars.size(); idx++) {
             ClassAttribute anAttribute = (ClassAttribute) ivars.get(idx);
+            
+            // Some attributes can be marked as do-not-marshal
+            if(anAttribute.shouldSerialize == false)
+            {
+                 pw.println("    // attribute " + anAttribute.getName() + " marked as not serialized");
+                 continue;
+            }
 
             // Write out a method call to serialize a primitive type
             if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE) {
@@ -1297,6 +1339,13 @@ public class CsharpGenerator extends Generator {
         for (int idx = 0; idx < ivars.size(); idx++) {
             ClassAttribute anAttribute = (ClassAttribute) ivars.get(idx);
 
+            // Some attributes can be marked as do-not-marshal
+            if(anAttribute.shouldSerialize == false)
+            {
+                 pw.println("    // attribute " + anAttribute.getName() + " marked as not serialized");
+                 continue;
+            }
+            
             // Write out a method call to deserialize a primitive type
             if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE) {
                 String marshalType = unmarshalTypes.getProperty(anAttribute.getType());
