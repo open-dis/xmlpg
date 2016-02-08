@@ -616,8 +616,8 @@ public class JavascriptGenerator extends Generator
                         pw.println("" + namespace + "." + aClass.getName() + ".prototype.get" + capped + " = function()");
                         pw.println("{");
                         
-                        pw.println("   var val = this." + bitfield.parentAttribute.getName() + " & " + bitfield.mask);
-                        pw.println("   return val >> " + shiftBits);
+                        pw.println("   var val = this." + bitfield.parentAttribute.getName() + " & " + bitfield.mask + ";");
+                        pw.println("   return val >> " + shiftBits + ";");
                         pw.println("};");
 
                         pw.println();
@@ -631,9 +631,9 @@ public class JavascriptGenerator extends Generator
                         }
                         pw.println("" + namespace + "." + aClass.getName() + ".prototype.set" + capped + "= function(val)");
                         pw.println("{");
-                        pw.println("  var aVal = 0");
+                        pw.println("  var aVal = 0;");
                         pw.println("  this." + bitfield.parentAttribute.getName() + " &= ~" + bitfield.mask + "; // Zero existing bits");
-                        pw.println("  val = val << " + shiftBits);
+                        pw.println("  val = val << " + shiftBits + ";");
                         pw.println("  this." + bitfield.parentAttribute.getName() + " = this." + bitfield.parentAttribute.getName() + " | val; " );
                         pw.println("};");
                         //pw.println(INDENT + INDENT + bitfield.parentAttribute.getName() + " = val & ~" + mask);
