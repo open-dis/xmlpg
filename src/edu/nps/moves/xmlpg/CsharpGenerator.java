@@ -267,7 +267,10 @@ public class CsharpGenerator extends Generator {
         this.writeExceptionHandler(pw, aClass, 2);
         this.writeMarshalMethod(pw, aClass, 2);
         this.writeUnmarshallMethod(pw, aClass, 2);
-        this.writeReflectionMethod(pw, aClass, 2);
+        if(useDotNet)
+        {
+            this.writeReflectionMethod(pw, aClass, 2);
+        }
         this.writeEqualityMethod(pw, aClass, 2);
         this.writeBitflagMethods(pw, aClass, 2);
 
@@ -740,6 +743,7 @@ public class CsharpGenerator extends Generator {
                         BitField bitfield = (BitField)bitfields.get(jdx);
                         String capped = this.initialCap(bitfield.name);
                         int shiftBits = super.getBitsToShift(anAttribute, bitfield.mask);
+                        String attributeType = types.getProperty(anAttribute.getType());
                         
                         // write getter
                         pw.println();
@@ -748,12 +752,13 @@ public class CsharpGenerator extends Generator {
                             pw.println( "// " + bitfield.comment );
                         }
                         
-                        pw.println("public virtual void get" + capped + "()");
+                        pw.println("public virtual int get" + capped + "()");
                         pw.println("{");
                         
                         
                         pw.println("    int val = this._" + bitfield.parentAttribute.getName() + " & " + bitfield.mask + ";");
-                        pw.println("    return val >> " + shiftBits + ";");
+                        pw.println("    val = val >> " + shiftBits + ";");
+                        pw.println("    return val;");
                         pw.println("}\n");
                         
                         // Write the setter/mutator
@@ -765,10 +770,11 @@ public class CsharpGenerator extends Generator {
                         }
                         pw.println("public void set" + capped + "(int val)");
                         pw.println("{");
-                        pw.println("    int aVal = 0");
-                        pw.println("    this._" + bitfield.parentAttribute.getName() + " &= ~" + bitfield.mask + "; // clear bits");
-                        pw.println("    val = val << " + shiftBits);
-                        pw.println("    this._" + bitfield.parentAttribute.getName() + " = this." + bitfield.parentAttribute.getName() + " | val;" );
+                        pw.println("    " + attributeType + " aVal = (" + attributeType + ")val;");
+                        pw.println("    " + attributeType + " mask = (" + attributeType + ")("+ bitfield.mask + ");   // type dance");
+                        pw.println("    aVal = (" + attributeType + ")(aVal << " + shiftBits + ");");
+                        pw.println("    _" + anAttribute.getName() + " = (" + attributeType + ")(_" + anAttribute.getName() + " & ~mask); // clear" );
+                        pw.println("    _" + anAttribute.getName() + " = (" + attributeType + ")(_" + anAttribute.getName() + " | aVal);  // set");
                         pw.println("}\n");
                     }
                     
@@ -1146,7 +1152,10 @@ public class CsharpGenerator extends Generator {
         pw.println(indent, "/// Marshal the data to the DataOutputStream.  Note: Length needs to be set before calling this method");
         pw.println(indent, "/// </summary>");
         pw.println(indent, "/// <param name=\"dos\">The DataOutputStream instance to which the PDU is marshaled.</param>");
-        pw.println(indent, "[SuppressMessage(\"Microsoft.Design\", \"CA1031:DoNotCatchGeneralExceptionTypes\", Justification = \"Due to ignoring errors.\")]");
+        if(useDotNet)
+        {
+            pw.println(indent, "[SuppressMessage(\"Microsoft.Design\", \"CA1031:DoNotCatchGeneralExceptionTypes\", Justification = \"Due to ignoring errors.\")]");
+        }
         pw.println(indent, "public " + newKeyword + "void Marshal(DataOutputStream dos)");
         pw.println(indent, "{");
 
@@ -1318,7 +1327,10 @@ public class CsharpGenerator extends Generator {
         }
 
         pw.println();
-        pw.println(indent, "[SuppressMessage(\"Microsoft.Design\", \"CA1031:DoNotCatchGeneralExceptionTypes\", Justification = \"Due to ignoring errors.\")]");
+        if(useDotNet)
+        {
+            pw.println(indent, "[SuppressMessage(\"Microsoft.Design\", \"CA1031:DoNotCatchGeneralExceptionTypes\", Justification = \"Due to ignoring errors.\")]");
+        }
         pw.println(indent, "public " + newKeyword + "void Unmarshal(DataInputStream dis)");
         pw.println(indent, "{");
 
@@ -1465,7 +1477,10 @@ public class CsharpGenerator extends Generator {
         pw.println(indent, "/// Note: The supplied Utilities folder contains a method called 'DecodePDU' in the PDUProcessor Class that provides this functionality");
         pw.println(indent, "/// </summary>");
         pw.println(indent, "/// <param name=\"sb\">The StringBuilder instance to which the PDU is written to.</param>");
-        pw.println(indent, "[SuppressMessage(\"Microsoft.Design\", \"CA1031:DoNotCatchGeneralExceptionTypes\", Justification = \"Due to ignoring errors.\")]");
+        if(useDotNet)
+        {
+            pw.println(indent, "[SuppressMessage(\"Microsoft.Design\", \"CA1031:DoNotCatchGeneralExceptionTypes\", Justification = \"Due to ignoring errors.\")]");
+        }
         pw.println(indent, "public " + newKeyword + "void Reflection(StringBuilder sb)");
         pw.println(indent, "{");
         pw.println(indent + 1, "sb.AppendLine(\"<" + aClass.getName() + ">\");");
