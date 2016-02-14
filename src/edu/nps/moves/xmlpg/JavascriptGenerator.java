@@ -617,7 +617,8 @@ public class JavascriptGenerator extends Generator
                     for(int jdx = 0; jdx < bitfields.size(); jdx++)
                     {
                         BitField bitfield = (BitField)bitfields.get(jdx);
-                        String capped = this.initialCap(bitfield.name);
+                        String capped = this.initialCap(anAttribute.getName());
+                        String methodBase = capped + "_" + bitfield.name;
                         int shiftBits = this.getBitsToShift(anAttribute, bitfield.mask);
                         
                         // write getter
@@ -626,7 +627,7 @@ public class JavascriptGenerator extends Generator
                         {
                             pw.println("/** " + bitfield.comment + " */");
                         }
-                        pw.println("" + namespace + "." + aClass.getName() + ".prototype.get" + capped + " = function()");
+                        pw.println("" + namespace + "." + aClass.getName() + ".prototype.get" + methodBase + " = function()");
                         pw.println("{");
                         
                         pw.println("   var val = this." + bitfield.parentAttribute.getName() + " & " + bitfield.mask + ";");
@@ -642,9 +643,9 @@ public class JavascriptGenerator extends Generator
                         {
                             pw.println("/** " + bitfield.comment +  " */");
                         }
-                        pw.println("" + namespace + "." + aClass.getName() + ".prototype.set" + capped + "= function(val)");
+                        pw.println("" + namespace + "." + aClass.getName() + ".prototype.set" + methodBase + "= function(val)");
                         pw.println("{");
-                        pw.println("  var aVal = 0;");
+                        //pw.println("  var aVal = 0;");
                         pw.println("  this." + bitfield.parentAttribute.getName() + " &= ~" + bitfield.mask + "; // Zero existing bits");
                         pw.println("  val = val << " + shiftBits + ";");
                         pw.println("  this." + bitfield.parentAttribute.getName() + " = this." + bitfield.parentAttribute.getName() + " | val; " );
