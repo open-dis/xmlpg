@@ -293,13 +293,26 @@ public class JavascriptGenerator extends Generator
         
         pw.println("}; // end of class");
         pw.println();
-        pw.println(" // node.js module support");
-        pw.println("exports." + aClass.getName() + " = " + namespace + "." + aClass.getName() + ";");
-        pw.println();
+        
+        this.writeNodeJsExports(pw, aClass);
+        
         pw.println("// End of " + aClass.getName() + " class");
         pw.println();
         pw.flush();
         pw.close();
+    }
+    
+    /**
+     * Write nodejs exports module to make functions available
+     * @param pw
+     * @param aClass 
+     */
+    private void writeNodeJsExports(PrintWriter pw, GeneratedClass aClass)
+    {
+        pw.println(" // node.js module support");
+        pw.println("exports." + aClass.getName() + " = " + namespace + "." + aClass.getName() + ";");
+        pw.println();
+        
     }
     
     /**
