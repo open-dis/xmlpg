@@ -196,7 +196,7 @@ public class Xmlpg
         String language = null;
 
         Properties props = System.getProperties();
-        props.list(System.out);
+        //props.list(System.out);
        
         if(args.length < 2 || args.length > 2)
         {
@@ -402,7 +402,7 @@ public class Xmlpg
                     javascriptProperties.setProperty(attributes.getQName(idx), attributes.getValue(idx));
                 }
                 
-                System.out.println("In parse, javascript properties are " + javascriptProperties);
+                //System.out.println("In parse, javascript properties are " + javascriptProperties);
             }
 
             // objc element--place all the attributes and values into a property list

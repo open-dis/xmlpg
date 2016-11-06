@@ -55,8 +55,8 @@ public abstract class Generator
      */
     protected void createDirectory()
     {
-        System.out.println("creating directory");
-        System.out.println("directory=" + this.getDirectory());
+        //System.out.println("creating directory");
+        //System.out.println("directory=" + this.getDirectory());
         boolean success = (new File(this.getDirectory())).mkdirs();
         
     }

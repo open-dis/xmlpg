@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013-2015, Naval Postgraduate School
+ *  Copyright (c) 2013-2016, Naval Postgraduate School
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without 
@@ -72,16 +72,16 @@ public class JavascriptGenerator extends Generator
     public JavascriptGenerator(HashMap pClassDescriptions, Properties pJavascriptProperties)
     {
         super(pClassDescriptions, pJavascriptProperties);
+        this.javascriptProperties = pJavascriptProperties;
 
         Properties systemProperties = System.getProperties();
         //System.out.println("System properties:" + systemProperties);
-        System.out.println("Javascript properties: " + pJavascriptProperties);
-        javascriptProperties = pJavascriptProperties;
+        //System.out.println("Javascript properties: " + pJavascriptProperties);
         namespace = javascriptProperties.getProperty("namespace");
         super.setDirectory(systemProperties.getProperty("xmlpg.generatedSourceDir"));
         
         //super.setDirectory("javascript/dis");
-        System.out.println("Destination directory: " + pJavascriptProperties.getProperty("xmlpg.generatedSourceDir"));
+        //System.out.println("Destination directory: " + pJavascriptProperties.getProperty("xmlpg.generatedSourceDir"));
 
         try
         {
@@ -211,14 +211,14 @@ public class JavascriptGenerator extends Generator
               if(pack != null)
               {
                   pack = pack.replace(".", "/");
-                  fullPath = getDirectory() + "/" + pack + "/" + name + ".js";
+                  fullPath = getDirectory() + "/" + name + ".js";
                   //System.out.println("full path is " + fullPath);
               }
               else
              {
                    fullPath = getDirectory() + "/" + name + ".js";
              }
-             System.out.println("Creating Javascript source code file for " + fullPath);
+             //System.out.println("Creating Javascript source code file for " + fullPath);
               
               // Create the new, empty file, and create printwriter object for output to it
               File outputFile = new File(fullPath);
@@ -632,7 +632,7 @@ public class JavascriptGenerator extends Generator
                         BitField bitfield = (BitField)bitfields.get(jdx);
                         String capped = this.initialCap(anAttribute.getName());
                         String methodBase = capped + "_" + bitfield.name;
-                        int shiftBits = this.getBitsToShift(anAttribute, bitfield.mask);
+                        int shiftBits = super.getBitsToShift(anAttribute, bitfield.mask);
                         
                         // write getter
                         pw.println();
@@ -812,7 +812,7 @@ public class JavascriptGenerator extends Generator
       for(int idx = 0; idx < classHierarchy.size(); idx++)
       {
           GeneratedClass aClass = (GeneratedClass)classHierarchy.get(idx);
-          if(log) System.out.println("Class name: " + aClass.getName());
+          //if(log) System.out.println("Class name: " + aClass.getName());
           
           List initialValues = aClass.getInitialValues();
           for(int jdx = 0; jdx < initialValues.size(); jdx++)
@@ -820,9 +820,9 @@ public class JavascriptGenerator extends Generator
               InitialValue aVal = (InitialValue)initialValues.get(jdx);
               if(aVal.getVariable().equalsIgnoreCase(attributeName))
               {
-                  if(log) System.out.println("Variable name:" + aVal.getVariable());
+                  //if(log) System.out.println("Variable name:" + aVal.getVariable());
 
-                  if(log) System.out.println("found match in " + aClass.getName() + ":" + aVal.getVariable());
+                  //if(log) System.out.println("found match in " + aClass.getName() + ":" + aVal.getVariable());
 
                   return aVal.getVariableValue();
               }

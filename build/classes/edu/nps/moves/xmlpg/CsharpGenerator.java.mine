@@ -217,6 +217,8 @@ public class CsharpGenerator extends Generator {
         this.writeUnmarshallMethod(pw, aClass, 2);
         this.writeReflectionMethod(pw, aClass, 2);
 
+        this.writeBitflagMethods(pw, aClass, 2);
+
         //For C# - do not believe these are necessary as the MemoryStream used in previous MarshalMethod
         //should provide the same type features.
         //this.writeMarshalMethodWithByteBuffer(pw, aClass);
@@ -572,6 +574,79 @@ public class CsharpGenerator extends Generator {
             pw.println(indent, "///<summary>");
             pw.println(indent, "///" + anAttribute.getComment());
             pw.println(indent, "///</summary>");
+        }
+    }
+
+    /**
+     * Some fields have integers with bit fields defined, eg an integer where 
+     * bits 0-2 represent some value, while bits 3-4 represent another value, 
+     * and so on. This writes accessor and mutator methods for those fields.
+     * 
+     * @param pw
+     * @param aClass 
+     */
+    public void writeBitflagMethods(PrintWriter pw, GeneratedClass aClass, int indentLevel)
+    {
+        List attributes = aClass.getClassAttributes();
+        
+        for(int idx = 0; idx < attributes.size(); idx++)
+        {
+            ClassAttribute anAttribute = (ClassAttribute)attributes.get(idx);
+           
+            
+            switch(anAttribute.getAttributeKind())
+            {
+                
+                // Anything with bitfields must be a primitive type
+                case PRIMITIVE:
+                    
+                    List bitfields = anAttribute.bitFieldList;
+   
+                    for(int jdx = 0; jdx < bitfields.size(); jdx++)
+                    {
+                        BitField bitfield = (BitField)bitfields.get(jdx);
+                        String capped = this.initialCap(bitfield.name);
+                        int shiftBits = this.getBitsToShift(anAttribute, bitfield.mask);
+                        
+                        // write getter
+                        pw.println();
+                        pw.println(INDENT + "def get" + capped + "(self):");
+                        if(bitfield.comment != null)
+                        {
+                            pw.println(INDENT + INDENT + "\"\"\"" + bitfield.comment + " \"\"\"");
+                        }
+                        
+                        pw.println(INDENT + INDENT + "val = self." + bitfield.parentAttribute.getName() + " & " + bitfield.mask);
+                        pw.println(INDENT + INDENT + "return val >> " + shiftBits);
+                        pw.println();
+                        
+                        // Write the setter/mutator
+                        
+                        pw.println();
+                        pw.println(INDENT + "def set" + capped + "(self, val):");
+                        if(bitfield.comment != null)
+                        {
+                            pw.println(INDENT + INDENT + "\"\"\"" + bitfield.comment + " \"\"\"");
+                        }
+                        pw.println(INDENT + INDENT + "aVal = 0");
+                        pw.println(INDENT + INDENT + "self." + bitfield.parentAttribute.getName() + " &= ~" + bitfield.mask);
+                        pw.println(INDENT + INDENT + "val = val << " + shiftBits);
+                        pw.println(INDENT + INDENT + "self." + bitfield.parentAttribute.getName() + " = self." + bitfield.parentAttribute.getName() + " | val" );
+                        //pw.println(INDENT + INDENT + bitfield.parentAttribute.getName() + " = val & ~" + mask);
+                        pw.println();
+                    }
+                    
+                    break;
+                    
+                default:
+                    bitfields = anAttribute.bitFieldList;
+                    if(!bitfields.isEmpty())
+                    {
+                        System.out.println("Attempted to use bit flags on a non-primitive field");
+                        System.out.println( "Field: " + anAttribute.getName() );
+                    }
+            }
+        
         }
     }
 
@@ -1664,7 +1739,7 @@ public class CsharpGenerator extends Generator {
     }
 
     private void writeLicenseNotice(PrintStringBuffer pw) {
-        pw.println("// Copyright (c) 1995-2009 held by the author(s).  All rights reserved.");
+        pw.println("// Copyright (c) 1995-2015 held by the author(s).  All rights reserved.");
 
         pw.println("// Redistribution and use in source and binary forms, with or without");
         pw.println("// modification, are permitted provided that the following conditions");
