@@ -1,12 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head>
-  <meta content="text/html; charset=ISO-8859-1"
- http-equiv="content-type">
-  <title>License.html</title>
-</head>
-<body>
-    <PRE>
 Copyright (c) 1995-2007 held by the author(s).  All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -38,6 +29,3 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
 LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
 ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
-    </PRE>
-</body>
-</html>
