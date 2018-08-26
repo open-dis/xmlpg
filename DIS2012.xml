@@ -98,7 +98,7 @@
         <primitive type="unsigned short"/>
     </attribute>
     
-    <attribute name="category" comment = "category of entity">
+    <attribute name="category" comment="category of entity">
         <primitive type="unsigned byte"/>
     </attribute>
     
@@ -609,7 +609,7 @@
        comment="The Blanking Sector attribute record may be used to convey persistent areas within a scan volume where emitter power for a specific active emitter beam is reduced to an insignificant value. Section 6.2.21.2">
        
     <attribute name="recordType" commment="record type">
-      <primitive type="int"  defaultValue="3500"/>
+      <primitive type="int" defaultValue="3500"/>
     </attribute>
     
      <attribute name="recordLength" commment="the length of the Blanking Sector attribute record in octets.">
@@ -671,15 +671,15 @@
         comment="The Angle Deception attribute record may be used to communicate discrete values that are associated with angle deception jamming that cannot be referenced to an emitter mode. The values provided in the record records (provided in the associated Electromagnetic Emission PDU). (The victim radar beams are those that are targeted by the jammer.) Section 6.2.21.2.2">
   
     <attribute name="recordType" commment="record type">
-      <primitive type="unsigned int"  defaultValue="3501"/>
+      <primitive type="unsigned int" defaultValue="3501"/>
     </attribute>
     
      <attribute name="recordLength" commment="the length of the record in octets.">
-      <primitive type="unsigned short"  defaultValue="48"/>
+      <primitive type="unsigned short" defaultValue="48"/>
     </attribute>
     
      <attribute name="padding" commment="padding">
-      <primitive type="unsigned short"  defaultValue="0"/>
+      <primitive type="unsigned short" defaultValue="0"/>
     </attribute>
     
      <attribute name="emitterNumber" commment="indicates the emitter system for which the angle deception values are applicable. ">
@@ -695,7 +695,7 @@
     </attribute>
     
     <attribute name="padding2" commment="padding">
-      <primitive type="unsigned byte"  defaultValue="0"/>
+      <primitive type="unsigned byte" defaultValue="0"/>
     </attribute>
     
      <attribute name="azimuthOffset" commment="This field indicates the relative azimuth angle at which the deceptive radar returns are centered. This angle is measured in the X-Y plane of the victim radar's entity coordinate system (see 1.4.3). This angle is measured in radians from the victim radar entity's azimuth for the true jam- mer position to the center of the range of azimuths in which deceptive radar returns are perceived as shown in Figure 43. Positive and negative values indicate that the perceived positions of the jammer are right and left of the true position of the jammer, respectively. The range of permissible values is -PI to PI">
@@ -740,15 +740,15 @@
        comment="The False Targets attribute record shall be used to communicate discrete values that are associated with false targets jamming that cannot be referenced to an emitter mode. The values provided in the False Targets attri- bute record shall be considered valid only for the victim radar beams listed in the jamming beam's Track/Jam Data records (provided in the associated Electromagnetic Emission PDU). Section 6.2.21.3">
        
     <attribute name="recordType" commment="record type">
-      <primitive type="unsigned int"  defaultValue="3502"/>
+      <primitive type="unsigned int" defaultValue="3502"/>
     </attribute>
     
      <attribute name="recordLength" commment="the length of the record in octets.">
-      <primitive type="unsigned short"  defaultValue="40"/>
+      <primitive type="unsigned short" defaultValue="40"/>
     </attribute>
     
      <attribute name="padding" commment="padding">
-      <primitive type="unsigned short"  defaultValue="0"/>
+      <primitive type="unsigned short" defaultValue="0"/>
     </attribute>
     
      <attribute name="emitterNumber" commment="This field indicates the emitter system generating the false targets.">
@@ -764,7 +764,7 @@
     </attribute>
     
     <attribute name="padding2" commment="padding">
-      <primitive type="unsigned byte"  defaultValue="0"/>
+      <primitive type="unsigned byte" defaultValue="0"/>
     </attribute>
     
      <attribute name="falseTargetCount" commment="This field indicates the jamming beam generating the false targets. ">
@@ -956,7 +956,7 @@
         <primitive type="unsigned short"/>
     </attribute>
     
-    <attribute name="category" comment = "category of entity">
+    <attribute name="category" comment="category of entity">
         <primitive type="unsigned byte"/>
     </attribute>
     
@@ -1020,7 +1020,7 @@
  </attribute>
  
   <attribute name="padding" comment="padding">
-      <primitive type="unsigned byte" defaultValue = "0"/>
+      <primitive type="unsigned byte" defaultValue="0"/>
  </attribute>
     
 <!-- Add geometry or state record field -->
@@ -1044,7 +1044,7 @@
         <primitive type="unsigned short"/>
     </attribute>
     
-    <attribute name="category" comment = "category of entity">
+    <attribute name="category" comment="category of entity">
         <primitive type="unsigned byte"/>
     </attribute>
     
@@ -1585,7 +1585,7 @@
        inheritsFrom="root" 
        comment="The specification of an individual segment of a linear segment synthetic environment object in a Linear Object State PDU Section 6.2.52">
 
-     <attribute name="segmentNumber" comment="the individual segment of the linear segment "  >
+     <attribute name="segmentNumber" comment="the individual segment of the linear segment">
          <primitive type="unsigned byte"/>
      </attribute>
      
@@ -1815,7 +1815,7 @@
         <primitive type="unsigned byte"/>
     </attribute>
 
-    <attribute name="category" comment = "category of entity">
+    <attribute name="category" comment="category of entity">
         <primitive type="unsigned byte"/>
     </attribute>
 
@@ -1951,7 +1951,7 @@
  <primitive type="unsigned short"/>
 </attribute>
 
-<attribute name="category" comment = "category of entity">
+<attribute name="category" comment="category of entity">
   <primitive type="unsigned byte"/>
 </attribute>
 
@@ -2576,7 +2576,7 @@
 
 <class name="Vector3Float" inheritsFrom="root" comment="Three floating point values, x, y, and z. Section 6.2.95">
     
-  <attribute name="x" comment = "X value">
+  <attribute name="x" comment="X value">
     <primitive type="float"/>
   </attribute>
 
@@ -2592,7 +2592,7 @@
 
 <class name="Vector2Float" inheritsFrom="root" comment="Two floating point values, x, y">
     
-  <attribute name="x" comment = "X value">
+  <attribute name="x" comment="X value">
     <primitive type="float"/>
   </attribute>
 
@@ -2615,7 +2615,7 @@
 </class>
 
  <class name="Vector3Double" inheritsFrom="root" comment="Three double precision floating point values, x, y, and z. Used for world coordinates Section 6.2.97.">
-  <attribute name="x" comment = "X value">
+  <attribute name="x" comment="X value">
     <primitive type="double"/>
   </attribute>
 
@@ -2877,7 +2877,7 @@
         <primitive type="unsigned short"/>
     </attribute>
     
-    <attribute name="category" comment = "category of entity">
+    <attribute name="category" comment="category of entity">
         <primitive type="unsigned byte"/>
     </attribute>
     
@@ -2906,7 +2906,7 @@
         <primitive type="unsigned short"/>
     </attribute>
     
-    <attribute name="altCategory" comment = "category of entity">
+    <attribute name="altCategory" comment="category of entity">
         <primitive type="unsigned byte"/>
     </attribute>
     
@@ -2923,7 +2923,7 @@
     </attribute>
 
 
-  <attribute name="xVelocity" comment = "X velo">
+  <attribute name="xVelocity" comment="X velo">
     <primitive type="float"/>
   </attribute>
   
@@ -2935,7 +2935,7 @@
     <primitive type="float"/>
   </attribute>
 
-  <attribute name="xLocation" comment = "X value">
+  <attribute name="xLocation" comment="X value">
     <primitive type="double"/>
   </attribute>
   
@@ -2975,7 +2975,7 @@
    </list>
 </attribute>
 
-<attribute name="xAcceleration" comment = "X value">
+<attribute name="xAcceleration" comment="X value">
     <primitive type="float"/>
   </attribute>
   
@@ -2988,7 +2988,7 @@
   </attribute>
 
 
-<attribute name="xAngularVelocity" comment = "X value">
+<attribute name="xAngularVelocity" comment="X value">
     <primitive type="float"/>
   </attribute>
   
@@ -3042,7 +3042,7 @@
   </attribute>
 
   <attribute name="pad" comment="some padding">
-    <primitive type="byte" defaultValue = "0"/>
+    <primitive type="byte" defaultValue="0"/>
   </attribute>
 
   <attribute name="velocity" comment="This field shall contain the velocity (at the time the collision is detected) of the issuing entity. The velocity shall be represented in world coordinates. This field shall be represented by the Linear Velocity Vector record [see 6.2.95 item c)].">
@@ -3077,7 +3077,7 @@
   </attribute>
 
   <attribute name="pad" comment="some padding">
-    <primitive type="short" defaultValue = "0"/>
+    <primitive type="short" defaultValue="0"/>
   </attribute>
 
   <attribute name="contactVelocity" comment="This field shall contain the velocity at the time the collision is detected at the point the collision is detected. The velocity shall be represented in world coordinates. This field shall be represented by the Linear Velocity Vector record [see 6.2.95 item c)]">
@@ -3466,7 +3466,7 @@
   </attribute>
 
   <attribute name="serviceRequestPadding" comment="padding">
-    <primitive type="short" defaultValue = "0"/>
+    <primitive type="short" defaultValue="0"/>
   </attribute>
 
   <attribute name="supplies">
@@ -3507,7 +3507,7 @@
  </attribute>
 
  <attribute name="padding2" comment="padding">
-   <primitive type="short" defaultValue = "0"/>
+   <primitive type="short" defaultValue="0"/>
  </attribute>
 
 <attribute name="supplies"
@@ -4015,7 +4015,7 @@
 
 </class>
 
-<class name="DistributedEmissionsFamilyPdu" inheritsFrom="Pdu"  comment="Section 5.3.7. Electronic Emissions. Abstract superclass for distirubted emissions PDU">
+<class name="DistributedEmissionsFamilyPdu" inheritsFrom="Pdu" comment="Section 5.3.7. Electronic Emissions. Abstract superclass for distributed emissions PDU">
    <initialValue name="protocolFamily" value="6"/>
 </class>
 
