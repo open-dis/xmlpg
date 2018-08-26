@@ -1589,7 +1589,7 @@
          <primitive type="unsigned byte"/>
      </attribute>
      
-     <attribute name="segmentModification" comment=" whether a modification has been made to the point object’s location or orientation">
+     <attribute name="segmentModification" comment=" whether a modification has been made to the point object's location or orientation">
          <primitive type="unsigned byte"/>
      </attribute>
 
@@ -1780,7 +1780,7 @@
 <class name="NamedLocationIdentification" inheritsFrom="root"
        comment="Information about the discrete positional relationship of the part entity with respect to the its host entity Section 6.2.62 ">
  
-  <attribute name="stationName" comment="the station name within the host at which the part entity is located. If the part entity is On Station, this field shall specify the representation of the part’s location data fields. This field shall be specified by a 16-bit enumeration ">
+  <attribute name="stationName" comment="the station name within the host at which the part entity is located. If the part entity is On Station, this field shall specify the representation of the part's location data fields. This field shall be specified by a 16-bit enumeration ">
          <primitive type="unsigned short"/>
  </attribute>
  
@@ -3143,19 +3143,19 @@
       <primitive type="unsigned byte"/>
    </attribute>
 
-   <attribute name="entityLinearVelocity" comment="This field shall specify an entity’s linear velocity. The coordinate system for an entity’s linear velocity depends on the dead reckoning algorithm used. This field shall be represented by a Linear Velocity Vector record [see 6.2.95 item c)]).">
+   <attribute name="entityLinearVelocity" comment="This field shall specify an entity's linear velocity. The coordinate system for an entity's linear velocity depends on the dead reckoning algorithm used. This field shall be represented by a Linear Velocity Vector record [see 6.2.95 item c)]).">
      <classRef name="Vector3Float"/>
    </attribute>
 
-   <attribute name="entityLocation" comment="This field shall specify an entity’s physical location in the simulated world and shall be represented by a World Coordinates record (see 6.2.97).">
+   <attribute name="entityLocation" comment="This field shall specify an entity's physical location in the simulated world and shall be represented by a World Coordinates record (see 6.2.97).">
      <classRef name="Vector3Double"/>
    </attribute>
 
-   <attribute name="entityOrientation" comment="This field shall specify an entity’s orientation and shall be represented by an Euler Angles record (see 6.2.33).">
+   <attribute name="entityOrientation" comment="This field shall specify an entity's orientation and shall be represented by an Euler Angles record (see 6.2.33).">
      <classRef name="EulerAngles"/>
    </attribute>
 
-   <attribute name="entityAppearance" comment="This field shall specify the dynamic changes to the entity’s appearance attributes. This field shall be represented by an Entity Appearance record (see 6.2.26).">
+   <attribute name="entityAppearance" comment="This field shall specify the dynamic changes to the entity's appearance attributes. This field shall be represented by an Entity Appearance record (see 6.2.26).">
      <primitive type="unsigned int"/>
    </attribute>
 
@@ -3252,7 +3252,7 @@
     <classRef name="Vector3Float"/>
   </attribute>
 
-  <attribute name="range" comment="This field shall specify the range that an entity’s fire control system has assumed in computing the fire control solution. This field shall be represented by a 32-bit floating point number in meters. For systems where range is unknown or unavailable, this field shall contain a value of zero.">
+  <attribute name="range" comment="This field shall specify the range that an entity's fire control system has assumed in computing the fire control solution. This field shall be represented by a 32-bit floating point number in meters. For systems where range is unknown or unavailable, this field shall contain a value of zero.">
     <primitive type="float"/>
   </attribute>
 
