@@ -40,6 +40,10 @@
     <target name="clean" description="Remove build and dist directories">
         <delete dir="${bin}"/>
         <delete dir="${dist}"/>
-
+    </target>
+    
+    <target name="createSchema" depends="" description="create XSD schema from legacy xmlpg xml">
+        <xslt destdir="." style="XmlpgToXmlSchema.xslt" force="true" in="DIS2012.xml" out="DIS2012.xsd">
+        </xslt>
     </target>
 </project>
