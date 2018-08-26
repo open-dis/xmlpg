@@ -3120,7 +3120,7 @@
     <classRef name="Vector3Float"/>
   </attribute>
 
-  <attribute name="coefficientOfRestitution" comment="This field shall represent the degree to which energy is conserved in a collision and shall be represented by a 32-bit floating point number. In addition, it represents a free parameter by which simulation application developers may “tune” their collision interactions.">
+  <attribute name="coefficientOfRestitution" comment="This field shall represent the degree to which energy is conserved in a collision and shall be represented by a 32-bit floating point number. In addition, it represents a free parameter by which simulation application developers may &quot;tune&quot; their collision interactions.">
     <primitive type="float"/>
   </attribute>
 
