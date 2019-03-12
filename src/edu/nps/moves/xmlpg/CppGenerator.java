@@ -773,7 +773,7 @@ public void writeUnmarshalMethod(PrintWriter pw, GeneratedClass aClass)
             }
             else // It's a primitive
             {
-                pw.println("       " +  IVAR_PREFIX + anAttribute.getName() + "[idx] << dataStream");
+                pw.println("        dataStream >> " +  IVAR_PREFIX + anAttribute.getName() + "[idx];");
             }
 
             pw.println("     }");
@@ -1128,7 +1128,11 @@ public void writeGetMarshalledSizeMethod(PrintWriter pw, GeneratedClass aClass)
                 pw.println("   {");
                 //pw.println( anAttribute.getName() + ".size() " + " * " +  " new " + anAttribute.getType() + "().getMarshalledSize()"  + ";  // " + anAttribute.getName());
                 pw.println("        " + anAttribute.getType() + " listElement = " + IVAR_PREFIX + anAttribute.getName() + "[idx];");
-                pw.println("        marshalSize = marshalSize + listElement.getMarshalledSize();");
+                if (marshalTypes.getProperty(anAttribute.getType()) == null) {
+                    pw.println("        marshalSize = marshalSize + listElement.getMarshalledSize();");
+                } else {
+                    pw.println("        marshalSize = marshalSize + sizeof(listElement);");
+                }
                 pw.println("    }");
                 pw.println();
             }
