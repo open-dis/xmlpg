@@ -61,7 +61,7 @@ public class CppGenerator extends Generator
         types.setProperty("unsigned short", "unsigned short");
         types.setProperty("unsigned byte", "unsigned char");
         types.setProperty("unsigned int", "unsigned int");
-		types.setProperty("unsigned long", "long");
+        types.setProperty("unsigned long", "long");
         
         types.setProperty("byte", "char");
         types.setProperty("short", "short");
@@ -76,7 +76,7 @@ public class CppGenerator extends Generator
         marshalTypes.setProperty("unsigned short", "unsigned short");
         marshalTypes.setProperty("unsigned byte", "unsigned char");
         marshalTypes.setProperty("unsigned int", "unsigned int");
-		marshalTypes.setProperty("unsigned long", "long");
+        marshalTypes.setProperty("unsigned long", "long");
         
         marshalTypes.setProperty("byte", "char");
         marshalTypes.setProperty("short", "short");
@@ -90,7 +90,7 @@ public class CppGenerator extends Generator
         primitiveSizes.setProperty("unsigned short", "2");
         primitiveSizes.setProperty("unsigned byte", "1");
         primitiveSizes.setProperty("unsigned int", "4");
-		primitiveSizes.setProperty("unsigned long", "8");
+        primitiveSizes.setProperty("unsigned long", "8");
         
         primitiveSizes.setProperty("byte", "1");
         primitiveSizes.setProperty("short", "2");
@@ -210,8 +210,15 @@ public void writeHeaderFile(GeneratedClass aClass)
         String namespace = languageProperties.getProperty("namespace");
         if(namespace == null)
             namespace = "";
-        else
-            namespace = namespace + "/";
+
+        String includeDirectory = languageProperties.getProperty("includeDirectory");
+        if (includeDirectory == null) {
+            includeDirectory = namespace + "/";
+        }
+        String includeUtilsDirectory = languageProperties.getProperty("includeUtilsDirectory");
+        if (includeUtilsDirectory == null) {
+            includeUtilsDirectory = namespace + "/";
+        } 
         
         boolean hasVariableLengthList = false;
         
@@ -222,14 +229,14 @@ public void writeHeaderFile(GeneratedClass aClass)
             // If this attribute is a class, we need to do an import on that class
             if(anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.CLASSREF)
             { 
-                pw.println("#include <" + namespace + anAttribute.getType() + ".h>");
+                pw.println("#include <" + includeDirectory + anAttribute.getType() + ".h>");
             }
             
             // if this attribute is a variable-length list that holds a class, we need to
             // do an import on the class that is in the list.
             if(anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.VARIABLE_LIST)
             { 
-                pw.println("#include <" + namespace + anAttribute.getType() + ".h>");
+                pw.println("#include <" + includeDirectory + anAttribute.getType() + ".h>");
                 hasVariableLengthList = true;
             }
         }
@@ -242,20 +249,17 @@ public void writeHeaderFile(GeneratedClass aClass)
         // if we inherit from another class we need to do an include on it
         if(!(aClass.getParentClass().equalsIgnoreCase("root")))
         {
-             pw.println("#include <" + namespace + aClass.getParentClass() + ".h>");
+             pw.println("#include <" + includeDirectory + aClass.getParentClass() + ".h>");
         }
            
-        // "the usual" includes.
-        // pw.println("#include <vector>");
-        //pw.println("#include <iostream>");
-        pw.println("#include <" + namespace + "DataStream.h>");
+        pw.println("#include <" + includeUtilsDirectory + "DataStream.h>");
         
          // This is a macro file included only for microsoft compilers. set in the cpp properties tag.
         String msMacroFile = "msLibMacro";
         
         if(msMacroFile != null)
         {
-            pw.println("#include <" + namespace + msMacroFile + ".h>");
+            pw.println("#include <" + includeUtilsDirectory + msMacroFile + ".h>");
         }
         
         pw.println();
@@ -455,10 +459,13 @@ public void writeCppFile(GeneratedClass aClass)
         String namespace = languageProperties.getProperty("namespace");
         if(namespace==null)
             namespace ="";
-        else
-            namespace=namespace +"/";
+
+        String includeDirectory = languageProperties.getProperty("includeDirectory");
+        if (includeDirectory == null) {
+            includeDirectory = namespace + "/";
+        }
         
-        pw.println("#include <" + namespace + aClass.getName() + ".h> ");
+        pw.println("#include <" + includeDirectory + aClass.getName() + ".h> ");
         pw.println();
         
         namespace = languageProperties.getProperty("namespace");
