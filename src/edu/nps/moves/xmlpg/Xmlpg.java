@@ -31,7 +31,7 @@ public class Xmlpg
     protected HashMap generatedClassNames = new HashMap();
     
     /** The language types we generate */
-    public enum LanguageType {CPP, JAVA, CSHARP, OBJECTIVEC, JAVASCRIPT, PYTHON }
+    public enum LanguageType {CPP, JAVA, CSHARP, OBJECTIVEC, JAVASCRIPT, PYTHON, SCHEMA }
     
     /** As we parse the XML document, this is the class we are currently working on */
     private GeneratedClass currentGeneratedClass = null;
@@ -62,7 +62,10 @@ public class Xmlpg
     
     /** source code generation for python */
     Properties pythonProperties = new Properties();
-    
+
+    /** source code generation for schema */
+    Properties schemaProperties = new Properties();
+
     /** Hash table of all the primitive types we can use (short, long, byte, etc.)*/
     private HashSet primitiveTypes = new HashSet();
     
@@ -114,7 +117,13 @@ public class Xmlpg
             toGenerate = Xmlpg.LanguageType.JAVASCRIPT;
         }
         else if(languageToGenerate.equalsIgnoreCase("python"))
+        {
             toGenerate = Xmlpg.LanguageType.PYTHON;
+        }
+        else if(languageToGenerate.equalsIgnoreCase("schema"))
+        {
+            toGenerate = Xmlpg.LanguageType.SCHEMA;
+        }
 
         Properties sourceGenerationOptions = new Properties();
 
@@ -185,6 +194,13 @@ public class Xmlpg
             PythonGenerator pythonGenerator = new PythonGenerator(generatedClassNames, pythonProperties);
             pythonGenerator.writeClasses();
         }
+
+        if(toGenerate == Xmlpg.LanguageType.SCHEMA)
+        {
+            // create a new generator object for Python
+            SchemaGenerator schemaGenerator = new SchemaGenerator(generatedClassNames, schemaProperties);
+            schemaGenerator.writeClasses();
+        }
     }
     
     /**
@@ -201,7 +217,7 @@ public class Xmlpg
         if(args.length < 2 || args.length > 2)
         {
             System.out.println("Usage: Xmlpg xmlFile language"); 
-            System.out.println("Allowable languages are java, cpp, objc, python, and csharp");
+            System.out.println("Allowable languages are java, cpp, objc, python, schema and csharp");
             System.exit(0);
         }
         
@@ -223,9 +239,10 @@ public class Xmlpg
             
             if(!(language.equalsIgnoreCase("java") || language.equalsIgnoreCase("cpp") ||
                language.equalsIgnoreCase("objc") || language.equalsIgnoreCase("csharp") ||
-               language.equalsIgnoreCase("javascript") || language.equalsIgnoreCase("python") ))
+               language.equalsIgnoreCase("javascript") || language.equalsIgnoreCase("python") ||
+               language.equalsIgnoreCase("schema") ))
             {
-                System.out.println("Not a valid language to generate. The options are java, cpp, objc, javascript, python and csharp");
+                System.out.println("Not a valid language to generate. The options are java, cpp, objc, javascript, python, schema and csharp");
                 System.out.println("Usage: Xmlpg xmlFile language"); 
                 System.exit(0);
             }
@@ -422,7 +439,16 @@ public class Xmlpg
                     pythonProperties.setProperty(attributes.getQName(idx), attributes.getValue(idx));
                 }
             }
-            
+
+            // schema element--place all the attributes and values into a property list
+            if(qName.equalsIgnoreCase("schema"))
+            {
+                for(int idx = 0; idx < attributes.getLength(); idx++)
+                {
+                    schemaProperties.setProperty(attributes.getQName(idx), attributes.getValue(idx));
+                }
+            }
+
             // We've hit the start of a class element. Pick up the attributes of this (name, and any comments)
             // and then prepare for reading attributes.
             if(qName.compareToIgnoreCase("class") == 0)

@@ -41,6 +41,10 @@
 <cpp namespace="DIS"
      directory="cpp/DIS"/>
 
+<schema namespace="DIS"
+        directory="schema/DIS"
+        pduOffset="1000" />
+
 <class name="AcousticEmitter" inheritsFrom="root" comment=" information about a specific UA emitter. Section 6.2.2.">
     
     <attribute name="acousticSystemName" comment="the system for a particular UA emitter, and an enumeration">
