@@ -216,13 +216,20 @@ public class SchemaGenerator extends Generator
                     pw.println("  " + anAttribute.getType() + " " + makeSnakeCase(anAttribute.getName()) + " = " + id + ";");
                 }
 
-                if(anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.FIXED_LIST ||
-                   anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.VARIABLE_LIST)
+                if(anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.FIXED_LIST)
                 {
                     if(anAttribute.getComment() != null)
                         pw.println("  " + "/** " + anAttribute.getComment() + " */");
 
-                    pw.println("  list<" + types.get(anAttribute.getType()) + "> " + makeSnakeCase(anAttribute.getName()) + " = " + (idx) + ";");
+                    pw.println("  list<" + types.get(anAttribute.getType()) + "> " + makeSnakeCase(anAttribute.getName()) + " = " + id + ";");
+                }
+
+                if(anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.VARIABLE_LIST)
+                {
+                    if(anAttribute.getComment() != null)
+                        pw.println("  " + "/** " + anAttribute.getComment() + " */");
+
+                    pw.println("  list<" + anAttribute.getType() + "> " + makeSnakeCase(anAttribute.getName()) + " = " + id + ";");
                 }
             }
 
