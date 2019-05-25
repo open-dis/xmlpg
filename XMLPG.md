@@ -223,16 +223,16 @@ public void marshal(DataOutputStream dos)
        entityOrientation.marshal(dos);
        dos.writeInt( (int)entityAppearance);
        deadReckoningParameters.marshal(dos);
-        for(int idx = 0; idx < marking.length; idx++)
-        {
-           dos.writeByte(marking[idx]);
-        } // end of array marshaling
+       for(int idx = 0; idx < marking.length; idx++)
+       {
+          dos.writeByte(marking[idx]);
+       } // end of array marshaling
        dos.writeInt( (int)capabilities);
-        for(int idx = 0; idx < articulationParameters.size(); idx++)
-        {
-           ArticulationParameter aArticulationParameter = (ArticulationParameter)articulationParameters.get(idx);
-           aArticulationParameter.marshal(dos);
-        } // end of list marshalling
+       for(int idx = 0; idx < articulationParameters.size(); idx++)
+       {
+          ArticulationParameter aArticulationParameter = (ArticulationParameter)articulationParameters.get(idx);
+          aArticulationParameter.marshal(dos);
+       } // end of list marshalling
     } // end try
 ``` 
 
