@@ -132,8 +132,8 @@ The name attribute must contain the name of another class defined in the XML fil
     EntityID entityID;  // Uniquely identifies an entity in the world  
   
     EntityID& getEntityID();
-    const EntityID&  getEntityID() const;
-    void setEntityID(EntityID    &x);
+    const EntityID& getEntityID() const;
+    void setEntityID(EntityID &x);
 ```
   
 The java code generated looks like this:  
@@ -169,9 +169,9 @@ The C++ code generated looks like this:
 ```cpp
     char marking[12];
   
-    char*  getMarking();
-    const char*  getMarking() const;
-    void setMarking( char*    x);
+    char* getMarking();
+    const char* getMarking() const;
+    void setMarking(char* x);
 ```
 
 And the Java code like this:  
