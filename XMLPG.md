@@ -12,31 +12,31 @@ The XML fragment below provides an abstract definition of a protocol class:
 ```xml
 <class name="EntityID" inheritsFrom="root" comment="The identifier for entities in a DIS world. It consists of three unsigned short values, which together are unique.">
   
- <attribute name="application" comment="The application ID">
-  <primitive type="unsigned short"/>
- </attribute>
+    <attribute name="application" comment="The application ID">
+        <primitive type="unsigned short"/>
+    </attribute>
   
- <attribute name="site" comment="The site ID">
-   <primitive type="unsigned short"/>
- </attribute>  
+    <attribute name="site" comment="The site ID">
+        <primitive type="unsigned short"/>
+    </attribute>  
   
- <attribute name="entity" comment="the entity ID">
-   <primitive type="unsigned short"/>
- </attribute>
-  
+    <attribute name="entity" comment="the entity ID">
+        <primitive type="unsigned short"/>
+    </attribute>
 </class>  
 ```
   
 **Figure 1. XML Protocol Class Description**
 
   
-XMLPG reads this XML and generates an abstract description of the class. This abstract description is compiled to Java and C++ classes. A fragment of the Java class generated is below:
+XMLPG reads this XML and generates an abstract description of the class. This abstract description is compiled to Java and C++ classes.
+
+A fragment of the Java class generated is below:
   
 ```java
 /**
  * The identifier for entities in a DIS world. It consists of three unsigned short values, which together are unique.
  */
-
 public class EntityID extends Object
 {
    /** The application ID */
@@ -48,13 +48,13 @@ public class EntityID extends Object
    /** the entity ID */
    protected int  entity;
 
-public void setApplication(int pApplication)
-{ application = pApplication;
-}
+   public void setApplication(int pApplication)
+   { application = pApplication;
+   }
 
-public int getApplication()
-{ return application; }
-}
+   public int getApplication()
+   { return application; }
+   }
 ```
 
 **Figure 2. Java Language Class Created by XMLPG**
@@ -103,9 +103,9 @@ In this case the FirePdu will inherit from Pdu. The comment tag is optional; it 
 The class tag contains one or more attribute tags. The attribute tags describe one field of the PDU. The simplest sort of attribute is a primitive, which corresponds to a programming language primitive type.  
 
 ```xml
-     <attribute name="quantity" comment="how many">  
-      <primitive type="unsigned short"/>  
-    </attribute>  
+<attribute name="quantity" comment="how many">  
+   <primitive type="unsigned short"/>  
+</attribute>  
 ```
   
 The attribute will cause a programming language instance variable to be created in the class. The ivar will appear in the same order as which it appears in the XML document. This is important for marshaling and unmarshaling. If you are reverse-engineering an existing protocol you should have attribute tags in exactly the same order in which the appear in the protocol.  
@@ -131,11 +131,11 @@ The `name` attribute must contain the name of another class defined in the XML f
 The C++ ivar, getter and setter declarations look like this:  
   
 ```cpp
-    EntityID entityID;  // Uniquely identifies an entity in the world  
+EntityID entityID;  // Uniquely identifies an entity in the world  
   
-    EntityID& getEntityID();
-    const EntityID& getEntityID() const;
-    void setEntityID(EntityID &x);
+EntityID& getEntityID();
+const EntityID& getEntityID() const;
+void setEntityID(EntityID &x);
 ```
   
 The Java code generated looks like this:  
@@ -169,17 +169,17 @@ The `list` tag defines a fixed length, which is used to generate an array in the
 The C++ code generated looks like this:  
 
 ```cpp
-    char marking[12];
+char marking[12];
   
-    char* getMarking();
-    const char* getMarking() const;
-    void setMarking(char* x);
+char* getMarking();
+const char* getMarking() const;
+void setMarking(char* x);
 ```
 
 And the Java code like this:  
 
 ```java
- protected byte[]  marking = new byte[12];  
+protected byte[]  marking = new byte[12];  
   
 public void setMarking(byte[] pMarking)  
 { marking = pMarking;  
@@ -194,7 +194,7 @@ public byte[] getMarking()
 While fixed lists are always the same length, variable lists may have more or fewer list elements, and are implemented as vectors that can grow or shrink. Variable lists must be tied to an `attribute` field that is used to determine how many elements are in the lists. This is needed for unmarshaling; when processing a binary format packet we must know how many elements of the list to read.  
 
 ```xml
- <attribute name="articulationParameters" comment="variable length list of articulation parameters">  
+<attribute name="articulationParameters" comment="variable length list of articulation parameters">  
    <list type="variable" countFieldName="articulationParameterCount">  
      <classRef name="ArticulationParameter"/>  
    </list>  
@@ -211,7 +211,7 @@ The classes with `get` and `set` methods implements much of the code. However, a
 public void marshal(DataOutputStream dos)  
 {  
     super.marshal(dos);  
- try  
+    try  
     {  
        entityID.marshal(dos);  
        dos.writeByte( (byte)forceId);  
