@@ -1,4 +1,4 @@
-# XMLPLG (XML Multi-Language Protocol Generator)
+# XMLPG (XML Multi-Language Protocol Generator)
 
   
 ## Introduction  
@@ -30,7 +30,7 @@ The XML fragment below provides an abstract definition of a protocol class:
 **Figure 1. XML Protocol Class Description**
 
   
-XMLPG reads this XML and generates an abstract description of the class. This abstract description is compiled to Java and C++ classes. A fragment of the Java class generated is below in Figure 2:
+XMLPG reads this XML and generates an abstract description of the class. This abstract description is compiled to Java and C++ classes. A fragment of the Java class generated is below:
   
 ```java
 /**
@@ -59,7 +59,7 @@ public int getApplication()
 
 **Figure 2. Java Language Class Created by XMLPG**
 
-A fragment of the C++ header file generated is below in Figure 3:  
+A fragment of the C++ header file generated is below:  
   
 ```cpp
 class XML_DIS_EXPORT EntityID
@@ -126,7 +126,9 @@ A class may include other classes, for example an EntityStatePdu including a Ent
 </attribute>  
 ```
   
-The name attribute must contain the name of another class defined in the XML file. Getter and setter methods will be generated for the attribute, and the attribute will be marshaled and unmarshaled. In this case the name of the attribute is "entityID" and the class is of the type is "EntityID" (note capitalization).  The C++ ivar, getter and setter declarations look like this:  
+The `name` attribute must contain the name of another class defined in the XML file. Getter and setter methods will be generated for the attribute, and the attribute will be marshaled and unmarshaled. In this case the name of the attribute is "entityID" and the class is of the type is "EntityID" (note capitalization).
+
+The C++ ivar, getter and setter declarations look like this:  
   
 ```cpp
     EntityID entityID;  // Uniquely identifies an entity in the world  
@@ -136,7 +138,7 @@ The name attribute must contain the name of another class defined in the XML fil
     void setEntityID(EntityID &x);
 ```
   
-The java code generated looks like this:  
+The Java code generated looks like this:  
 
 ```java
 /** Uniquely identifies an entity in the world */  
@@ -162,7 +164,7 @@ This corresponds to an array. The tags are as below:
  </attribute>
 ```
 
-The list tag defines a fixed length, which is used to generate an array in the source code. The list tag encloses either a primitive type or a classref field.  
+The `list` tag defines a fixed length, which is used to generate an array in the source code. The `list` tag encloses either a `primitive` type or a `classref` field.  
   
 The C++ code generated looks like this:  
 
@@ -187,7 +189,9 @@ public byte[] getMarking()
 { return marking; }
 ```
 
-Variable List While fixed lists  are always the same length, variable lists may  have more or fewer list elements, and are implemented as vectors that can grow or shrink. Variable lists must be tied to an attribute field that is used to determine how many elements are in the lists. This is needed for unmarshaling; when processing a binary format packet we must know how many elements of the list to read.  
+### Variable List 
+
+While fixed lists are always the same length, variable lists may have more or fewer list elements, and are implemented as vectors that can grow or shrink. Variable lists must be tied to an `attribute` field that is used to determine how many elements are in the lists. This is needed for unmarshaling; when processing a binary format packet we must know how many elements of the list to read.  
 
 ```xml
  <attribute name="articulationParameters" comment="variable length list of articulation parameters">  
@@ -201,7 +205,7 @@ This specifies a field called "articulationParameters" that has a variable numbe
   
 ## Marshaling and Unmarshaling  
   
-The classes with get and set methods implements much of the code. However, a network protocol requires that these classes be able to marshal and unmarshal (aka serialize and deserialize) themselves to the network as PDUs. XMLPG is able to do this automatically. The order in which the ivars are marshaled and unmarshaled is determined by the order in which they appear in the XML description document. An example marshal method for the DIS Entity State PDU is shown below. All this code is generated automatically. Note that because ESPDU inherits from PDU the marshal method in the superclass is called first. Then each of the ivars is marshaled, in order. Primitive types are written directly, and embedded objects have their marshal method called.  A similar method is generated to unmarshal the class from the network.
+The classes with `get` and `set` methods implements much of the code. However, a network protocol requires that these classes be able to marshal and unmarshal (aka serialize and deserialize) themselves to the network as PDUs. XMLPG is able to do this automatically. The order in which the ivars are marshaled and unmarshaled is determined by the order in which they appear in the XML description document. An example marshal method for the DIS Entity State PDU is shown below. All this code is generated automatically. Note that because ESPDU inherits from PDU the marshal method in the superclass is called first. Then each of the ivars is marshaled, in order. Primitive types are written directly, and embedded objects have their marshal method called.  A similar method is generated to unmarshal the class from the network.
 
 ```java
 public void marshal(DataOutputStream dos)  
@@ -237,4 +241,4 @@ Similar code is generated for the C++ implementation.
   
 ### Example: Distributed Interactive Simulation  
   
-As a test case parts of the IEEE DIS standard have been described using XMLPG.  This is in the file `DIS.xml`. Using this XML file java and C++ language files were generated and placed in the cpp and java directories of DIS. The Java source code is compiled via the ant `build.xml` file with the `ant compileDis` command.
+As a test case parts of the IEEE DIS standard have been described using XMLPG.  This is in the file `DIS.xml`. Using this XML file Java and C++ language files were generated and placed in the cpp and java directories of DIS. The Java source code is compiled via the ant `build.xml` file with the `ant compileDis` command.
