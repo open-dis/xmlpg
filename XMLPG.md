@@ -142,14 +142,14 @@ The Java code generated looks like this:
 
 ```java
 /** Uniquely identifies an entity in the world */  
-protected EntityID  entityID = new EntityID();  
+protected EntityID  entityID = new EntityID();
   
-public void setEntityID(EntityID pEntityID)  
-{ entityID = pEntityID;  
-}  
+public void setEntityID(EntityID pEntityID)
+{ entityID = pEntityID;
+}
   
-public EntityID getEntityID()  
-{ return entityID; }  
+public EntityID getEntityID()
+{ return entityID; }
 ```
 
 ### Fixed List
@@ -157,11 +157,11 @@ public EntityID getEntityID()
 This corresponds to an array. The tags are as below:  
   
 ```xml
-<attribute name="marking">  
-   <list type="fixed" length="12">  
-     <primitive type="byte"/>  
-   </list>  
- </attribute>
+<attribute name="marking">
+   <list type="fixed" length="12">
+     <primitive type="byte"/>
+   </list>
+</attribute>
 ```
 
 The `list` tag defines a fixed length, which is used to generate an array in the source code. The `list` tag encloses either a `primitive` type or a `classref` field.  
@@ -179,13 +179,13 @@ void setMarking(char* x);
 And the Java code like this:  
 
 ```java
-protected byte[]  marking = new byte[12];  
+protected byte[]  marking = new byte[12];
   
-public void setMarking(byte[] pMarking)  
-{ marking = pMarking;  
+public void setMarking(byte[] pMarking)
+{ marking = pMarking;
 }  
   
-public byte[] getMarking()  
+public byte[] getMarking()
 { return marking; }
 ```
 
@@ -194,11 +194,11 @@ public byte[] getMarking()
 While fixed lists are always the same length, variable lists may have more or fewer list elements, and are implemented as vectors that can grow or shrink. Variable lists must be tied to an `attribute` field that is used to determine how many elements are in the lists. This is needed for unmarshaling; when processing a binary format packet we must know how many elements of the list to read.  
 
 ```xml
-<attribute name="articulationParameters" comment="variable length list of articulation parameters">  
-   <list type="variable" countFieldName="articulationParameterCount">  
-     <classRef name="ArticulationParameter"/>  
-   </list>  
-</attribute>  
+<attribute name="articulationParameters" comment="variable length list of articulation parameters">
+   <list type="variable" countFieldName="articulationParameterCount">
+     <classRef name="ArticulationParameter"/>
+   </list>
+</attribute>
 ```
 
 This specifies a field called "articulationParameters" that has a variable number of ArticulationParameter objects in it. The number of objects should be held in the field called "articulationParameterCount". During the unmarshaling process that field will be read and the value used to read that many ArticulationParameter objects. This means that the number of articulation parameters specified in articulationParameterCount should be current at the time the PDU is marshaled.  
@@ -208,35 +208,35 @@ This specifies a field called "articulationParameters" that has a variable numbe
 The classes with `get` and `set` methods implements much of the code. However, a network protocol requires that these classes be able to marshal and unmarshal (aka serialize and deserialize) themselves to the network as PDUs. XMLPG is able to do this automatically. The order in which the ivars are marshaled and unmarshaled is determined by the order in which they appear in the XML description document. An example marshal method for the DIS Entity State PDU is shown below. All this code is generated automatically. Note that because ESPDU inherits from PDU the marshal method in the superclass is called first. Then each of the ivars is marshaled, in order. Primitive types are written directly, and embedded objects have their marshal method called.  A similar method is generated to unmarshal the class from the network.
 
 ```java
-public void marshal(DataOutputStream dos)  
-{  
-    super.marshal(dos);  
-    try  
-    {  
-       entityID.marshal(dos);  
-       dos.writeByte( (byte)forceId);  
-       dos.writeByte( (byte)articulationParameterCount);  
-       entityType.marshal(dos);  
-       alternativeEntityType.marshal(dos);  
-       entityLinearVelocity.marshal(dos);  
-       entityLocation.marshal(dos);  
-       entityOrientation.marshal(dos);  
-       dos.writeInt( (int)entityAppearance);  
-       deadReckoningParameters.marshal(dos);  
-        for(int idx = 0; idx < marking.length; idx++)  
-        {  
-           dos.writeByte(marking[idx]);  
-        } // end of array marshaling  
-       dos.writeInt( (int)capabilities);  
-        for(int idx = 0; idx < articulationParameters.size(); idx++)  
-        {  
-           ArticulationParameter aArticulationParameter = (ArticulationParameter)articulationParameters.get(idx);  
-        aArticulationParameter.marshal(dos);  
-        } // end of list marshalling  
-    } // end try  
+public void marshal(DataOutputStream dos)
+{
+    super.marshal(dos);
+    try
+    {
+       entityID.marshal(dos);
+       dos.writeByte( (byte)forceId);
+       dos.writeByte( (byte)articulationParameterCount);
+       entityType.marshal(dos);
+       alternativeEntityType.marshal(dos);
+       entityLinearVelocity.marshal(dos);
+       entityLocation.marshal(dos);
+       entityOrientation.marshal(dos);
+       dos.writeInt( (int)entityAppearance);
+       deadReckoningParameters.marshal(dos);
+        for(int idx = 0; idx < marking.length; idx++)
+        {
+           dos.writeByte(marking[idx]);
+        } // end of array marshaling
+       dos.writeInt( (int)capabilities);
+        for(int idx = 0; idx < articulationParameters.size(); idx++)
+        {
+           ArticulationParameter aArticulationParameter = (ArticulationParameter)articulationParameters.get(idx);
+           aArticulationParameter.marshal(dos);
+        } // end of list marshalling
+    } // end try
 ``` 
 
-Similar code is generated for the C++ implementation.  
+Similar code is generated for the C++ implementation.
   
   
 ### Example: Distributed Interactive Simulation  
