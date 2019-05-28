@@ -1,4 +1,4 @@
-# Example for running xmlpg and generating code for DIS6 protocol.
+# Example for running xmlpg and generating code for DIS protocol.
 # This uses exec-maven-plugin to run, but you could run from xmlpg.jar too.
 
 #schema=../DISDescription/DIS6.xml
