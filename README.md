@@ -13,6 +13,10 @@ The XMLPG system uses the Maven build system, available from Apache.org.
 * `mvn compile`: Compiles the XMLPG program itself
 * `dist`: default task, does most operations.
 
+## Running
+
+There is a sample script `runXmlpg.sh` that uses a compiled version of xmlpg to generate code for several languages.
+
 ## License
 
 XMLPG is released under the BSD license. See `LICENSE.md` for details. 
