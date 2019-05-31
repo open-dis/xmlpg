@@ -1,5 +1,7 @@
 # xmlpg
 
+[![Build Status](https://travis-ci.org/open-dis/xmlpg.svg?branch=master)](https://travis-ci.org/open-dis/xmlpg)
+
 XML Multi-Language Protocol Generator (XMLPG) is a XML-based network protocol implementation generator. Write an XML file and generate network message code.
 
 XMLPG generates Java, C++, C#, Objective-C, Python, and JavaScript language protocol implementations from an abstract description of the protocol in XML. This release includes an example partial implementation of the Distributed Interactive Simulation (DIS) protocol.
