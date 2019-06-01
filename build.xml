@@ -1,46 +1,5 @@
 <?xml version="1.0"  encoding="UTF-8"?>
-<project name="xmlpg" default="dist" basedir=".">
-    <property name="src" location="src"/>
-    <property name="build" location="build"/>
-    <property name="lib" location="lib"/>
-    <property name="dist" location="dist"/>
-    <property name="jarfile" location="${dist}/${ant.project.name}.jar"/>
-    <property name="compile.debug" value="true"/>
-    <!--property name="opendis" location="../open-dis"/-->
-
-    <fileset id="lib.jars" dir="${lib}">
-        <include name="**/*.jar"/>
-    </fileset>
-
-    <path id="lib.path">
-        <fileset refid="lib.jars"/>
-    </path>
-
-    <target name="init" description="create initial directories">
-      <mkdir dir="${dist}"/>
-      <mkdir dir="${build}"/>
-    </target>
-
-    <target name="compile" depends="init" description="Compile code">
-        <javac srcdir="${src}" destdir="${build}"
-               source="1.5" target="1.5"
-               includeAntRuntime="no"
-               classpathref="lib.path" debug="${compile.debug}">
-        </javac>
-    </target>
-
-    <target name="jar" depends="compile" description="make jar file">
-       <jar jarfile="${jarfile}" basedir="build"/>
-    </target>
-   
-    
-    <target name="dist" depends="clean, init, compile, jar" description="compile everything">
-    </target>
-
-    <target name="clean" description="Remove build and dist directories">
-        <delete dir="${bin}"/>
-        <delete dir="${dist}"/>
-    </target>
+<project name="xmlpg" basedir=".">
     
     <target name="createSchema" depends="" description="create XSD schema from legacy xmlpg xml">
         <xslt destdir="." style="XmlpgToXmlSchema.xslt" force="true" in="DIS2012.xml" out="DIS2012.xsd">
