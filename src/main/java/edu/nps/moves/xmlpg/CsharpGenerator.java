@@ -61,14 +61,10 @@ public class CsharpGenerator extends Generator {
         super(pClassDescriptions, pCsharpProperties);
 
         Properties systemProperties = System.getProperties();
-        String directory = null;
-        String clDirectory = systemProperties.getProperty("xmlpg.generatedSourceDir");
         String clNamespace = systemProperties.getProperty("xmlpg.namespace");
         String clUsing = systemProperties.getProperty("xmlpg.using");
 
-        // Directory to place generated source code
-        if(clDirectory != null)
-            pCsharpProperties.setProperty("directory", clDirectory);
+        pCsharpProperties.setProperty("directory", getDirectory());
         
         // Namespace for generated code
         if(clNamespace != null)
@@ -77,9 +73,6 @@ public class CsharpGenerator extends Generator {
         // the using (imports) for the generated code
         if(clUsing != null)
             pCsharpProperties.setProperty("using", clUsing);
-        
-
-        super.setDirectory(pCsharpProperties.getProperty("directory"));
         
         String dotNet = pCsharpProperties.getProperty("useDotNet");
         if(dotNet.equalsIgnoreCase("false"))

@@ -43,16 +43,7 @@ public class CppGenerator extends Generator
     {
         super(pClassDescriptions, pCppProperties);
 
-        Properties systemProperties = System.getProperties();
-        String directory = null;
-        String clDirectory = systemProperties.getProperty("xmlpg.generatedSourceDir");
-
-        // Directory to place generated source code
-        if(clDirectory != null)
-            pCppProperties.setProperty("directory", clDirectory);
-        
-
-        super.setDirectory(pCppProperties.getProperty("directory"));
+        pCppProperties.setProperty("directory", getDirectory());
         
         // Set up a mapping between the strings used in the XML file and the strings used
         // in the java file, specifically the data types. This could be externalized to

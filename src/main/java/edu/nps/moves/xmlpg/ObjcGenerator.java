@@ -43,15 +43,7 @@ public class ObjcGenerator extends Generator
     {
         super(pClassDescriptions, pObjcProperties);
 
-        Properties systemProperties = System.getProperties();
-        String clDirectory = systemProperties.getProperty("xmlpg.generatedSourceDir");
-
-        // Directory to place generated source code
-        if(clDirectory != null)
-            pObjcProperties.setProperty("directory", clDirectory);
-       
-
-        super.setDirectory(pObjcProperties.getProperty("directory"));
+        pObjcProperties.setProperty("directory", getDirectory());
 
         // Set up a mapping between the strings used in the XML file and the strings used
         // in the java file, specifically the data types. This could be externalized to

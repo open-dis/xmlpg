@@ -27,19 +27,19 @@
 
 <java imports="java.util.*, java.io.*"
       package="edu.nps.moves.dis"
-      directory="main/java/edu/nps/moves/dis"
       usesJaxb="false"
       usesHibernate="false"/>
 
 <!-- csharp langauge specific packages. These are added information for xmlpg -->
-
 <csharp using="System, System.Collections.Generic, System.Text, System.Diagnostics, System.Xml.Serialization, DISnet.DataStreamUtilities"
-        namespace="DIS1998net"
-        directory="CSharp/DIS"/>
+    namespace="DIS1998net"/>
 
  <!-- C++ specific information, used by xmlpg -->     
-<cpp namespace="DIS"
-     directory="cpp/DIS"/>
+<cpp namespace="DIS"/>
+
+ <!-- python specific information, used by xmlpg -->
+<python namespace="DIS"
+    filename="pythonDis.py"/>
 
 <class name="AcousticEmitter" inheritsFrom="root" comment=" information about a specific UA emitter. Section 6.2.2.">
     

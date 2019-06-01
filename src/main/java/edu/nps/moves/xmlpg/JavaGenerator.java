@@ -59,8 +59,7 @@ public class JavaGenerator extends Generator
             // take precedence over
             String clUseHibernate = systemProperties.getProperty("xmlpg.useHibernate");
             String clUseJaxb = systemProperties.getProperty("xmlpg.useJaxb");
-            String clDirectory = systemProperties.getProperty("xmlpg.generatedSourceDir");
-            //System.out.println("clDirectory=" + clDirectory);
+
             String clPackage = systemProperties.getProperty("xmlpg.package");
 
             //System.out.println("System properties: " + systemProperties);
@@ -71,15 +70,12 @@ public class JavaGenerator extends Generator
             if(clUseJaxb != null)
                 pJavaProperties.setProperty("useJaxb", clUseJaxb);
 
-            if(clDirectory != null)
-                pJavaProperties.setProperty("directory", clDirectory);
+            pJavaProperties.setProperty("directory", getDirectory());
 
             if(clPackage != null)
                 pJavaProperties.setProperty("package", clPackage);
 
-            super.setDirectory(clDirectory);
-
-            System.out.println("Source code directory set to " + clDirectory);
+            System.out.println("Source code directory set to " + getDirectory());
             if(pJavaProperties.getProperty("useHibernate").equalsIgnoreCase("false"))
                 this.useHibernateAnnotations = false;
             else

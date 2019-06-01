@@ -74,24 +74,7 @@ public class JavascriptGenerator extends Generator
         super(pClassDescriptions, pJavascriptProperties);
         this.javascriptProperties = pJavascriptProperties;
 
-        Properties systemProperties = System.getProperties();
-        //System.out.println("System properties:" + systemProperties);
-        //System.out.println("Javascript properties: " + pJavascriptProperties);
-        namespace = javascriptProperties.getProperty("namespace");
-        super.setDirectory(systemProperties.getProperty("xmlpg.generatedSourceDir"));
-        
-        //super.setDirectory("javascript/dis");
-        //System.out.println("Destination directory: " + pJavascriptProperties.getProperty("xmlpg.generatedSourceDir"));
-
-        try
-        {
-            //Properties systemProperties = System.getProperties();
-        }
-        catch(Exception e)
-        {
-            System.out.println("Required property not set. Modify the XML file to include the missing property");
-            System.out.println(e);
-        }  
+        namespace = javascriptProperties.getProperty("namespace"); 
         
         // How big various primitive types are
         primitiveSizes.setProperty("unsigned short", "2");

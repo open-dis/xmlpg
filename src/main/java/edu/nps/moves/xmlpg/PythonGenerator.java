@@ -58,10 +58,10 @@ public class PythonGenerator extends Generator
         unmarshalTypes.setProperty("float", "float");
     }
 
+    @Override
     public void writeClasses()
     {
        List sortedClasses =  this.sortClasses();
-       this.directory = "src/main/python";
        
        this.createDirectory();
         
@@ -71,7 +71,7 @@ public class PythonGenerator extends Generator
        {
             // Create the new, empty file, and create printwriter object for output to it
             String outputFileName = (String)languageProperties.getProperty("filename");
-            String directoryName = (String)languageProperties.getProperty("directory");
+            String directoryName = getDirectory();
             System.out.println("putting network code in " + directoryName + "/" + outputFileName);
             File outputFile = new File(directoryName + "/" + outputFileName);
             outputFile.getParentFile().mkdirs();

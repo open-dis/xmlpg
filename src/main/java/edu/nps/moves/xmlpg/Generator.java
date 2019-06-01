@@ -27,6 +27,9 @@ public abstract class Generator
     {
         classDescriptions = pClassDescriptions;
         languageProperties = pLanguageProperties;
+        
+        Properties systemProperties = System.getProperties();
+        directory = systemProperties.getProperty("xmlpg.generatedSourceDir");
 
         // Directory is set in the subclasses
 
