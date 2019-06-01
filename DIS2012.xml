@@ -28,8 +28,8 @@
 <java imports="java.util.*, java.io.*"
       package="edu.nps.moves.dis"
       directory="main/java/edu/nps/moves/dis"
-      usesJaxb="true"
-      usesHibernate="true"/>
+      usesJaxb="false"
+      usesHibernate="false"/>
 
 <!-- csharp langauge specific packages. These are added information for xmlpg -->
 
