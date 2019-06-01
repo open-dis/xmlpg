@@ -25,7 +25,7 @@
      annotations here are used only by XMLPG, the source code generation tool.
  -->
 
-<java imports="java.util.*, java.io.*, edu.nps.moves.disenum.*, edu.nps.moves.disutil.*"
+<java imports="java.util.*, java.io.*"
       package="edu.nps.moves.dis"
       directory="main/java/edu/nps/moves/dis"
       usesJaxb="true"
