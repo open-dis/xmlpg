@@ -3,7 +3,6 @@ package edu.nps.moves.xmlpg;
 import java.io.*;
 import java.util.*;
 import javax.xml.parsers.*;
-import org.w3c.dom.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 
