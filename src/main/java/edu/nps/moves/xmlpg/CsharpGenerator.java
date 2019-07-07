@@ -1765,17 +1765,6 @@ public class CsharpGenerator extends Generator {
         }
     }
 
-    /**
-     * returns a string with the first letter capitalized.
-     */
-    @Override
-    public String initialCap(String aString) {
-        StringBuffer stb = new StringBuffer(aString);
-        stb.setCharAt(0, Character.toUpperCase(aString.charAt(0)));
-
-        return new String(stb);
-    }
-
     public String camelCaseCapIgnoreSpaces(String aString) {
         StringBuffer stb = new StringBuffer();
 

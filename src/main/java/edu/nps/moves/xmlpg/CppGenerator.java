@@ -997,17 +997,6 @@ public class CppGenerator extends Generator {
     }
 
     /**
-     * returns a string with the first letter capitalized.
-     */
-    @Override
-    public String initialCap(String aString) {
-        StringBuffer stb = new StringBuffer(aString);
-        stb.setCharAt(0, Character.toUpperCase(aString.charAt(0)));
-
-        return new String(stb);
-    }
-
-    /**
      * Returns true if this class consists only of instance variables that are
      * primitives, such as short, int, etc. Things that are not allowed include
      * ivars that are classes, arrays, or variable length lists. If a class

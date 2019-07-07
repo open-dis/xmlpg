@@ -1780,27 +1780,4 @@ public class JavaGenerator extends Generator {
         }
 
     }
-
-    /**
-     * returns a string with the first letter capitalized.
-     */
-    @Override
-    public String initialCap(String aString) {
-        StringBuffer stb = new StringBuffer(aString);
-        stb.setCharAt(0, Character.toUpperCase(aString.charAt(0)));
-
-        return new String(stb);
-    }
-
-    /**
-     * returns a string with the first letter lower case.
-     */
-    @Override
-    public String initialLower(String aString) {
-        StringBuffer stb = new StringBuffer(aString);
-        stb.setCharAt(0, Character.toLowerCase(aString.charAt(0)));
-
-        return new String(stb);
-    }
-
 }
