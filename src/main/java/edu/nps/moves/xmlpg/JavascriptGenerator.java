@@ -34,7 +34,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Properties;
-import java.util.Stack;
 
 /**
  * Generates Javascript source files that marshal and unmarshal to IEEE DIS.
