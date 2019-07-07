@@ -88,7 +88,7 @@ public abstract class Generator {
     /**
      * returns a string with the first letter capitalized.
      */
-    public String initialCap(String aString) {
+    public static String initialCap(String aString) {
         StringBuffer stb = new StringBuffer(aString);
         stb.setCharAt(0, Character.toUpperCase(aString.charAt(0)));
 
@@ -98,7 +98,7 @@ public abstract class Generator {
     /**
      * returns a string with the first letter lower case.
      */
-    public String initialLower(String aString) {
+    public static String initialLower(String aString) {
         StringBuffer stb = new StringBuffer(aString);
         stb.setCharAt(0, Character.toLowerCase(aString.charAt(0)));
 
