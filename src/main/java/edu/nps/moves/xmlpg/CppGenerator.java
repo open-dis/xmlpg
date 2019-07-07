@@ -99,6 +99,7 @@ public class CppGenerator extends Generator {
     /**
      * Generates the cpp source code classes
      */
+    @Override
     public void writeClasses() {
         this.createDirectory();
 
@@ -998,6 +999,7 @@ public class CppGenerator extends Generator {
     /**
      * returns a string with the first letter capitalized.
      */
+    @Override
     public String initialCap(String aString) {
         StringBuffer stb = new StringBuffer(aString);
         stb.setCharAt(0, Character.toUpperCase(aString.charAt(0)));

@@ -168,6 +168,7 @@ public class JavaGenerator extends Generator {
     /**
      * Generate the classes and write them to a directory
      */
+    @Override
     public void writeClasses() {
         this.createDirectory();
 
@@ -1783,6 +1784,7 @@ public class JavaGenerator extends Generator {
     /**
      * returns a string with the first letter capitalized.
      */
+    @Override
     public String initialCap(String aString) {
         StringBuffer stb = new StringBuffer(aString);
         stb.setCharAt(0, Character.toUpperCase(aString.charAt(0)));
@@ -1793,6 +1795,7 @@ public class JavaGenerator extends Generator {
     /**
      * returns a string with the first letter lower case.
      */
+    @Override
     public String initialLower(String aString) {
         StringBuffer stb = new StringBuffer(aString);
         stb.setCharAt(0, Character.toLowerCase(aString.charAt(0)));
