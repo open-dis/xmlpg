@@ -31,7 +31,8 @@ public class PythonGenerator extends Generator {
         marshalTypes.setProperty("unsigned short", "unsigned_short");
         marshalTypes.setProperty("unsigned byte", "unsigned_byte");
         marshalTypes.setProperty("unsigned int", "unsigned_int");
-        marshalTypes.setProperty("unsigned long", "long"); // This is wrong; no unsigned long type in java. Fix with a BigInt or similar
+        marshalTypes.setProperty("unsigned long", "long"); // This is wrong; no unsigned long type in java. Fix with a
+                                                           // BigInt or similar
 
         marshalTypes.setProperty("byte", "byte");
         marshalTypes.setProperty("short", "short");
@@ -123,7 +124,7 @@ public class PythonGenerator extends Generator {
         for (int idx = 0; idx < ivars.size(); idx++) {
             ClassAttribute anAttribute = (ClassAttribute) ivars.get(idx);
 
-            // This attribute is a primitive. 
+            // This attribute is a primitive.
             if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE) {
 
                 String defaultValue = anAttribute.getDefaultValue();
@@ -156,8 +157,7 @@ public class PythonGenerator extends Generator {
                 String listLengthString = (new Integer(listLength)).toString();
 
                 if (anAttribute.getUnderlyingTypeIsPrimitive() == true) {
-                    pw.print(INDENT + INDENT + "self." + anAttribute.getName() + " =  "
-                            + "[");
+                    pw.print(INDENT + INDENT + "self." + anAttribute.getName() + " =  " + "[");
                     for (int arrayLength = 0; arrayLength < anAttribute.getListLength(); arrayLength++) {
                         pw.print(" 0");
                         if (arrayLength < anAttribute.getListLength() - 1) {
@@ -166,8 +166,7 @@ public class PythonGenerator extends Generator {
                     }
                     pw.println("]");
                 } else {
-                    pw.print(INDENT + INDENT + "self." + anAttribute.getName() + " =  "
-                            + "[");
+                    pw.print(INDENT + INDENT + "self." + anAttribute.getName() + " =  " + "[");
                     for (int arrayLength = 0; arrayLength < anAttribute.getListLength(); arrayLength++) {
                         pw.print(" " + attributeType + "()");
                         if (arrayLength < anAttribute.getListLength() - 1) {
@@ -182,7 +181,7 @@ public class PythonGenerator extends Generator {
                 }
             }
 
-            // The attribute is a variable list of some kind. 
+            // The attribute is a variable list of some kind.
             if ((anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.VARIABLE_LIST)) {
                 String attributeType = anAttribute.getType();
                 int listLength = anAttribute.getListLength();
@@ -208,7 +207,8 @@ public class PythonGenerator extends Generator {
                 List thisClassesAttributes = currentClass.getClassAttributes();
                 for (int jdx = 0; jdx < thisClassesAttributes.size(); jdx++) {
                     ClassAttribute anAttribute = (ClassAttribute) thisClassesAttributes.get(jdx);
-                    //System.out.println("--checking " + anAttribute.getName() + " against inital value " + anInitialValue.getVariable());
+                    // System.out.println("--checking " + anAttribute.getName() + " against inital value " +
+                    // anInitialValue.getVariable());
                     if (anInit.getVariable().equals(anAttribute.getName())) {
                         found = true;
                         break;
@@ -217,7 +217,8 @@ public class PythonGenerator extends Generator {
                 currentClass = (GeneratedClass) classDescriptions.get(currentClass.getParentClass());
             }
             if (!found) {
-                System.out.println("Could not find initial value matching attribute name for " + anInit.getVariable() + " in class " + aClass.getName());
+                System.out.println("Could not find initial value matching attribute name for " + anInit.getVariable()
+                        + " in class " + aClass.getName());
             } else {
                 pw.println(INDENT + INDENT + "self." + anInit.getVariable() + " = " + anInit.getVariableValue());
                 pw.println(INDENT + INDENT + "\"\"\" initialize value \"\"\"");
@@ -258,60 +259,64 @@ public class PythonGenerator extends Generator {
             }
 
             switch (anAttribute.getAttributeKind()) {
-                case PRIMITIVE:
-                    String marshalType = marshalTypes.getProperty(anAttribute.getType());
+            case PRIMITIVE:
+                String marshalType = marshalTypes.getProperty(anAttribute.getType());
 
-                    // If we're a normal primitivetype, marshal out directly; otherwise, marshall out
-                    // the list length.
-                    if (anAttribute.getIsDynamicListLengthField() == true) {
-                        ClassAttribute listAttribute = anAttribute.getDynamicListClassAttribute();
-                        pw.println(INDENT + INDENT + "outputStream.write_" + marshalType + "( len(self." + listAttribute.getName() + "));");
-                    } else {
-                        pw.println(INDENT + INDENT + "outputStream.write_" + marshalType + "(self." + anAttribute.getName() + ");");
-                    }
-                    pw.flush();
-                    break;
+                // If we're a normal primitivetype, marshal out directly; otherwise, marshall out
+                // the list length.
+                if (anAttribute.getIsDynamicListLengthField() == true) {
+                    ClassAttribute listAttribute = anAttribute.getDynamicListClassAttribute();
+                    pw.println(INDENT + INDENT + "outputStream.write_" + marshalType + "( len(self."
+                            + listAttribute.getName() + "));");
+                } else {
+                    pw.println(INDENT + INDENT + "outputStream.write_" + marshalType + "(self." + anAttribute.getName()
+                            + ");");
+                }
+                pw.flush();
+                break;
 
-                case CLASSREF:
-                    pw.println(INDENT + INDENT + "self." + anAttribute.getName() + ".serialize(outputStream)");
-                    break;
+            case CLASSREF:
+                pw.println(INDENT + INDENT + "self." + anAttribute.getName() + ".serialize(outputStream)");
+                break;
 
-                case FIXED_LIST:
-                    // Write out the method call to encode a fixed length list, aka an array.
+            case FIXED_LIST:
+                // Write out the method call to encode a fixed length list, aka an array.
 
-                    pw.println(INDENT + INDENT + "for idx in range(0, " + anAttribute.getListLength() + "):");
+                pw.println(INDENT + INDENT + "for idx in range(0, " + anAttribute.getListLength() + "):");
 
-                    if (anAttribute.getUnderlyingTypeIsPrimitive() == true) {
-                        marshalType = unmarshalTypes.getProperty(anAttribute.getType());
+                if (anAttribute.getUnderlyingTypeIsPrimitive() == true) {
+                    marshalType = unmarshalTypes.getProperty(anAttribute.getType());
 
-                        pw.println(INDENT + INDENT + INDENT + "outputStream.write_" + marshalType + "( self." + anAttribute.getName() + "[ idx ] );");
-                    } else if (anAttribute.listIsClass() == true) {
-                        pw.println(INDENT + INDENT + INDENT + "self." + anAttribute.getName() + "[ idx ].serialize(outputStream);");
-                    }
+                    pw.println(INDENT + INDENT + INDENT + "outputStream.write_" + marshalType + "( self."
+                            + anAttribute.getName() + "[ idx ] );");
+                } else if (anAttribute.listIsClass() == true) {
+                    pw.println(INDENT + INDENT + INDENT + "self." + anAttribute.getName()
+                            + "[ idx ].serialize(outputStream);");
+                }
 
-                    pw.println();
+                pw.println();
 
-                    break;
+                break;
 
-                case VARIABLE_LIST:
-                    //pw.println(INDENT + INDENT + "while idx < len(" + anAttribute.getName() + "):");
-                    pw.println(INDENT + INDENT + "for anObj in self." + anAttribute.getName() + ":");
-                    // This is some sleaze. We're an array, but an array of what? We could be either a
-                    // primitive or a class. We need to figure out which. This is done via the expedient
-                    // but not very reliable way of trying to do a lookup on the type. If we don't find
-                    // it in our map of primitives to marshal types, we assume it is a class.
+            case VARIABLE_LIST:
+                // pw.println(INDENT + INDENT + "while idx < len(" + anAttribute.getName() + "):");
+                pw.println(INDENT + INDENT + "for anObj in self." + anAttribute.getName() + ":");
+                // This is some sleaze. We're an array, but an array of what? We could be either a
+                // primitive or a class. We need to figure out which. This is done via the expedient
+                // but not very reliable way of trying to do a lookup on the type. If we don't find
+                // it in our map of primitives to marshal types, we assume it is a class.
 
-                    marshalType = marshalTypes.getProperty(anAttribute.getType());
+                marshalType = marshalTypes.getProperty(anAttribute.getType());
 
-                    if (marshalType == null) // It's a class
-                    {
-                        pw.println(INDENT + INDENT + INDENT + "anObj.serialize(outputStream)");
-                    } else // It's a primitive
-                    {
-                        pw.println(INDENT + INDENT + INDENT + "outputStream.write_" + marshalType + "( anObj )");
-                    }
-                    pw.println();
-                    break;
+                if (marshalType == null) // It's a class
+                {
+                    pw.println(INDENT + INDENT + INDENT + "anObj.serialize(outputStream)");
+                } else // It's a primitive
+                {
+                    pw.println(INDENT + INDENT + INDENT + "outputStream.write_" + marshalType + "( anObj )");
+                }
+                pw.println();
+                break;
             }
         }
         pw.println();
@@ -342,58 +347,62 @@ public class PythonGenerator extends Generator {
             }
 
             switch (anAttribute.getAttributeKind()) {
-                case PRIMITIVE:
-                    String marshalType = marshalTypes.getProperty(anAttribute.getType());
-                    pw.println(INDENT + INDENT + "self." + anAttribute.getName() + " = inputStream.read_" + marshalType + "();");
-                    break;
+            case PRIMITIVE:
+                String marshalType = marshalTypes.getProperty(anAttribute.getType());
+                pw.println(INDENT + INDENT + "self." + anAttribute.getName() + " = inputStream.read_" + marshalType
+                        + "();");
+                break;
 
-                case CLASSREF:
-                    pw.println(INDENT + INDENT + "self." + anAttribute.getName() + ".parse(inputStream)");
-                    break;
+            case CLASSREF:
+                pw.println(INDENT + INDENT + "self." + anAttribute.getName() + ".parse(inputStream)");
+                break;
 
-                case FIXED_LIST:
-                    // Write out the method call to parse a fixed length list, aka an array.
+            case FIXED_LIST:
+                // Write out the method call to parse a fixed length list, aka an array.
 
-                    pw.println(INDENT + INDENT + "self." + anAttribute.getName() + " = [0]*" + anAttribute.getListLength());
+                pw.println(INDENT + INDENT + "self." + anAttribute.getName() + " = [0]*" + anAttribute.getListLength());
 
-                    pw.println(INDENT + INDENT + "for idx in range(0, " + anAttribute.getListLength() + "):");
+                pw.println(INDENT + INDENT + "for idx in range(0, " + anAttribute.getListLength() + "):");
 
-                    if (anAttribute.getUnderlyingTypeIsPrimitive() == true) {
-                        marshalType = unmarshalTypes.getProperty(anAttribute.getType());
-                        pw.println(INDENT + INDENT + INDENT + "val = inputStream.read_" + marshalType);
-                        pw.println(INDENT + INDENT + INDENT + "self." + anAttribute.getName() + "[  idx  ] = val");
-                        //pw.println(INDENT + INDENT + INDENT +"inputStream.read_" + marshalType + "( self." + anAttribute.getName() + "[ idx ] );");
-                    }
-                    //else if(anAttribute.listIsClass() == true) 
-                    ///{
-                    //    pw.println(INDENT + INDENT + INDENT+ "self." + anAttribute.getName() + "[ idx ].serialize(outputStream);");
-                    //}
+                if (anAttribute.getUnderlyingTypeIsPrimitive() == true) {
+                    marshalType = unmarshalTypes.getProperty(anAttribute.getType());
+                    pw.println(INDENT + INDENT + INDENT + "val = inputStream.read_" + marshalType);
+                    pw.println(INDENT + INDENT + INDENT + "self." + anAttribute.getName() + "[  idx  ] = val");
+                    // pw.println(INDENT + INDENT + INDENT +"inputStream.read_" + marshalType + "( self." +
+                    // anAttribute.getName() + "[ idx ] );");
+                }
+                // else if(anAttribute.listIsClass() == true)
+                /// {
+                // pw.println(INDENT + INDENT + INDENT+ "self." + anAttribute.getName() + "[ idx
+                // ].serialize(outputStream);");
+                // }
 
-                    pw.println();
-                    break;
+                pw.println();
+                break;
 
-                case VARIABLE_LIST:
-                    pw.println(INDENT + INDENT + "for idx in range(0, self." + anAttribute.getCountFieldName() + "):");
+            case VARIABLE_LIST:
+                pw.println(INDENT + INDENT + "for idx in range(0, self." + anAttribute.getCountFieldName() + "):");
 
-                    // This is some sleaze. We're an array, but an array of what? We could be either a
-                    // primitive or a class. We need to figure out which. This is done via the expedient
-                    // but not very reliable way of trying to do a lookup on the type. If we don't find
-                    // it in our map of primitives to marshal types, we assume it is a class.
-                    marshalType = marshalTypes.getProperty(anAttribute.getType());
+                // This is some sleaze. We're an array, but an array of what? We could be either a
+                // primitive or a class. We need to figure out which. This is done via the expedient
+                // but not very reliable way of trying to do a lookup on the type. If we don't find
+                // it in our map of primitives to marshal types, we assume it is a class.
+                marshalType = marshalTypes.getProperty(anAttribute.getType());
 
-                    if (marshalType == null) // It's a class
-                    {
-                        pw.println(INDENT + INDENT + INDENT + "element = " + anAttribute.dynamicListClassAttribute + "()");
-                        pw.println(INDENT + INDENT + INDENT + "element.parse(inputStream)");
-                        pw.println(INDENT + INDENT + INDENT + "self." + anAttribute.getName() + ".append(element)");
-                    } else // It's a primitive
-                    {
-                        pw.println(INDENT + INDENT + INDENT + "self." + anAttribute.getName() + ".add( inputStream.read_" + marshalType + "(  )");
-                    }
-                    pw.println();
+                if (marshalType == null) // It's a class
+                {
+                    pw.println(INDENT + INDENT + INDENT + "element = " + anAttribute.dynamicListClassAttribute + "()");
+                    pw.println(INDENT + INDENT + INDENT + "element.parse(inputStream)");
+                    pw.println(INDENT + INDENT + INDENT + "self." + anAttribute.getName() + ".append(element)");
+                } else // It's a primitive
+                {
+                    pw.println(INDENT + INDENT + INDENT + "self." + anAttribute.getName() + ".add( inputStream.read_"
+                            + marshalType + "(  )");
+                }
+                pw.println();
 
-                    break;
-            } // end switch  
+                break;
+            } // end switch
 
         } // End loop through attributes
     }
@@ -404,9 +413,8 @@ public class PythonGenerator extends Generator {
     }
 
     /**
-     * Some fields have integers with bit fields defined, eg an integer where
-     * bits 0-2 represent some value, while bits 3-4 represent another value,
-     * and so on. This writes accessor and mutator methods for those fields.
+     * Some fields have integers with bit fields defined, eg an integer where bits 0-2 represent some value, while bits
+     * 3-4 represent another value, and so on. This writes accessor and mutator methods for those fields.
      *
      * @param pw
      * @param aClass
@@ -419,49 +427,52 @@ public class PythonGenerator extends Generator {
 
             switch (anAttribute.getAttributeKind()) {
 
-                // Anything with bitfields must be a primitive type
-                case PRIMITIVE:
+            // Anything with bitfields must be a primitive type
+            case PRIMITIVE:
 
-                    List bitfields = anAttribute.bitFieldList;
+                List bitfields = anAttribute.bitFieldList;
 
-                    for (int jdx = 0; jdx < bitfields.size(); jdx++) {
-                        BitField bitfield = (BitField) bitfields.get(jdx);
-                        String capped = this.initialCap(bitfield.name);
-                        int shiftBits = this.getBitsToShift(anAttribute, bitfield.mask);
+                for (int jdx = 0; jdx < bitfields.size(); jdx++) {
+                    BitField bitfield = (BitField) bitfields.get(jdx);
+                    String capped = this.initialCap(bitfield.name);
+                    int shiftBits = this.getBitsToShift(anAttribute, bitfield.mask);
 
-                        // write getter
-                        pw.println();
-                        pw.println(INDENT + "def get" + capped + "(self):");
-                        if (bitfield.comment != null) {
-                            pw.println(INDENT + INDENT + "\"\"\"" + bitfield.comment + " \"\"\"");
-                        }
-
-                        pw.println(INDENT + INDENT + "val = self." + bitfield.parentAttribute.getName() + " & " + bitfield.mask);
-                        pw.println(INDENT + INDENT + "return val >> " + shiftBits);
-                        pw.println();
-
-                        // Write the setter/mutator
-                        pw.println();
-                        pw.println(INDENT + "def set" + capped + "(self, val):");
-                        if (bitfield.comment != null) {
-                            pw.println(INDENT + INDENT + "\"\"\"" + bitfield.comment + " \"\"\"");
-                        }
-                        pw.println(INDENT + INDENT + "aVal = 0");
-                        pw.println(INDENT + INDENT + "self." + bitfield.parentAttribute.getName() + " &= ~" + bitfield.mask);
-                        pw.println(INDENT + INDENT + "val = val << " + shiftBits);
-                        pw.println(INDENT + INDENT + "self." + bitfield.parentAttribute.getName() + " = self." + bitfield.parentAttribute.getName() + " | val");
-                        //pw.println(INDENT + INDENT + bitfield.parentAttribute.getName() + " = val & ~" + mask);
-                        pw.println();
+                    // write getter
+                    pw.println();
+                    pw.println(INDENT + "def get" + capped + "(self):");
+                    if (bitfield.comment != null) {
+                        pw.println(INDENT + INDENT + "\"\"\"" + bitfield.comment + " \"\"\"");
                     }
 
-                    break;
+                    pw.println(INDENT + INDENT + "val = self." + bitfield.parentAttribute.getName() + " & "
+                            + bitfield.mask);
+                    pw.println(INDENT + INDENT + "return val >> " + shiftBits);
+                    pw.println();
 
-                default:
-                    bitfields = anAttribute.bitFieldList;
-                    if (!bitfields.isEmpty()) {
-                        System.out.println("Attempted to use bit flags on a non-primitive field");
-                        System.out.println("Field: " + anAttribute.getName());
+                    // Write the setter/mutator
+                    pw.println();
+                    pw.println(INDENT + "def set" + capped + "(self, val):");
+                    if (bitfield.comment != null) {
+                        pw.println(INDENT + INDENT + "\"\"\"" + bitfield.comment + " \"\"\"");
                     }
+                    pw.println(INDENT + INDENT + "aVal = 0");
+                    pw.println(
+                            INDENT + INDENT + "self." + bitfield.parentAttribute.getName() + " &= ~" + bitfield.mask);
+                    pw.println(INDENT + INDENT + "val = val << " + shiftBits);
+                    pw.println(INDENT + INDENT + "self." + bitfield.parentAttribute.getName() + " = self."
+                            + bitfield.parentAttribute.getName() + " | val");
+                    // pw.println(INDENT + INDENT + bitfield.parentAttribute.getName() + " = val & ~" + mask);
+                    pw.println();
+                }
+
+                break;
+
+            default:
+                bitfields = anAttribute.bitFieldList;
+                if (!bitfields.isEmpty()) {
+                    System.out.println("Attempted to use bit flags on a non-primitive field");
+                    System.out.println("Field: " + anAttribute.getName());
+                }
             }
 
         }
@@ -476,12 +487,10 @@ public class PythonGenerator extends Generator {
     }
 
     /**
-     * Python doesn't like forward-declaring classes, so a subclass must be
-     * declared after its superclass. This reorders the list of classes so that
-     * this is the case. This re-creates the semantic class inheritance tree
-     * structure, then traverses the tree in preorder fashion to ensure that a
-     * base class is written before a subclass. The implementation is a little
-     * wonky in places.
+     * Python doesn't like forward-declaring classes, so a subclass must be declared after its superclass. This reorders
+     * the list of classes so that this is the case. This re-creates the semantic class inheritance tree structure, then
+     * traverses the tree in preorder fashion to ensure that a base class is written before a subclass. The
+     * implementation is a little wonky in places.
      */
     public List sortClasses() {
         List allClasses = new ArrayList(classDescriptions.values());

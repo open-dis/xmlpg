@@ -48,23 +48,21 @@ public class JavascriptGenerator extends Generator {
     Properties types = new Properties();
 
     /**
-     * A property list that contains javascript-specific code generation
-     * information, such as package names, imports, etc.
+     * A property list that contains javascript-specific code generation information, such as package names, imports,
+     * etc.
      */
     Properties javascriptProperties;
 
     String namespace = null;
 
     /**
-     * What primitive types should be marshalled as. This may be different from
-     * the Java get/set methods, ie an unsigned short might have ints as the
-     * getter/setter, but is marshalled as a short.
+     * What primitive types should be marshalled as. This may be different from the Java get/set methods, ie an unsigned
+     * short might have ints as the getter/setter, but is marshalled as a short.
      */
     Properties marshalTypes = new Properties();
 
     /**
-     * Similar to above, but used on unmarshalling. There are some special cases
-     * (unsigned types) to be handled here.
+     * Similar to above, but used on unmarshalling. There are some special cases (unsigned types) to be handled here.
      */
     Properties unmarshalTypes = new Properties();
 
@@ -116,7 +114,8 @@ public class JavascriptGenerator extends Generator {
         types.setProperty("unsigned short", "int");
         types.setProperty("unsigned byte", "short");
         types.setProperty("unsigned int", "long");
-        types.setProperty("unsigned long", "long"); // This is wrong; java doesn't have an unsigned long. Placeholder for a later BigInt or similar type
+        types.setProperty("unsigned long", "long"); // This is wrong; java doesn't have an unsigned long. Placeholder
+                                                    // for a later BigInt or similar type
 
         types.setProperty("byte", "byte");
         types.setProperty("short", "short");
@@ -130,7 +129,8 @@ public class JavascriptGenerator extends Generator {
         marshalTypes.setProperty("unsigned short", "UnsignedShort");
         marshalTypes.setProperty("unsigned byte", "UnsignedByte");
         marshalTypes.setProperty("unsigned int", "UnsignedInt");
-        marshalTypes.setProperty("unsigned long", "long"); // This is wrong; no unsigned long type in java. Fix with a BigInt or similar
+        marshalTypes.setProperty("unsigned long", "long"); // This is wrong; no unsigned long type in java. Fix with a
+                                                           // BigInt or similar
 
         marshalTypes.setProperty("byte", "byte");
         marshalTypes.setProperty("short", "short");
@@ -193,11 +193,11 @@ public class JavascriptGenerator extends Generator {
                 if (pack != null) {
                     pack = pack.replace(".", "/");
                     fullPath = getDirectory() + "/" + name + ".js";
-                    //System.out.println("full path is " + fullPath);
+                    // System.out.println("full path is " + fullPath);
                 } else {
                     fullPath = getDirectory() + "/" + name + ".js";
                 }
-                //System.out.println("Creating Javascript source code file for " + fullPath);
+                // System.out.println("Creating Javascript source code file for " + fullPath);
 
                 // Create the new, empty file, and create printwriter object for output to it
                 File outputFile = new File(fullPath);
@@ -218,38 +218,22 @@ public class JavascriptGenerator extends Generator {
         // into the dis.js file via ant.
         // (Commented out; trying to keep the exports in each generated file now)
         /*
-        try
-        {
-            String fullPath = getDirectory() + "/exports.js";
-            File outputFile = new File(fullPath);
-            outputFile.getParentFile().mkdirs();
-            outputFile.createNewFile();
-            PrintWriter pw = new PrintWriter(outputFile);
-            
-            pw.println();
-            pw.println("// Exports for the dis module, used in require.js");
-            pw.println("// You should delete this if not using with require.js");
-            pw.println();
-            
-            it = classDescriptions.values().iterator();
-            while(it.hasNext())
-            {
-                 GeneratedClass aClass = (GeneratedClass)it.next();
-                 pw.println("exports." + aClass.getName() + " = dis." + aClass.getName() + ";");
-            }
-            pw.println();
-            pw.close();
-        }
-        catch(Exception e)
-        {
-            System.out.println(e);
-        }
+         * try { String fullPath = getDirectory() + "/exports.js"; File outputFile = new File(fullPath);
+         * outputFile.getParentFile().mkdirs(); outputFile.createNewFile(); PrintWriter pw = new
+         * PrintWriter(outputFile);
+         * 
+         * pw.println(); pw.println("// Exports for the dis module, used in require.js");
+         * pw.println("// You should delete this if not using with require.js"); pw.println();
+         * 
+         * it = classDescriptions.values().iterator(); while(it.hasNext()) { GeneratedClass aClass =
+         * (GeneratedClass)it.next(); pw.println("exports." + aClass.getName() + " = dis." + aClass.getName() + ";"); }
+         * pw.println(); pw.close(); } catch(Exception e) { System.out.println(e); }
          */
     } // End write classes
 
     /**
-     * Generate a source code file with a psuedo-classical constructor. No
-     * getters or setters; that's sorta not the style in javascript.
+     * Generate a source code file with a psuedo-classical constructor. No getters or setters; that's sorta not the
+     * style in javascript.
      */
     private void writeClass(PrintWriter pw, GeneratedClass aClass) {
         this.writeClassComments(pw, aClass);
@@ -319,7 +303,7 @@ public class JavascriptGenerator extends Generator {
 
         // Start writing the function
         pw.println();
-        //pw.println("  " + aClass.getName()+ ".prototype. encodeToBinary = function(outputStream)");
+        // pw.println(" " + aClass.getName()+ ".prototype. encodeToBinary = function(outputStream)");
         pw.println("  " + namespace + "." + aClass.getName() + ".prototype.encodeToBinary = function(outputStream)");
         pw.println("  {");
 
@@ -344,7 +328,12 @@ public class JavascriptGenerator extends Generator {
                 } else if (marshalType.equalsIgnoreCase("UnsignedInt")) {
                     pw.println("       outputStream.writeUInt(this." + anAttribute.getName() + ");");
                 } else if (marshalType.equalsIgnoreCase("UnsignedLong")) {
-                    pw.println("       outputStream.writeLong" + "(this." + anAttribute.getName() + ");"); // ^^^This is wrong; need to read unsigned here
+                    pw.println("       outputStream.writeLong" + "(this." + anAttribute.getName() + ");"); // ^^^This is
+                                                                                                           // wrong;
+                                                                                                           // need to
+                                                                                                           // read
+                                                                                                           // unsigned
+                                                                                                           // here
                 } else {
                     pw.println("       outputStream.write" + capped + "(this." + anAttribute.getName() + ");");
                 }
@@ -365,7 +354,8 @@ public class JavascriptGenerator extends Generator {
                     String marshalType = unmarshalTypes.getProperty(anAttribute.getType());
                     String capped = this.initialCap(marshalType);
 
-                    pw.println("          outputStream.write" + capped + "(this." + anAttribute.getName() + "[ idx ] );");
+                    pw.println(
+                            "          outputStream.write" + capped + "(this." + anAttribute.getName() + "[ idx ] );");
                 } else if (anAttribute.listIsClass() == true) {
                     pw.println("          this." + anAttribute.getName() + "[ idx ].encodeToBinary(outputStream);");
                 }
@@ -428,7 +418,7 @@ public class JavascriptGenerator extends Generator {
             allAttributes.addAll(ivars);
         }
 
-        //pw.println("  this.initFromBinary = function(inputStream)");
+        // pw.println(" this.initFromBinary = function(inputStream)");
         pw.println("  " + namespace + "." + aClass.getName() + ".prototype.initFromBinary = function(inputStream)");
         pw.println("  {");
 
@@ -451,7 +441,12 @@ public class JavascriptGenerator extends Generator {
                 } else if (marshalType.equalsIgnoreCase("UnsignedShort")) {
                     pw.println("       this." + anAttribute.getName() + " = inputStream.readUShort();");
                 } else if (marshalType.equalsIgnoreCase("UnsignedLong")) {
-                    pw.println("       this." + anAttribute.getName() + " = inputStream.readLong" + "();"); // ^^^This is wrong; need to read unsigned here
+                    pw.println("       this." + anAttribute.getName() + " = inputStream.readLong" + "();"); // ^^^This
+                                                                                                            // is wrong;
+                                                                                                            // need to
+                                                                                                            // read
+                                                                                                            // unsigned
+                                                                                                            // here
                 } else {
                     pw.println("       this." + anAttribute.getName() + " = inputStream.read" + capped + "();");
                 }
@@ -475,7 +470,8 @@ public class JavascriptGenerator extends Generator {
                     String marshalType = unmarshalTypes.getProperty(anAttribute.getType());
                     String capped = this.initialCap(marshalType);
 
-                    pw.println("          this." + anAttribute.getName() + "[ idx ] = inputStream.read" + capped + "();");
+                    pw.println(
+                            "          this." + anAttribute.getName() + "[ idx ] = inputStream.read" + capped + "();");
                 } else if (anAttribute.listIsClass() == true) {
                     pw.println("          this." + anAttribute.getName() + "[ idx ].initFromBinary(inputStream);");
                 }
@@ -521,7 +517,8 @@ public class JavascriptGenerator extends Generator {
         }
 
         pw.println(" * Copyright (c) 2008-2015, MOVES Institute, Naval Postgraduate School. All rights reserved.");
-        pw.println(" * This work is licensed under the BSD open source license, available at https://www.movesinstitute.org/licenses/bsd.html");
+        pw.println(
+                " * This work is licensed under the BSD open source license, available at https://www.movesinstitute.org/licenses/bsd.html");
         pw.println(" *");
         pw.println(" * @author DMcG");
         pw.println(" */");
@@ -547,9 +544,8 @@ public class JavascriptGenerator extends Generator {
     }
 
     /**
-     * Some fields have integers with bit fields defined, eg an integer where
-     * bits 0-2 represent some value, while bits 3-4 represent another value,
-     * and so on. This writes accessor and mutator methods for those fields.
+     * Some fields have integers with bit fields defined, eg an integer where bits 0-2 represent some value, while bits
+     * 3-4 represent another value, and so on. This writes accessor and mutator methods for those fields.
      *
      * @param pw
      * @param aClass
@@ -562,62 +558,66 @@ public class JavascriptGenerator extends Generator {
 
             switch (anAttribute.getAttributeKind()) {
 
-                // Anything with bitfields _must_ be a primitive type
-                case PRIMITIVE:
+            // Anything with bitfields _must_ be a primitive type
+            case PRIMITIVE:
 
-                    List bitfields = anAttribute.bitFieldList;
+                List bitfields = anAttribute.bitFieldList;
 
-                    for (int jdx = 0; jdx < bitfields.size(); jdx++) {
-                        BitField bitfield = (BitField) bitfields.get(jdx);
-                        String capped = this.initialCap(anAttribute.getName());
-                        String methodBase = capped + "_" + bitfield.name;
-                        int shiftBits = super.getBitsToShift(anAttribute, bitfield.mask);
+                for (int jdx = 0; jdx < bitfields.size(); jdx++) {
+                    BitField bitfield = (BitField) bitfields.get(jdx);
+                    String capped = this.initialCap(anAttribute.getName());
+                    String methodBase = capped + "_" + bitfield.name;
+                    int shiftBits = super.getBitsToShift(anAttribute, bitfield.mask);
 
-                        // write getter
-                        pw.println();
-                        if (bitfield.comment != null) {
-                            pw.println("/** " + bitfield.comment + " */");
-                        }
-                        pw.println("" + namespace + "." + aClass.getName() + ".prototype.get" + methodBase + " = function()");
-                        pw.println("{");
-
-                        pw.println("   var val = this." + bitfield.parentAttribute.getName() + " & " + bitfield.mask + ";");
-                        pw.println("   return val >> " + shiftBits + ";");
-                        pw.println("};");
-
-                        pw.println();
-
-                        // Write the setter/mutator
-                        pw.println();
-                        if (bitfield.comment != null) {
-                            pw.println("/** " + bitfield.comment + " */");
-                        }
-                        pw.println("" + namespace + "." + aClass.getName() + ".prototype.set" + methodBase + "= function(val)");
-                        pw.println("{");
-                        //pw.println("  var aVal = 0;");
-                        pw.println("  this." + bitfield.parentAttribute.getName() + " &= ~" + bitfield.mask + "; // Zero existing bits");
-                        pw.println("  val = val << " + shiftBits + ";");
-                        pw.println("  this." + bitfield.parentAttribute.getName() + " = this." + bitfield.parentAttribute.getName() + " | val; ");
-                        pw.println("};");
-                        //pw.println(INDENT + INDENT + bitfield.parentAttribute.getName() + " = val & ~" + mask);
-                        pw.println();
+                    // write getter
+                    pw.println();
+                    if (bitfield.comment != null) {
+                        pw.println("/** " + bitfield.comment + " */");
                     }
+                    pw.println(
+                            "" + namespace + "." + aClass.getName() + ".prototype.get" + methodBase + " = function()");
+                    pw.println("{");
 
-                    break;
+                    pw.println("   var val = this." + bitfield.parentAttribute.getName() + " & " + bitfield.mask + ";");
+                    pw.println("   return val >> " + shiftBits + ";");
+                    pw.println("};");
 
-                default:
-                    bitfields = anAttribute.bitFieldList;
-                    if (!bitfields.isEmpty()) {
-                        System.out.println("Attempted to use bit flags on a non-primitive field");
-                        System.out.println("Field: " + anAttribute.getName());
+                    pw.println();
+
+                    // Write the setter/mutator
+                    pw.println();
+                    if (bitfield.comment != null) {
+                        pw.println("/** " + bitfield.comment + " */");
                     }
+                    pw.println("" + namespace + "." + aClass.getName() + ".prototype.set" + methodBase
+                            + "= function(val)");
+                    pw.println("{");
+                    // pw.println(" var aVal = 0;");
+                    pw.println("  this." + bitfield.parentAttribute.getName() + " &= ~" + bitfield.mask
+                            + "; // Zero existing bits");
+                    pw.println("  val = val << " + shiftBits + ";");
+                    pw.println("  this." + bitfield.parentAttribute.getName() + " = this."
+                            + bitfield.parentAttribute.getName() + " | val; ");
+                    pw.println("};");
+                    // pw.println(INDENT + INDENT + bitfield.parentAttribute.getName() + " = val & ~" + mask);
+                    pw.println();
+                }
+
+                break;
+
+            default:
+                bitfields = anAttribute.bitFieldList;
+                if (!bitfields.isEmpty()) {
+                    System.out.println("Attempted to use bit flags on a non-primitive field");
+                    System.out.println("Field: " + anAttribute.getName());
+                }
             }
 
         }
     }
 
     private void writeIvars(PrintWriter pw, GeneratedClass aClass) {
-        //List ivars = aClass.getClassAttributes();
+        // List ivars = aClass.getClassAttributes();
         List classHierarchy = new ArrayList();
         GeneratedClass otherClass = aClass;
         do {
@@ -636,7 +636,7 @@ public class JavascriptGenerator extends Generator {
             for (int idx = 0; idx < ivars.size(); idx++) {
                 ClassAttribute anAttribute = (ClassAttribute) ivars.get(idx);
 
-                // This attribute is a primitive. 
+                // This attribute is a primitive.
                 if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE) {
                     // The primitive type--we need to do a lookup from the abstract type in the
                     // xml to the javascript-specific type.
@@ -662,7 +662,8 @@ public class JavascriptGenerator extends Generator {
                     pw.println(";\n");
                 } // end of primitive attribute type
 
-                // this attribute is a reference to another class defined in the XML document, The output should look like
+                // this attribute is a reference to another class defined in the XML document, The output should look
+                // like
                 //
                 // /** This is a comment */
                 // protected AClass foo = new AClass();
@@ -673,7 +674,8 @@ public class JavascriptGenerator extends Generator {
                         pw.println("   /** " + anAttribute.getComment() + " */");
                     }
 
-                    pw.println("   this." + anAttribute.getName() + " = new " + namespace + "." + attributeType + "(); \n");
+                    pw.println("   this." + anAttribute.getName() + " = new " + namespace + "." + attributeType
+                            + "(); \n");
                 }
 
                 // The attribute is a fixed list, ie an array of some type--maybe primitve, maybe a class.
@@ -699,7 +701,7 @@ public class JavascriptGenerator extends Generator {
                     }
                 }
 
-                // The attribute is a variable list of some kind. 
+                // The attribute is a variable list of some kind.
                 if ((anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.VARIABLE_LIST)) {
                     String attributeType = anAttribute.getType();
                     int listLength = anAttribute.getListLength();
@@ -725,15 +727,15 @@ public class JavascriptGenerator extends Generator {
         // work up.
         for (int idx = 0; idx < classHierarchy.size(); idx++) {
             GeneratedClass aClass = (GeneratedClass) classHierarchy.get(idx);
-            //if(log) System.out.println("Class name: " + aClass.getName());
+            // if(log) System.out.println("Class name: " + aClass.getName());
 
             List initialValues = aClass.getInitialValues();
             for (int jdx = 0; jdx < initialValues.size(); jdx++) {
                 InitialValue aVal = (InitialValue) initialValues.get(jdx);
                 if (aVal.getVariable().equalsIgnoreCase(attributeName)) {
-                    //if(log) System.out.println("Variable name:" + aVal.getVariable());
+                    // if(log) System.out.println("Variable name:" + aVal.getVariable());
 
-                    //if(log) System.out.println("found match in " + aClass.getName() + ":" + aVal.getVariable());
+                    // if(log) System.out.println("found match in " + aClass.getName() + ":" + aVal.getVariable());
                     return aVal.getVariableValue();
                 }
 

@@ -16,8 +16,8 @@ import java.util.*;
 public class ObjcGenerator extends Generator {
 
     /**
-     * ivars are often preceded by a special character. This sets what that
-     * character is, so that instance variable names will be preceded by a "_".
+     * ivars are often preceded by a special character. This sets what that character is, so that instance variable
+     * names will be preceded by a "_".
      */
     public static final String IVAR_PREFIX = "";
 
@@ -27,9 +27,8 @@ public class ObjcGenerator extends Generator {
     Properties types = new Properties();
 
     /**
-     * What primitive types should be marshalled as. This may be different from
-     * the cpp get/set methods, ie an unsigned short might have ints as the
-     * getter/setter, but is marshalled as a short.
+     * What primitive types should be marshalled as. This may be different from the cpp get/set methods, ie an unsigned
+     * short might have ints as the getter/setter, but is marshalled as a short.
      */
     Properties marshalTypes = new Properties();
 
@@ -39,8 +38,7 @@ public class ObjcGenerator extends Generator {
     Properties primitiveSizes = new Properties();
 
     /**
-     * A property list that contains cpp-specific code generation information,
-     * such as package names, includes, etc.
+     * A property list that contains cpp-specific code generation information, such as package names, includes, etc.
      */
     Properties objcProperties;
 
@@ -126,7 +124,7 @@ public class ObjcGenerator extends Generator {
     public void writeHeaderFile(GeneratedClass aClass) {
         try {
             String name = aClass.getName();
-            //System.out.println("Creating cpp and .h source code files for " + name);
+            // System.out.println("Creating cpp and .h source code files for " + name);
             String headerFullPath = getDirectory() + "/" + name + ".h";
             File outputFile = new File(headerFullPath);
             outputFile.createNewFile();
@@ -168,7 +166,8 @@ public class ObjcGenerator extends Generator {
             if (aClass.getClassComments() != null) {
                 pw.println("// " + aClass.getClassComments());
                 pw.println();
-                pw.println("// Copyright (c) 2007-2009, MOVES Institute, Naval Postgraduate School. All rights reserved. ");
+                pw.println(
+                        "// Copyright (c) 2007-2009, MOVES Institute, Naval Postgraduate School. All rights reserved. ");
                 pw.println("//");
                 pw.println("// @author DMcG");
                 pw.println();
@@ -183,7 +182,7 @@ public class ObjcGenerator extends Generator {
 
             pw.println("{");
 
-            // Print out ivars. 
+            // Print out ivars.
             for (int idx = 0; idx < aClass.getClassAttributes().size(); idx++) {
                 ClassAttribute anAttribute = (ClassAttribute) aClass.getClassAttributes().get(idx);
 
@@ -211,7 +210,8 @@ public class ObjcGenerator extends Generator {
                         pw.println("  " + "/** " + anAttribute.getComment() + " */");
                     }
 
-                    pw.println("  " + types.get(anAttribute.getType()) + " " + anAttribute.getName() + "[" + anAttribute.getListLength() + "]; ");
+                    pw.println("  " + types.get(anAttribute.getType()) + " " + anAttribute.getName() + "["
+                            + anAttribute.getListLength() + "]; ");
                     pw.println("  // Length of the above array");
                     pw.println("  int " + anAttribute.getName() + "Length;");
                     pw.println("  // Ptr to the array (fixes a syntax types problem with properties)");
@@ -238,15 +238,18 @@ public class ObjcGenerator extends Generator {
                 ClassAttribute anAttribute = (ClassAttribute) aClass.getClassAttributes().get(idx);
 
                 if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE) {
-                    pw.println("@property(readwrite, assign) " + types.get(anAttribute.getType()) + " " + anAttribute.getName() + "; ");
+                    pw.println("@property(readwrite, assign) " + types.get(anAttribute.getType()) + " "
+                            + anAttribute.getName() + "; ");
                 }
 
                 if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.CLASSREF) {
-                    pw.println("@property(readwrite, retain) " + anAttribute.getType() + "* " + anAttribute.getName() + "; ");
+                    pw.println("@property(readwrite, retain) " + anAttribute.getType() + "* " + anAttribute.getName()
+                            + "; ");
                 }
 
                 if ((anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.FIXED_LIST)) {
-                    pw.println("@property(readwrite) " + types.get(anAttribute.getType()) + "* " + anAttribute.getName() + "Ptr;");
+                    pw.println("@property(readwrite) " + types.get(anAttribute.getType()) + "* " + anAttribute.getName()
+                            + "Ptr;");
                     pw.println("@property(readonly) int " + anAttribute.getName() + "Length;");
                 }
 
@@ -254,7 +257,7 @@ public class ObjcGenerator extends Generator {
                     pw.println("@property(readwrite, retain) " + "NSMutableArray*" + anAttribute.getName() + "; ");
                 }
 
-            } // end of properties      
+            } // end of properties
 
             pw.println();
 
@@ -323,7 +326,7 @@ public class ObjcGenerator extends Generator {
             this.writeUnmarshalMethod(pw, aClass);
 
             // Write a comparision operator
-            //this.writeEqualityOperator(pw, aClass);
+            // this.writeEqualityOperator(pw, aClass);
             // Method to determine the marshalled length of the PDU
             this.writeGetMarshalledSizeMethod(pw, aClass);
             pw.println("@end\n");
@@ -340,11 +343,10 @@ public class ObjcGenerator extends Generator {
     }
 
     /**
-     * Write the code for an equality operator. This allows you to compare two
-     * objects for equality. The code should look like
+     * Write the code for an equality operator. This allows you to compare two objects for equality. The code should
+     * look like
      *
-     * bool operator ==(const ClassName& rhs) return (_ivar1==rhs._ivar1 &&
-     * _var2 == rhs._ivar2 ...)
+     * bool operator ==(const ClassName& rhs) return (_ivar1==rhs._ivar1 && _var2 == rhs._ivar2 ...)
      *
      */
     public void writeEqualityOperator(PrintWriter pw, GeneratedClass aClass) {
@@ -365,15 +367,15 @@ public class ObjcGenerator extends Generator {
             for (int idx = 0; idx < aClass.getClassAttributes().size(); idx++) {
                 ClassAttribute anAttribute = (ClassAttribute) aClass.getClassAttributes().get(idx);
 
-                if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE || anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.CLASSREF) {
+                if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE
+                        || anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.CLASSREF) {
                     if (anAttribute.getIsDynamicListLengthField() == false) {
-                        pw.println("     if( ! (" + anAttribute.getName() + " == rhs." + anAttribute.getName() + ") ) ivarsEqual = false;");
+                        pw.println("     if( ! (" + anAttribute.getName() + " == rhs." + anAttribute.getName()
+                                + ") ) ivarsEqual = false;");
                     }
                     /*
-                else
-                {
-                    pw.println("     if( ! (  this.get" + this.initialCap(anAttribute.getName()) + "() == rhs.get" + this.initialCap(anAttribute.getName()) + "()) ) ivarsEqual = false;");
-                }
+                     * else { pw.println("     if( ! (  this.get" + this.initialCap(anAttribute.getName()) +
+                     * "() == rhs.get" + this.initialCap(anAttribute.getName()) + "()) ) ivarsEqual = false;"); }
                      */
 
                 }
@@ -384,7 +386,8 @@ public class ObjcGenerator extends Generator {
                     pw.println();
                     pw.println("     for(" + indexType + " idx = 0; idx < " + anAttribute.getListLength() + "; idx++)");
                     pw.println("     {");
-                    pw.println("          if(!(" + anAttribute.getName() + "[idx] == rhs." + anAttribute.getName() + "[idx]) ) ivarsEqual = false;");
+                    pw.println("          if(!(" + anAttribute.getName() + "[idx] == rhs." + anAttribute.getName()
+                            + "[idx]) ) ivarsEqual = false;");
                     pw.println("     }");
                     pw.println();
                 }
@@ -393,8 +396,9 @@ public class ObjcGenerator extends Generator {
                     pw.println();
                     pw.println("     for(int idx = 0; idx < " + anAttribute.getName() + ".size(); idx++)");
                     pw.println("     {");
-                    // pw.println("        " + aClass.getName() + " x = " + IVAR_PREFIX + anAttribute.getName() + "[idx];");
-                    pw.println("        if( ! ( " + anAttribute.getName() + "[idx] == rhs." + anAttribute.getName() + "[idx]) ) ivarsEqual = false;");
+                    // pw.println(" " + aClass.getName() + " x = " + IVAR_PREFIX + anAttribute.getName() + "[idx];");
+                    pw.println("        if( ! ( " + anAttribute.getName() + "[idx] == rhs." + anAttribute.getName()
+                            + "[idx]) ) ivarsEqual = false;");
                     pw.println("     }");
                     pw.println();
                 }
@@ -411,8 +415,7 @@ public class ObjcGenerator extends Generator {
     }
 
     /**
-     * Write the code for a method that marshals out the object into a DIS
-     * format byte array.
+     * Write the code for a method that marshals out the object into a DIS format byte array.
      */
     public void writeMarshalMethod(PrintWriter pw, GeneratedClass aClass) {
         try {
@@ -445,7 +448,8 @@ public class ObjcGenerator extends Generator {
                         ClassAttribute listAttribute = anAttribute.getDynamicListClassAttribute();
                         String marshalType = marshalTypes.getProperty(anAttribute.getType());
                         String capped = this.initialCap(marshalType);
-                        //pw.println("    dataStream << ( " + types.get(anAttribute.getType()) + " )"  + listAttribute.getName() + ".size();");
+                        // pw.println(" dataStream << ( " + types.get(anAttribute.getType()) + " )" +
+                        // listAttribute.getName() + ".size();");
                         pw.println("    [dataStream write" + capped + ":[" + listAttribute.getName() + " count]];");
                     }
 
@@ -487,7 +491,8 @@ public class ObjcGenerator extends Generator {
 
                     if (marshalType == null) // It's a class
                     {
-                        pw.println("        " + anAttribute.getType() + "* x = [" + anAttribute.getName() + " objectAtIndex:idx];");
+                        pw.println("        " + anAttribute.getType() + "* x = [" + anAttribute.getName()
+                                + " objectAtIndex:idx];");
                         pw.println("        [x marshalUsingStream:dataStream];");
                     } else // it's a primitive
                     {
@@ -550,7 +555,8 @@ public class ObjcGenerator extends Generator {
 
                 if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.VARIABLE_LIST) {
                     pw.println();
-                    pw.println("     [" + anAttribute.getName() + " removeAllObjects];"); // Clear out any existing objects in the list
+                    pw.println("     [" + anAttribute.getName() + " removeAllObjects];"); // Clear out any existing
+                                                                                          // objects in the list
                     pw.println("     for(int idx = 0; idx < " + anAttribute.getCountFieldName() + "; idx++)");
                     pw.println("     {");
 
@@ -567,7 +573,7 @@ public class ObjcGenerator extends Generator {
                         pw.println("        [" + anAttribute.getName() + " addObject:x];");
                     } else // It's a primitive; not supported
                     {
-                        // pw.println("       "  + anAttribute.getName() + "[idx] << dataStream");
+                        // pw.println(" " + anAttribute.getName() + "[idx] << dataStream");
                     }
 
                     pw.println("     }");
@@ -583,9 +589,8 @@ public class ObjcGenerator extends Generator {
     }
 
     /**
-     * Write a constructor. This uses an initialization list to initialize the
-     * various object ivars in the class. God, C++ is a PITA. The result should
-     * be something like Foo::Foo() : bar(Bar(), baz(Baz()
+     * Write a constructor. This uses an initialization list to initialize the various object ivars in the class. God,
+     * C++ is a PITA. The result should be something like Foo::Foo() : bar(Bar(), baz(Baz()
      */
     private void writeInitializer(PrintWriter pw, GeneratedClass aClass) {
         pw.println("-(id)init");
@@ -615,7 +620,7 @@ public class ObjcGenerator extends Generator {
             if ((attribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE)) {
                 if (attribute.getDefaultValue() != null) {
                     String setterName = "set" + this.initialCap(attribute.getName());
-                    //pw.println("    [self " + setterName + ":" + attribute.getDefaultValue() + "];");
+                    // pw.println(" [self " + setterName + ":" + attribute.getDefaultValue() + "];");
                     pw.println("    " + attribute.getName() + " = " + attribute.getDefaultValue() + ";");
                     usedValues.add(attribute.getName());
                     System.out.println("----Found default value: " + setterName + " " + attribute.getDefaultValue());
@@ -654,7 +659,8 @@ public class ObjcGenerator extends Generator {
                 int arrayLength = attribute.getListLength();
                 String indexName = "length" + attribute.getName();
                 pw.println("     int " + indexName + ";");
-                pw.println("     for(" + indexName + " = 0; " + indexName + " < " + arrayLength + "; " + indexName + "++)");
+                pw.println("     for(" + indexName + " = 0; " + indexName + " < " + arrayLength + "; " + indexName
+                        + "++)");
                 pw.println("     {");
                 pw.println("         " + attribute.getName() + "[" + indexName + "] = 0;");
                 pw.println("     }");
@@ -705,23 +711,29 @@ public class ObjcGenerator extends Generator {
                 pw.print("   marshalSize = marshalSize + ");
                 // If this is a fixed list of primitives, it's the list size times the size of the primitive.
                 if (anAttribute.getUnderlyingTypeIsPrimitive() == true) {
-                    pw.println(anAttribute.getListLength() + " * " + primitiveSizes.get(anAttribute.getType()) + ";  // " + anAttribute.getName());
+                    pw.println(anAttribute.getListLength() + " * " + primitiveSizes.get(anAttribute.getType())
+                            + ";  // " + anAttribute.getName());
                 } else {
-                    //pw.println( anAttribute.getListLength() + " * " +  " new " + anAttribute.getType() + "().getMarshalledSize()"  + ";  // " + anAttribute.getName());
-                    pw.println(" THIS IS A CONDITION NOT HANDLED BY XMLPG: a fixed list array of objects. That's  why you got the compile error.");
+                    // pw.println( anAttribute.getListLength() + " * " + " new " + anAttribute.getType() +
+                    // "().getMarshalledSize()" + "; // " + anAttribute.getName());
+                    pw.println(
+                            " THIS IS A CONDITION NOT HANDLED BY XMLPG: a fixed list array of objects. That's  why you got the compile error.");
                 }
             }
 
             if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.VARIABLE_LIST) {
                 // If this is a dynamic list of primitives, it's the list size times the size of the primitive.
                 if (anAttribute.getUnderlyingTypeIsPrimitive() == true) {
-                    pw.println(anAttribute.getName() + ".size() " + " * " + primitiveSizes.get(anAttribute.getType()) + ";  // " + anAttribute.getName());
+                    pw.println(anAttribute.getName() + ".size() " + " * " + primitiveSizes.get(anAttribute.getType())
+                            + ";  // " + anAttribute.getName());
                 } else {
                     pw.println();
                     pw.println("   for(int idx=0; idx < [" + anAttribute.getName() + " count]; idx++)");
                     pw.println("   {");
-                    //pw.println( anAttribute.getName() + ".size() " + " * " +  " new " + anAttribute.getType() + "().getMarshalledSize()"  + ";  // " + anAttribute.getName());
-                    pw.println("        " + anAttribute.getType() + "* listElement = [" + anAttribute.getName() + " objectAtIndex:idx];");
+                    // pw.println( anAttribute.getName() + ".size() " + " * " + " new " + anAttribute.getType() +
+                    // "().getMarshalledSize()" + "; // " + anAttribute.getName());
+                    pw.println("        " + anAttribute.getType() + "* listElement = [" + anAttribute.getName()
+                            + " objectAtIndex:idx];");
                     pw.println("        marshalSize = marshalSize + [listElement getMarshalledSize];");
                     pw.println("    }");
                     pw.println();
@@ -743,8 +755,7 @@ public class ObjcGenerator extends Generator {
 
             ClassAttribute.ClassAttributeType kind = anAttribute.getAttributeKind();
 
-            if ((kind == anAttribute.attributeKind.CLASSREF)
-                    || (kind == anAttribute.attributeKind.VARIABLE_LIST)) {
+            if ((kind == anAttribute.attributeKind.CLASSREF) || (kind == anAttribute.attributeKind.VARIABLE_LIST)) {
                 pw.println("  [" + anAttribute.getName() + " release];");
             }
         }
@@ -754,10 +765,9 @@ public class ObjcGenerator extends Generator {
     }
 
     /**
-     * Returns true if this class consists only of instance variables that are
-     * primitives, such as short, int, etc. Things that are not allowed include
-     * ivars that are classes, arrays, or variable length lists. If a class
-     * contains any of these, false is returned.
+     * Returns true if this class consists only of instance variables that are primitives, such as short, int, etc.
+     * Things that are not allowed include ivars that are classes, arrays, or variable length lists. If a class contains
+     * any of these, false is returned.
      */
     private boolean classHasOnlyPrimitives(GeneratedClass aClass) {
         boolean isAllPrimitive = true;
@@ -767,7 +777,8 @@ public class ObjcGenerator extends Generator {
             ClassAttribute anAttribute = (ClassAttribute) aClass.getClassAttributes().get(idx);
             if (anAttribute.getAttributeKind() != ClassAttribute.ClassAttributeType.PRIMITIVE) {
                 isAllPrimitive = false;
-                System.out.println("Not primitive for class " + aClass.getName() + " and attribute " + anAttribute.getName() + " " + anAttribute.getAttributeKind());
+                System.out.println("Not primitive for class " + aClass.getName() + " and attribute "
+                        + anAttribute.getName() + " " + anAttribute.getAttributeKind());
             }
         }
 
@@ -775,9 +786,8 @@ public class ObjcGenerator extends Generator {
     }
 
     /**
-     * Some code to figure out the characters to use for array types. We may
-     * have arrays of either primitives or classes; this figures out which it is
-     * and returns the right string.
+     * Some code to figure out the characters to use for array types. We may have arrays of either primitives or
+     * classes; this figures out which it is and returns the right string.
      */
     private String getArrayType(String xmlType) {
         String marshalType = marshalTypes.getProperty(xmlType);

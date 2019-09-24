@@ -16,8 +16,8 @@ import java.util.*;
 public class CppGenerator extends Generator {
 
     /**
-     * ivars are often preceded by a special character. This sets what that
-     * character is, so that instance variable names will be preceded by a "_".
+     * ivars are often preceded by a special character. This sets what that character is, so that instance variable
+     * names will be preceded by a "_".
      */
     public static final String IVAR_PREFIX = "_";
 
@@ -27,9 +27,8 @@ public class CppGenerator extends Generator {
     Properties types = new Properties();
 
     /**
-     * What primitive types should be marshalled as. This may be different from
-     * the cpp get/set methods, ie an unsigned short might have ints as the
-     * getter/setter, but is marshalled as a short.
+     * What primitive types should be marshalled as. This may be different from the cpp get/set methods, ie an unsigned
+     * short might have ints as the getter/setter, but is marshalled as a short.
      */
     Properties marshalTypes = new Properties();
 
@@ -39,8 +38,7 @@ public class CppGenerator extends Generator {
     Properties primitiveSizes = new Properties();
 
     /**
-     * A property list that contains cpp-specific code generation information,
-     * such as package names, includes, etc.
+     * A property list that contains cpp-specific code generation information, such as package names, includes, etc.
      */
     Properties cppProperties;
 
@@ -123,19 +121,17 @@ public class CppGenerator extends Generator {
     }
 
     /**
-     * Microsoft C++ requires a macro file to generate dlls. The preprocessor
-     * will import this and resolve it to an empty string in the gcc/unix world.
-     * In the Microsoft C++ world, the macro will resolve and do something
-     * useful about creating libraries.
+     * Microsoft C++ requires a macro file to generate dlls. The preprocessor will import this and resolve it to an
+     * empty string in the gcc/unix world. In the Microsoft C++ world, the macro will resolve and do something useful
+     * about creating libraries.
      */
     public void writeMacroFile() {
         System.out.println("Creating microsoft library macro file");
 
         /*
-        String headerFile = languageProperties.getProperty("microsoftLibHeaderMacro");
-        
-        if(headerFile == null)
-            return;
+         * String headerFile = languageProperties.getProperty("microsoftLibHeaderMacro");
+         * 
+         * if(headerFile == null) return;
          */
         String headerFile = "msLibMacro";
 
@@ -151,7 +147,8 @@ public class CppGenerator extends Generator {
             pw.println("#ifndef " + headerFile.toUpperCase() + "_H");
             pw.println("#define " + headerFile.toUpperCase() + "_H");
 
-            pw.println("#if defined(_MSC_VER) || defined(__CYGWIN__) || defined(__MINGW32__) || defined( __BCPLUSPLUS__)  || defined( __MWERKS__)");
+            pw.println(
+                    "#if defined(_MSC_VER) || defined(__CYGWIN__) || defined(__MINGW32__) || defined( __BCPLUSPLUS__)  || defined( __MWERKS__)");
             pw.println("#  ifdef EXPORT_LIBRARY");
             pw.println("#    define " + "EXPORT_MACRO" + " __declspec(dllexport)");
             pw.println("#  else");
@@ -176,7 +173,7 @@ public class CppGenerator extends Generator {
     public void writeHeaderFile(GeneratedClass aClass) {
         try {
             String name = aClass.getName();
-            //System.out.println("Creating cpp and .h source code files for " + name);
+            // System.out.println("Creating cpp and .h source code files for " + name);
             String headerFullPath = getDirectory() + "/" + name + ".h";
             File outputFile = new File(headerFullPath);
             outputFile.createNewFile();
@@ -226,7 +223,7 @@ public class CppGenerator extends Generator {
 
             // "the usual" includes.
             // pw.println("#include <vector>");
-            //pw.println("#include <iostream>");
+            // pw.println("#include <iostream>");
             pw.println("#include <" + namespace + "DataStream.h>");
 
             // This is a macro file included only for microsoft compilers. set in the cpp properties tag.
@@ -254,13 +251,15 @@ public class CppGenerator extends Generator {
 
             pw.println();
             pw.println("// Copyright (c) 2007-2012, MOVES Institute, Naval Postgraduate School. All rights reserved. ");
-            pw.println("// Licensed under the BSD open source license. See http://www.movesinstitute.org/licenses/bsd.html");
+            pw.println(
+                    "// Licensed under the BSD open source license. See http://www.movesinstitute.org/licenses/bsd.html");
             pw.println("//");
             pw.println("// @author DMcG, jkg");
             pw.println();
 
             if (hasVariableLengthList == true) {
-                pw.println("#pragma warning(disable: 4251 ) // Disables warning for stl vector template DLL export in msvc");
+                pw.println(
+                        "#pragma warning(disable: 4251 ) // Disables warning for stl vector template DLL export in msvc");
                 pw.println();
             }
 
@@ -286,7 +285,8 @@ public class CppGenerator extends Generator {
                         pw.println("  " + "/** " + anAttribute.getComment() + " */");
                     }
 
-                    pw.println("  " + types.get(anAttribute.getType()) + " " + IVAR_PREFIX + anAttribute.getName() + "; ");
+                    pw.println(
+                            "  " + types.get(anAttribute.getType()) + " " + IVAR_PREFIX + anAttribute.getName() + "; ");
                     pw.println();
 
                 }
@@ -305,7 +305,8 @@ public class CppGenerator extends Generator {
                         pw.println("  " + "/** " + anAttribute.getComment() + " */");
                     }
 
-                    pw.println("  " + types.get(anAttribute.getType()) + " " + IVAR_PREFIX + anAttribute.getName() + "[" + anAttribute.getListLength() + "]; ");
+                    pw.println("  " + types.get(anAttribute.getType()) + " " + IVAR_PREFIX + anAttribute.getName() + "["
+                            + anAttribute.getListLength() + "]; ");
                     pw.println();
                 }
 
@@ -314,7 +315,8 @@ public class CppGenerator extends Generator {
                         pw.println("  " + "/** " + anAttribute.getComment() + " */");
                     }
 
-                    pw.println("  std::vector<" + anAttribute.getType() + "> " + IVAR_PREFIX + anAttribute.getName() + "; ");
+                    pw.println("  std::vector<" + anAttribute.getType() + "> " + IVAR_PREFIX + anAttribute.getName()
+                            + "; ");
                     pw.println();
                 }
             }
@@ -338,34 +340,45 @@ public class CppGenerator extends Generator {
                 ClassAttribute anAttribute = (ClassAttribute) aClass.getClassAttributes().get(idx);
 
                 if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE) {
-                    pw.println("    " + types.get(anAttribute.getType()) + " " + "get" + this.initialCap(anAttribute.getName()) + "() const; ");
+                    pw.println("    " + types.get(anAttribute.getType()) + " " + "get"
+                            + this.initialCap(anAttribute.getName()) + "() const; ");
                     if (anAttribute.getIsDynamicListLengthField() == false) {
-                        pw.println("    void " + "set" + this.initialCap(anAttribute.getName()) + "(" + types.get(anAttribute.getType()) + " pX); ");
+                        pw.println("    void " + "set" + this.initialCap(anAttribute.getName()) + "("
+                                + types.get(anAttribute.getType()) + " pX); ");
                     }
                 }
 
                 if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.CLASSREF) {
-                    pw.println("    " + anAttribute.getType() + "& " + "get" + this.initialCap(anAttribute.getName()) + "(); ");
-                    pw.println("    const " + anAttribute.getType() + "&  get" + this.initialCap(anAttribute.getName()) + "() const; ");
-                    pw.println("    void set" + this.initialCap(anAttribute.getName()) + "(const " + anAttribute.getType() + "    &pX);");
+                    pw.println("    " + anAttribute.getType() + "& " + "get" + this.initialCap(anAttribute.getName())
+                            + "(); ");
+                    pw.println("    const " + anAttribute.getType() + "&  get" + this.initialCap(anAttribute.getName())
+                            + "() const; ");
+                    pw.println("    void set" + this.initialCap(anAttribute.getName()) + "(const "
+                            + anAttribute.getType() + "    &pX);");
                 }
 
                 if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.FIXED_LIST) {
-                    // Sleaze. We need to figure out what type of array we are, and this is slightly complex. 
+                    // Sleaze. We need to figure out what type of array we are, and this is slightly complex.
                     String arrayType = this.getArrayType(anAttribute.getType());
                     pw.println("    " + arrayType + "*  get" + this.initialCap(anAttribute.getName()) + "(); ");
-                    pw.println("    const " + arrayType + "*  get" + this.initialCap(anAttribute.getName()) + "() const; ");
-                    pw.println("    void set" + this.initialCap(anAttribute.getName()) + "( const " + arrayType + "*    pX);");
+                    pw.println("    const " + arrayType + "*  get" + this.initialCap(anAttribute.getName())
+                            + "() const; ");
+                    pw.println("    void set" + this.initialCap(anAttribute.getName()) + "( const " + arrayType
+                            + "*    pX);");
                     if (anAttribute.getCouldBeString() == true) {
-                        pw.println("    void " + "setByString" + this.initialCap(anAttribute.getName()) + "(const " + arrayType + "* pX);");
+                        pw.println("    void " + "setByString" + this.initialCap(anAttribute.getName()) + "(const "
+                                + arrayType + "* pX);");
                     }
 
                 }
 
                 if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.VARIABLE_LIST) {
-                    pw.println("    std::vector<" + anAttribute.getType() + ">& " + "get" + this.initialCap(anAttribute.getName()) + "(); ");
-                    pw.println("    const std::vector<" + anAttribute.getType() + ">& " + "get" + this.initialCap(anAttribute.getName()) + "() const; ");
-                    pw.println("    void set" + this.initialCap(anAttribute.getName()) + "(const std::vector<" + anAttribute.getType() + ">&    pX);");
+                    pw.println("    std::vector<" + anAttribute.getType() + ">& " + "get"
+                            + this.initialCap(anAttribute.getName()) + "(); ");
+                    pw.println("    const std::vector<" + anAttribute.getType() + ">& " + "get"
+                            + this.initialCap(anAttribute.getName()) + "() const; ");
+                    pw.println("    void set" + this.initialCap(anAttribute.getName()) + "(const std::vector<"
+                            + anAttribute.getType() + ">&    pX);");
                 }
 
                 pw.println();
@@ -376,7 +389,7 @@ public class CppGenerator extends Generator {
             pw.println("virtual int getMarshalledSize() const;");
             pw.println();
 
-            // Generate an equality operator 
+            // Generate an equality operator
             pw.println("     bool operator  ==(const " + aClass.getName() + "& rhs) const;");
 
             pw.println("};");
@@ -403,7 +416,7 @@ public class CppGenerator extends Generator {
     public void writeCppFile(GeneratedClass aClass) {
         try {
             String name = aClass.getName();
-            //System.out.println("Creating cpp and .h source code files for " + name);
+            // System.out.println("Creating cpp and .h source code files for " + name);
             String headerFullPath = getDirectory() + "/" + name + ".cpp";
             File outputFile = new File(headerFullPath);
             outputFile.createNewFile();
@@ -426,7 +439,7 @@ public class CppGenerator extends Generator {
 
             pw.println();
 
-            // Write ctor 
+            // Write ctor
             this.writeCtor(pw, aClass);
             this.writeDtor(pw, aClass);
 
@@ -458,11 +471,10 @@ public class CppGenerator extends Generator {
     }
 
     /**
-     * Write the code for an equality operator. This allows you to compare two
-     * objects for equality. The code should look like
+     * Write the code for an equality operator. This allows you to compare two objects for equality. The code should
+     * look like
      *
-     * bool operator ==(const ClassName& rhs) return (_ivar1==rhs._ivar1 &&
-     * _var2 == rhs._ivar2 ...)
+     * bool operator ==(const ClassName& rhs) return (_ivar1==rhs._ivar1 && _var2 == rhs._ivar2 ...)
      *
      */
     public void writeEqualityOperator(PrintWriter pw, GeneratedClass aClass) {
@@ -483,15 +495,15 @@ public class CppGenerator extends Generator {
             for (int idx = 0; idx < aClass.getClassAttributes().size(); idx++) {
                 ClassAttribute anAttribute = (ClassAttribute) aClass.getClassAttributes().get(idx);
 
-                if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE || anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.CLASSREF) {
+                if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE
+                        || anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.CLASSREF) {
                     if (anAttribute.getIsDynamicListLengthField() == false) {
-                        pw.println("     if( ! (" + IVAR_PREFIX + anAttribute.getName() + " == rhs." + IVAR_PREFIX + anAttribute.getName() + ") ) ivarsEqual = false;");
+                        pw.println("     if( ! (" + IVAR_PREFIX + anAttribute.getName() + " == rhs." + IVAR_PREFIX
+                                + anAttribute.getName() + ") ) ivarsEqual = false;");
                     }
                     /*
-                else
-                {
-                    pw.println("     if( ! (  this.get" + this.initialCap(anAttribute.getName()) + "() == rhs.get" + this.initialCap(anAttribute.getName()) + "()) ) ivarsEqual = false;");
-                }
+                     * else { pw.println("     if( ! (  this.get" + this.initialCap(anAttribute.getName()) +
+                     * "() == rhs.get" + this.initialCap(anAttribute.getName()) + "()) ) ivarsEqual = false;"); }
                      */
 
                 }
@@ -502,17 +514,20 @@ public class CppGenerator extends Generator {
                     pw.println();
                     pw.println("     for(" + indexType + " idx = 0; idx < " + anAttribute.getListLength() + "; idx++)");
                     pw.println("     {");
-                    pw.println("          if(!(" + IVAR_PREFIX + anAttribute.getName() + "[idx] == rhs." + IVAR_PREFIX + anAttribute.getName() + "[idx]) ) ivarsEqual = false;");
+                    pw.println("          if(!(" + IVAR_PREFIX + anAttribute.getName() + "[idx] == rhs." + IVAR_PREFIX
+                            + anAttribute.getName() + "[idx]) ) ivarsEqual = false;");
                     pw.println("     }");
                     pw.println();
                 }
 
                 if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.VARIABLE_LIST) {
                     pw.println();
-                    pw.println("     for(size_t idx = 0; idx < " + IVAR_PREFIX + anAttribute.getName() + ".size(); idx++)");
+                    pw.println("     for(size_t idx = 0; idx < " + IVAR_PREFIX + anAttribute.getName()
+                            + ".size(); idx++)");
                     pw.println("     {");
-                    // pw.println("        " + aClass.getName() + " x = " + IVAR_PREFIX + anAttribute.getName() + "[idx];");
-                    pw.println("        if( ! ( " + IVAR_PREFIX + anAttribute.getName() + "[idx] == rhs." + IVAR_PREFIX + anAttribute.getName() + "[idx]) ) ivarsEqual = false;");
+                    // pw.println(" " + aClass.getName() + " x = " + IVAR_PREFIX + anAttribute.getName() + "[idx];");
+                    pw.println("        if( ! ( " + IVAR_PREFIX + anAttribute.getName() + "[idx] == rhs." + IVAR_PREFIX
+                            + anAttribute.getName() + "[idx]) ) ivarsEqual = false;");
                     pw.println("     }");
                     pw.println();
                 }
@@ -529,20 +544,20 @@ public class CppGenerator extends Generator {
     }
 
     /**
-     * Write the code for a method that marshals out the object into a DIS
-     * format byte array.
+     * Write the code for a method that marshals out the object into a DIS format byte array.
      */
     public void writeMarshalMethod(PrintWriter pw, GeneratedClass aClass) {
         try {
             pw.println("void " + aClass.getName() + "::" + "marshal(DataStream& dataStream) const");
             pw.println("{");
 
-            // If this inherits from one of our classes, we should call the superclasses' 
+            // If this inherits from one of our classes, we should call the superclasses'
             // marshal method first. The syntax for this is SuperclassName::marshal(dataStream).
             // If it's not already a root class
             if (!(aClass.getParentClass().equalsIgnoreCase("root"))) {
                 String superclassName = aClass.getParentClass();
-                pw.println("    " + superclassName + "::marshal(dataStream); // Marshal information in superclass first");
+                pw.println(
+                        "    " + superclassName + "::marshal(dataStream); // Marshal information in superclass first");
             }
 
             for (int idx = 0; idx < aClass.getClassAttributes().size(); idx++) {
@@ -559,7 +574,8 @@ public class CppGenerator extends Generator {
                         pw.println("    dataStream << " + IVAR_PREFIX + anAttribute.getName() + ";");
                     } else {
                         ClassAttribute listAttribute = anAttribute.getDynamicListClassAttribute();
-                        pw.println("    dataStream << ( " + types.get(anAttribute.getType()) + " )" + IVAR_PREFIX + listAttribute.getName() + ".size();");
+                        pw.println("    dataStream << ( " + types.get(anAttribute.getType()) + " )" + IVAR_PREFIX
+                                + listAttribute.getName() + ".size();");
                     }
 
                 }
@@ -592,18 +608,21 @@ public class CppGenerator extends Generator {
 
                 if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.VARIABLE_LIST) {
                     pw.println();
-                    pw.println("     for(size_t idx = 0; idx < " + IVAR_PREFIX + anAttribute.getName() + ".size(); idx++)");
+                    pw.println("     for(size_t idx = 0; idx < " + IVAR_PREFIX + anAttribute.getName()
+                            + ".size(); idx++)");
                     pw.println("     {");
 
                     String marshalType = marshalTypes.getProperty(anAttribute.getType());
 
                     if (marshalType == null) // It's a class
                     {
-                        pw.println("        " + anAttribute.getType() + " x = " + IVAR_PREFIX + anAttribute.getName() + "[idx];");
+                        pw.println("        " + anAttribute.getType() + " x = " + IVAR_PREFIX + anAttribute.getName()
+                                + "[idx];");
                         pw.println("        x.marshal(dataStream);");
                     } else // it's a primitive
                     {
-                        pw.println("        " + anAttribute.getType() + " x = " + IVAR_PREFIX + anAttribute.getName() + "[idx];");
+                        pw.println("        " + anAttribute.getType() + " x = " + IVAR_PREFIX + anAttribute.getName()
+                                + "[idx];");
                         pw.println("    dataStream <<  x;");
                     }
 
@@ -627,7 +646,8 @@ public class CppGenerator extends Generator {
             // If it's not already a root class
             if (!(aClass.getParentClass().equalsIgnoreCase("root"))) {
                 String superclassName = aClass.getParentClass();
-                pw.println("    " + superclassName + "::unmarshal(dataStream); // unmarshal information in superclass first");
+                pw.println("    " + superclassName
+                        + "::unmarshal(dataStream); // unmarshal information in superclass first");
             }
 
             for (int idx = 0; idx < aClass.getClassAttributes().size(); idx++) {
@@ -658,8 +678,10 @@ public class CppGenerator extends Generator {
 
                 if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.VARIABLE_LIST) {
                     pw.println();
-                    pw.println("     " + IVAR_PREFIX + anAttribute.getName() + ".clear();"); // Clear out any existing objects in the list
-                    pw.println("     for(size_t idx = 0; idx < " + IVAR_PREFIX + anAttribute.getCountFieldName() + "; idx++)");
+                    pw.println("     " + IVAR_PREFIX + anAttribute.getName() + ".clear();"); // Clear out any existing
+                                                                                             // objects in the list
+                    pw.println("     for(size_t idx = 0; idx < " + IVAR_PREFIX + anAttribute.getCountFieldName()
+                            + "; idx++)");
                     pw.println("     {");
 
                     // This is some sleaze. We're an list, but an list of what? We could be either a
@@ -691,9 +713,8 @@ public class CppGenerator extends Generator {
     }
 
     /**
-     * Write a constructor. This uses an initialization list to initialize the
-     * various object ivars in the class. God, C++ is a PITA. The result should
-     * be something like Foo::Foo() : bar(Bar(), baz(Baz()
+     * Write a constructor. This uses an initialization list to initialize the various object ivars in the class. God,
+     * C++ is a PITA. The result should be something like Foo::Foo() : bar(Bar(), baz(Baz()
      */
     private void writeCtor(PrintWriter pw, GeneratedClass aClass) {
         boolean colonForInitializerListUsed = false;
@@ -701,7 +722,7 @@ public class CppGenerator extends Generator {
         pw.print(aClass.getName() + "::" + aClass.getName() + "()");
 
         // Need to do a pre-flight here; cycle throguh the attributes and get a count
-        // of the attribtes that are either primitives or objects. The 
+        // of the attribtes that are either primitives or objects. The
         // fixed length lists are not initialized in the initializer list.
         int attributeCount = 0;
 
@@ -716,7 +737,7 @@ public class CppGenerator extends Generator {
 
         // If this has a superclass, class the constructor for that (via the initializer list)
         if (!(aClass.getParentClass().equalsIgnoreCase("root"))) {
-            // Do an initailizer list for the ctor    
+            // Do an initailizer list for the ctor
             pw.print(" : "); // Start initializer list
             colonForInitializerListUsed = true;
             pw.print(aClass.getParentClass() + "()");
@@ -735,7 +756,7 @@ public class CppGenerator extends Generator {
         for (int idx = 0; idx < aClass.getClassAttributes().size(); idx++) {
             ClassAttribute anAttribute = (ClassAttribute) aClass.getClassAttributes().get(idx);
 
-            // This is a primitive type; initialize it to either the default value specified in 
+            // This is a primitive type; initialize it to either the default value specified in
             // the XML file or to zero. Tends to minimize the possiblity
             // of bad stack-allocated values hosing the system.
             if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE) {
@@ -800,7 +821,8 @@ public class CppGenerator extends Generator {
                 pw.println("     // Initialize fixed length array");
                 int arrayLength = attribute.getListLength();
                 String indexName = "length" + attribute.getName();
-                pw.println("     for(int " + indexName + "= 0; " + indexName + " < " + arrayLength + "; " + indexName + "++)");
+                pw.println("     for(int " + indexName + "= 0; " + indexName + " < " + arrayLength + "; " + indexName
+                        + "++)");
                 pw.println("     {");
                 pw.println("         _" + attribute.getName() + "[" + indexName + "] = 0;");
                 pw.println("     }");
@@ -832,7 +854,8 @@ public class CppGenerator extends Generator {
 
     private void writeGetterMethod(PrintWriter pw, GeneratedClass aClass, ClassAttribute anAttribute) {
         if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE) {
-            pw.println(types.get(anAttribute.getType()) + " " + aClass.getName() + "::" + "get" + this.initialCap(anAttribute.getName()) + "() const");
+            pw.println(types.get(anAttribute.getType()) + " " + aClass.getName() + "::" + "get"
+                    + this.initialCap(anAttribute.getName()) + "() const");
             pw.println("{");
             if (anAttribute.getIsDynamicListLengthField() == false) {
                 pw.println("    return " + IVAR_PREFIX + anAttribute.getName() + ";");
@@ -845,24 +868,28 @@ public class CppGenerator extends Generator {
         }
 
         if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.CLASSREF) {
-            pw.println(anAttribute.getType() + "& " + aClass.getName() + "::" + "get" + this.initialCap(anAttribute.getName()) + "() ");
+            pw.println(anAttribute.getType() + "& " + aClass.getName() + "::" + "get"
+                    + this.initialCap(anAttribute.getName()) + "() ");
             pw.println("{");
             pw.println("    return " + IVAR_PREFIX + anAttribute.getName() + ";");
             pw.println("}\n");
 
-            pw.println("const " + anAttribute.getType() + "& " + aClass.getName() + "::" + "get" + this.initialCap(anAttribute.getName()) + "() const");
+            pw.println("const " + anAttribute.getType() + "& " + aClass.getName() + "::" + "get"
+                    + this.initialCap(anAttribute.getName()) + "() const");
             pw.println("{");
             pw.println("    return " + IVAR_PREFIX + anAttribute.getName() + ";");
             pw.println("}\n");
         }
 
         if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.FIXED_LIST) {
-            pw.println(this.getArrayType(anAttribute.getType()) + "* " + aClass.getName() + "::" + "get" + this.initialCap(anAttribute.getName()) + "() ");
+            pw.println(this.getArrayType(anAttribute.getType()) + "* " + aClass.getName() + "::" + "get"
+                    + this.initialCap(anAttribute.getName()) + "() ");
             pw.println("{");
             pw.println("    return " + IVAR_PREFIX + anAttribute.getName() + ";");
             pw.println("}\n");
 
-            pw.println("const " + this.getArrayType(anAttribute.getType()) + "* " + aClass.getName() + "::" + "get" + this.initialCap(anAttribute.getName()) + "() const");
+            pw.println("const " + this.getArrayType(anAttribute.getType()) + "* " + aClass.getName() + "::" + "get"
+                    + this.initialCap(anAttribute.getName()) + "() const");
             pw.println("{");
             pw.println("    return " + IVAR_PREFIX + anAttribute.getName() + ";");
             pw.println("}\n");
@@ -870,24 +897,28 @@ public class CppGenerator extends Generator {
         }
 
         if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.VARIABLE_LIST) {
-            pw.println("std::vector<" + anAttribute.getType() + ">& " + aClass.getName() + "::" + "get" + this.initialCap(anAttribute.getName()) + "() ");
+            pw.println("std::vector<" + anAttribute.getType() + ">& " + aClass.getName() + "::" + "get"
+                    + this.initialCap(anAttribute.getName()) + "() ");
             pw.println("{");
             pw.println("    return " + IVAR_PREFIX + anAttribute.getName() + ";");
             pw.println("}\n");
 
-            pw.println("const std::vector<" + anAttribute.getType() + ">& " + aClass.getName() + "::" + "get" + this.initialCap(anAttribute.getName()) + "() const");
+            pw.println("const std::vector<" + anAttribute.getType() + ">& " + aClass.getName() + "::" + "get"
+                    + this.initialCap(anAttribute.getName()) + "() const");
             pw.println("{");
             pw.println("    return " + IVAR_PREFIX + anAttribute.getName() + ";");
             pw.println("}\n");
         }
 
-        //pw.println(aClass.getName() + "::get" + aClass.getName() + "()");
-        //pw.println("{");
+        // pw.println(aClass.getName() + "::get" + aClass.getName() + "()");
+        // pw.println("{");
     }
 
     public void writeSetterMethod(PrintWriter pw, GeneratedClass aClass, ClassAttribute anAttribute) {
-        if ((anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE) && (anAttribute.getIsDynamicListLengthField() == false)) {
-            pw.println("void " + aClass.getName() + "::" + "set" + this.initialCap(anAttribute.getName()) + "(" + types.get(anAttribute.getType()) + " pX)");
+        if ((anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.PRIMITIVE)
+                && (anAttribute.getIsDynamicListLengthField() == false)) {
+            pw.println("void " + aClass.getName() + "::" + "set" + this.initialCap(anAttribute.getName()) + "("
+                    + types.get(anAttribute.getType()) + " pX)");
             pw.println("{");
             if (anAttribute.getIsDynamicListLengthField() == false) {
                 pw.println("    " + IVAR_PREFIX + anAttribute.getName() + " = pX;");
@@ -896,17 +927,20 @@ public class CppGenerator extends Generator {
         }
 
         if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.CLASSREF) {
-            pw.println("void " + aClass.getName() + "::" + "set" + this.initialCap(anAttribute.getName()) + "(const " + anAttribute.getType() + " &pX)");
+            pw.println("void " + aClass.getName() + "::" + "set" + this.initialCap(anAttribute.getName()) + "(const "
+                    + anAttribute.getType() + " &pX)");
             pw.println("{");
             pw.println("    " + IVAR_PREFIX + anAttribute.getName() + " = pX;");
             pw.println("}\n");
         }
 
         if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.FIXED_LIST) {
-            pw.println("void " + aClass.getName() + "::" + "set" + this.initialCap(anAttribute.getName()) + "(const " + this.getArrayType(anAttribute.getType()) + "* x)");
+            pw.println("void " + aClass.getName() + "::" + "set" + this.initialCap(anAttribute.getName()) + "(const "
+                    + this.getArrayType(anAttribute.getType()) + "* x)");
             pw.println("{");
 
-            // The safest way to handle this is to set up a loop and individually copy over the array in a for loop. This makes
+            // The safest way to handle this is to set up a loop and individually copy over the array in a for loop.
+            // This makes
             // primitives and objects handling orthogonal, vs. doing a memcpy, which is faster but may or may not work.
             pw.println("   for(int i = 0; i < " + anAttribute.getListLength() + "; i++)");
             pw.println("   {");
@@ -916,8 +950,10 @@ public class CppGenerator extends Generator {
 
             // An alternative that is c-string friendly
             if (anAttribute.getCouldBeString() == true) {
-                pw.println("// An alternate method to set the value if this could be a string. This is not strictly comnpliant with the DIS standard.");
-                pw.println("void " + aClass.getName() + "::" + "setByString" + this.initialCap(anAttribute.getName()) + "(const " + this.getArrayType(anAttribute.getType()) + "* x)");
+                pw.println(
+                        "// An alternate method to set the value if this could be a string. This is not strictly comnpliant with the DIS standard.");
+                pw.println("void " + aClass.getName() + "::" + "setByString" + this.initialCap(anAttribute.getName())
+                        + "(const " + this.getArrayType(anAttribute.getType()) + "* x)");
                 pw.println("{");
                 pw.println("   strncpy(_" + anAttribute.getName() + ", x, " + anAttribute.getListLength() + "-1);");
                 pw.println("   _" + anAttribute.getName() + "[" + anAttribute.getListLength() + " -1] = '\\0';");
@@ -927,7 +963,8 @@ public class CppGenerator extends Generator {
         }
 
         if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.VARIABLE_LIST) {
-            pw.println("void " + aClass.getName() + "::" + "set" + this.initialCap(anAttribute.getName()) + "(const std::vector<" + anAttribute.getType() + ">& pX)");
+            pw.println("void " + aClass.getName() + "::" + "set" + this.initialCap(anAttribute.getName())
+                    + "(const std::vector<" + anAttribute.getType() + ">& pX)");
             pw.println("{");
             pw.println("     " + IVAR_PREFIX + anAttribute.getName() + " = pX;");
             pw.println("}\n");
@@ -959,30 +996,37 @@ public class CppGenerator extends Generator {
 
             if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.CLASSREF) {
                 pw.print("   marshalSize = marshalSize + ");
-                pw.println(IVAR_PREFIX + anAttribute.getName() + ".getMarshalledSize();  // " + IVAR_PREFIX + anAttribute.getName());
+                pw.println(IVAR_PREFIX + anAttribute.getName() + ".getMarshalledSize();  // " + IVAR_PREFIX
+                        + anAttribute.getName());
             }
 
             if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.FIXED_LIST) {
                 pw.print("   marshalSize = marshalSize + ");
                 // If this is a fixed list of primitives, it's the list size times the size of the primitive.
                 if (anAttribute.getUnderlyingTypeIsPrimitive() == true) {
-                    pw.println(anAttribute.getListLength() + " * " + primitiveSizes.get(anAttribute.getType()) + ";  // " + IVAR_PREFIX + anAttribute.getName());
+                    pw.println(anAttribute.getListLength() + " * " + primitiveSizes.get(anAttribute.getType())
+                            + ";  // " + IVAR_PREFIX + anAttribute.getName());
                 } else {
-                    //pw.println( anAttribute.getListLength() + " * " +  " new " + anAttribute.getType() + "().getMarshalledSize()"  + ";  // " + anAttribute.getName());
-                    pw.println(" THIS IS A CONDITION NOT HANDLED BY XMLPG: a fixed list array of objects. That's  why you got the compile error.");
+                    // pw.println( anAttribute.getListLength() + " * " + " new " + anAttribute.getType() +
+                    // "().getMarshalledSize()" + "; // " + anAttribute.getName());
+                    pw.println(
+                            " THIS IS A CONDITION NOT HANDLED BY XMLPG: a fixed list array of objects. That's  why you got the compile error.");
                 }
             }
 
             if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.VARIABLE_LIST) {
                 // If this is a dynamic list of primitives, it's the list size times the size of the primitive.
                 if (anAttribute.getUnderlyingTypeIsPrimitive() == true) {
-                    pw.println(anAttribute.getName() + ".size() " + " * " + primitiveSizes.get(anAttribute.getType()) + ";  // " + IVAR_PREFIX + anAttribute.getName());
+                    pw.println(anAttribute.getName() + ".size() " + " * " + primitiveSizes.get(anAttribute.getType())
+                            + ";  // " + IVAR_PREFIX + anAttribute.getName());
                 } else {
                     pw.println();
                     pw.println("   for(int idx=0; idx < " + IVAR_PREFIX + anAttribute.getName() + ".size(); idx++)");
                     pw.println("   {");
-                    //pw.println( anAttribute.getName() + ".size() " + " * " +  " new " + anAttribute.getType() + "().getMarshalledSize()"  + ";  // " + anAttribute.getName());
-                    pw.println("        " + anAttribute.getType() + " listElement = " + IVAR_PREFIX + anAttribute.getName() + "[idx];");
+                    // pw.println( anAttribute.getName() + ".size() " + " * " + " new " + anAttribute.getType() +
+                    // "().getMarshalledSize()" + "; // " + anAttribute.getName());
+                    pw.println("        " + anAttribute.getType() + " listElement = " + IVAR_PREFIX
+                            + anAttribute.getName() + "[idx];");
                     pw.println("        marshalSize = marshalSize + listElement.getMarshalledSize();");
                     pw.println("    }");
                     pw.println();
@@ -997,10 +1041,9 @@ public class CppGenerator extends Generator {
     }
 
     /**
-     * Returns true if this class consists only of instance variables that are
-     * primitives, such as short, int, etc. Things that are not allowed include
-     * ivars that are classes, arrays, or variable length lists. If a class
-     * contains any of these, false is returned.
+     * Returns true if this class consists only of instance variables that are primitives, such as short, int, etc.
+     * Things that are not allowed include ivars that are classes, arrays, or variable length lists. If a class contains
+     * any of these, false is returned.
      */
     private boolean classHasOnlyPrimitives(GeneratedClass aClass) {
         boolean isAllPrimitive = true;
@@ -1010,7 +1053,8 @@ public class CppGenerator extends Generator {
             ClassAttribute anAttribute = (ClassAttribute) aClass.getClassAttributes().get(idx);
             if (anAttribute.getAttributeKind() != ClassAttribute.ClassAttributeType.PRIMITIVE) {
                 isAllPrimitive = false;
-                System.out.println("Not primitive for class " + aClass.getName() + " and attribute " + anAttribute.getName() + " " + anAttribute.getAttributeKind());
+                System.out.println("Not primitive for class " + aClass.getName() + " and attribute "
+                        + anAttribute.getName() + " " + anAttribute.getAttributeKind());
             }
         }
 
@@ -1018,9 +1062,8 @@ public class CppGenerator extends Generator {
     }
 
     /**
-     * Some code to figure out the characters to use for array types. We may
-     * have arrays of either primitives or classes; this figures out which it is
-     * and returns the right string.
+     * Some code to figure out the characters to use for array types. We may have arrays of either primitives or
+     * classes; this figures out which it is and returns the right string.
      */
     private String getArrayType(String xmlType) {
         String marshalType = marshalTypes.getProperty(xmlType);

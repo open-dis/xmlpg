@@ -7,21 +7,20 @@ import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 
 /**
- * A class that reads an XML file in a specific format, and spits out a Java,
- * C#, Objective-C, or C++ classes that do <i>most</i> of the work of the
- * protocol.<p>
- *
- * This can rely on properties set in the XML file for the language. For
- * example, the Java element in the XML file can specify whether Hibernate or
- * JAXB support is included in the generated code.<p>
- *
- * There is a huge risk of using variable names that have ambiguous meaning
- * here, as many of the terms such as "class" are also used by java or c++.
+ * A class that reads an XML file in a specific format, and spits out a Java, C#, Objective-C, or C++ classes that do
+ * <i>most</i> of the work of the protocol.
  * <p>
  *
- * In effect this is reading an XML file and creating an abstract description of
- * the protocol data units. That abstract description is written out as source
- * code in various languages, such as C++, Java, etc.
+ * This can rely on properties set in the XML file for the language. For example, the Java element in the XML file can
+ * specify whether Hibernate or JAXB support is included in the generated code.
+ * <p>
+ *
+ * There is a huge risk of using variable names that have ambiguous meaning here, as many of the terms such as "class"
+ * are also used by java or c++.
+ * <p>
+ *
+ * In effect this is reading an XML file and creating an abstract description of the protocol data units. That abstract
+ * description is written out as source code in various languages, such as C++, Java, etc.
  *
  * @author DMcG
  */
@@ -40,8 +39,7 @@ public class Xmlpg {
     }
 
     /**
-     * As we parse the XML document, this is the class we are currently working
-     * on
+     * As we parse the XML document, this is the class we are currently working on
      */
     private GeneratedClass currentGeneratedClass = null;
 
@@ -102,7 +100,7 @@ public class Xmlpg {
      */
     private String cppDirectory = null;
 
-    //PES
+    // PES
     /**
      * Directory in which the C# classes are created
      */
@@ -116,14 +114,13 @@ public class Xmlpg {
     private int classCount = 0;
 
     /**
-     * Create a new collection of Java objects by reading an XML file; these
-     * java objects can be used to generate code templates of any language, once
-     * you write the translator.
+     * Create a new collection of Java objects by reading an XML file; these java objects can be used to generate code
+     * templates of any language, once you write the translator.
      */
-    public Xmlpg(String xmlDescriptionFileName,
-            String languageToGenerate) {
+    public Xmlpg(String xmlDescriptionFileName, String languageToGenerate) {
         // Which languages to generate
-        boolean generateJava = false, generateCpp = false, generateCs = false, generateObjc = false, generatePython = false;
+        boolean generateJava = false, generateCpp = false, generateCs = false, generateObjc = false,
+                generatePython = false;
         LanguageType toGenerate = null;
 
         if (languageToGenerate.equalsIgnoreCase("java")) {
@@ -162,7 +159,7 @@ public class Xmlpg {
             System.exit(1);
         }
 
-        //System.out.println("putting java files in " + javaDirectory);
+        // System.out.println("putting java files in " + javaDirectory);
         // Create a new generator object to write out the source code for all the classes in java
         if (toGenerate == Xmlpg.LanguageType.JAVA) {
             JavaGenerator javaGenerator = new JavaGenerator(generatedClassNames, javaProperties);
@@ -189,7 +186,8 @@ public class Xmlpg {
 
         if (toGenerate == Xmlpg.LanguageType.JAVASCRIPT) {
             // create a new generator object for javascript
-            JavascriptGenerator javascriptGenerator = new JavascriptGenerator(generatedClassNames, javascriptProperties);
+            JavascriptGenerator javascriptGenerator = new JavascriptGenerator(generatedClassNames,
+                    javascriptProperties);
             javascriptGenerator.writeClasses();
         }
 
@@ -201,14 +199,14 @@ public class Xmlpg {
     }
 
     /**
-     * entry point. Pass in two arguments, the language you want to generate for
-     * and the XML file that describes the classes
+     * entry point. Pass in two arguments, the language you want to generate for and the XML file that describes the
+     * classes
      */
     public static void main(String args[]) {
         String language = null;
 
         Properties props = System.getProperties();
-        //props.list(System.out);
+        // props.list(System.out);
 
         if (args.length < 2 || args.length > 2) {
             System.out.println("Usage: Xmlpg xmlFile language");
@@ -222,8 +220,7 @@ public class Xmlpg {
     } // end of main
 
     /**
-     * Does a sanity check on the args passed in: does the XML file exist, and
-     * is the language valid.
+     * Does a sanity check on the args passed in: does the XML file exist, and is the language valid.
      */
     public static void preflightArgs(String xmlFile, String language) {
         try {
@@ -233,7 +230,8 @@ public class Xmlpg {
             if (!(language.equalsIgnoreCase("java") || language.equalsIgnoreCase("cpp")
                     || language.equalsIgnoreCase("objc") || language.equalsIgnoreCase("csharp")
                     || language.equalsIgnoreCase("javascript") || language.equalsIgnoreCase("python"))) {
-                System.out.println("Not a valid language to generate. The options are java, cpp, objc, javascript, python and csharp");
+                System.out.println(
+                        "Not a valid language to generate. The options are java, cpp, objc, javascript, python and csharp");
                 System.out.println("Usage: Xmlpg xmlFile language");
                 System.exit(0);
             }
@@ -251,18 +249,14 @@ public class Xmlpg {
     }
 
     /**
-     * Returns true if the information parsed from the protocol description XML
-     * file is "plausible" in addition to being syntactically correct. This
-     * means that:
+     * Returns true if the information parsed from the protocol description XML file is "plausible" in addition to being
+     * syntactically correct. This means that:
      * <ul>
-     * <li>references to other classes in the file are correct; if a class
-     * attribute refers to a "EntityID", there's a class by that name elsewhere
-     * in the document;
-     * <li> The primitive types belong to a list of known correct primitive
-     * types, eg short, unsigned short, etc
+     * <li>references to other classes in the file are correct; if a class attribute refers to a "EntityID", there's a
+     * class by that name elsewhere in the document;
+     * <li>The primitive types belong to a list of known correct primitive types, eg short, unsigned short, etc
      *
-     * AST is a reference to "abstract syntax tree", which this really isn't,
-     * but sort of is.
+     * AST is a reference to "abstract syntax tree", which this really isn't, but sort of is.
      */
     private boolean astIsPlausible() {
 
@@ -283,7 +277,8 @@ public class Xmlpg {
         while (iterator.hasNext()) {
             GeneratedClass aClass = (GeneratedClass) iterator.next();
 
-            // Trip through every class attribute in this class and confirm that the type is either a primitive or references
+            // Trip through every class attribute in this class and confirm that the type is either a primitive or
+            // references
             // another class defined in the document.
             List attribs = aClass.getClassAttributes();
             for (int idx = 0; idx < attribs.size(); idx++) {
@@ -294,7 +289,8 @@ public class Xmlpg {
                 // The primitive type is on the known list of primitives.
                 if (kindOfNode == ClassAttribute.ClassAttributeType.PRIMITIVE) {
                     if (primitiveTypes.contains(anAttribute.getType()) == false) {
-                        System.out.println("Cannot find a primitive type of " + anAttribute.getType() + " in class " + aClass.getName());
+                        System.out.println("Cannot find a primitive type of " + anAttribute.getType() + " in class "
+                                + aClass.getName());
                         return false;
                     }
                 }
@@ -302,14 +298,17 @@ public class Xmlpg {
                 // The class referenced is available elsewehere in the document
                 if (kindOfNode == ClassAttribute.ClassAttributeType.CLASSREF) {
                     if (generatedClassNames.get(anAttribute.getType()) == null) {
-                        System.out.println("Makes reference to a class of name " + anAttribute.getType() + " in class " + aClass.getName() + " but no user-defined class of that type can be found in the document");
+                        System.out.println("Makes reference to a class of name " + anAttribute.getType() + " in class "
+                                + aClass.getName()
+                                + " but no user-defined class of that type can be found in the document");
                         return false;
                     }
 
                 }
             } // end of trip through one class' attributes
 
-            // Run through the list of initial values, ensuring that the initial values mentioned actually exist as attributes
+            // Run through the list of initial values, ensuring that the initial values mentioned actually exist as
+            // attributes
             // somewhere up the inheritance chain.
             List initialValues = aClass.getInitialValues();
 
@@ -318,12 +317,13 @@ public class Xmlpg {
                 GeneratedClass currentClass = aClass;
                 boolean found = false;
 
-                //System.out.println("----Looking for matches of inital value " + anInitialValue.getVariable());
+                // System.out.println("----Looking for matches of inital value " + anInitialValue.getVariable());
                 while (currentClass != null) {
                     List thisClassesAttributes = currentClass.getClassAttributes();
                     for (int jdx = 0; jdx < thisClassesAttributes.size(); jdx++) {
                         ClassAttribute anAttribute = (ClassAttribute) thisClassesAttributes.get(jdx);
-                        //System.out.println("--checking " + anAttribute.getName() + " against inital value " + anInitialValue.getVariable());
+                        // System.out.println("--checking " + anAttribute.getName() + " against inital value " +
+                        // anInitialValue.getVariable());
                         if (anInitialValue.getVariable().equals(anAttribute.getName())) {
                             found = true;
                             break;
@@ -332,7 +332,8 @@ public class Xmlpg {
                     currentClass = (GeneratedClass) generatedClassNames.get(currentClass.getParentClass());
                 }
                 if (!found) {
-                    System.out.println("Could not find initial value matching attribute name for " + anInitialValue.getVariable() + " in class " + aClass.getName());
+                    System.out.println("Could not find initial value matching attribute name for "
+                            + anInitialValue.getVariable() + " in class " + aClass.getName());
                 }
 
             } // end of for loop thorugh initial values
@@ -343,9 +344,8 @@ public class Xmlpg {
     } // end of astIsPlausible
 
     /**
-     * inner class that handles the SAX parsing of the XML file. This is
-     * relatively simnple, if a little verbose. Basically we just create the
-     * appropriate objects as we come across the XML elements in the file.
+     * inner class that handles the SAX parsing of the XML file. This is relatively simnple, if a little verbose.
+     * Basically we just create the appropriate objects as we come across the XML elements in the file.
      */
     public class MyHandler extends DefaultHandler {
 
@@ -385,7 +385,7 @@ public class Xmlpg {
                     javascriptProperties.setProperty(attributes.getQName(idx), attributes.getValue(idx));
                 }
 
-                //System.out.println("In parse, javascript properties are " + javascriptProperties);
+                // System.out.println("In parse, javascript properties are " + javascriptProperties);
             }
 
             // objc element--place all the attributes and values into a property list
@@ -406,7 +406,7 @@ public class Xmlpg {
             // and then prepare for reading attributes.
             if (qName.compareToIgnoreCase("class") == 0) {
                 classCount++;
-                //System.out.println("classCount is" + classCount);
+                // System.out.println("classCount is" + classCount);
 
                 currentGeneratedClass = new GeneratedClass();
 
@@ -417,25 +417,25 @@ public class Xmlpg {
                 for (int idx = 0; idx < attributes.getLength(); idx++) {
                     // class name
                     if (attributes.getQName(idx).compareToIgnoreCase("name") == 0) {
-                        //System.out.println("--->Processing class named " + attributes.getValue(idx));
+                        // System.out.println("--->Processing class named " + attributes.getValue(idx));
                         currentGeneratedClass.setName(attributes.getValue(idx));
                     }
 
                     // Class comment
                     if (attributes.getQName(idx).compareToIgnoreCase("comment") == 0) {
-                        //System.out.println("comment is " + attributes.getValue(idx));
+                        // System.out.println("comment is " + attributes.getValue(idx));
                         currentGeneratedClass.setComment(attributes.getValue(idx));
                     }
 
                     // Inherits from
                     if (attributes.getQName(idx).compareToIgnoreCase("inheritsFrom") == 0) {
-                        //System.out.println("inherits from " + attributes.getValue(idx));
+                        // System.out.println("inherits from " + attributes.getValue(idx));
                         currentGeneratedClass.setParentClass(attributes.getValue(idx));
                     }
 
                     // XML root element--used for marshalling to XML with JAXB
                     if (attributes.getQName(idx).equalsIgnoreCase("xmlRootElement")) {
-                        //System.out.println("is root element " + attributes.getValue(idx));
+                        // System.out.println("is root element " + attributes.getValue(idx));
                         if (attributes.getValue(idx).equalsIgnoreCase("true")) {
                             currentGeneratedClass.setXmlRootElement(true);
                         }
@@ -447,7 +447,7 @@ public class Xmlpg {
             }
 
             // We've hit an initial value element. This is used to initialize attributes in the
-            // constructor. 
+            // constructor.
             if (qName.equalsIgnoreCase("initialValue")) {
                 String anAttributeName = null;
                 String anInitialValue = null;
@@ -457,7 +457,7 @@ public class Xmlpg {
                     // Name of class attribute
                     if (attributes.getQName(idx).compareToIgnoreCase("name") == 0) {
                         anAttributeName = attributes.getValue(idx);
-                        //System.out.println("   in attribute " + attributes.getValue(idx));
+                        // System.out.println(" in attribute " + attributes.getValue(idx));
                     }
 
                     // Initial value
@@ -469,7 +469,8 @@ public class Xmlpg {
                 if ((anAttributeName != null) && (anInitialValue != null)) {
                     InitialValue aValue = new InitialValue(anAttributeName, anInitialValue);
                     currentGeneratedClass.addInitialValue(aValue);
-                    //System.out.println("---Added intial value named " + anAttributeName + " in class " + currentGeneratedClass.getName());
+                    // System.out.println("---Added intial value named " + anAttributeName + " in class " +
+                    // currentGeneratedClass.getName());
                 }
 
             }
@@ -483,13 +484,13 @@ public class Xmlpg {
                 for (int idx = 0; idx < attributes.getLength(); idx++) {
                     // Name of class attribute
                     if (attributes.getQName(idx).compareToIgnoreCase("name") == 0) {
-                        //System.out.println("    in attribute " + attributes.getValue(idx));
+                        // System.out.println(" in attribute " + attributes.getValue(idx));
                         currentClassAttribute.setName(attributes.getValue(idx));
                     }
 
                     // Comment on class attribute
                     if (attributes.getQName(idx).compareToIgnoreCase("comment") == 0) {
-                        //System.out.println("        attribute comment:" + attributes.getValue(idx));
+                        // System.out.println(" attribute comment:" + attributes.getValue(idx));
                         currentClassAttribute.setComment(attributes.getValue(idx));
                     }
 
@@ -556,7 +557,7 @@ public class Xmlpg {
 
             // A reference to another class in the same document
             if (qName.compareToIgnoreCase("classRef") == 0) {
-                // The classref may occur inside a List element; if that's the case, we want to 
+                // The classref may occur inside a List element; if that's the case, we want to
                 // respect the existing list type.
                 if (currentClassAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.UNSET) {
                     currentClassAttribute.setAttributeKind(ClassAttribute.ClassAttributeType.CLASSREF);
@@ -597,7 +598,8 @@ public class Xmlpg {
                         }
 
                         if (atFound == false) {
-                            System.out.println("Could not find a matching attribute for the length field for " + attributes.getValue(idx));
+                            System.out.println("Could not find a matching attribute for the length field for "
+                                    + attributes.getValue(idx));
                         }
 
                     }
@@ -639,14 +641,14 @@ public class Xmlpg {
             // We've reached the end of a class element. The class should be complete; add it to the hash table.
             if (qName.compareToIgnoreCase("class") == 0) {
                 classCount--;
-                //System.out.println("classCount is " + classCount);
-                //System.out.println("---#End of class" + currentGeneratedClass.getName());
+                // System.out.println("classCount is " + classCount);
+                // System.out.println("---#End of class" + currentGeneratedClass.getName());
                 generatedClassNames.put(currentGeneratedClass.getName(), currentGeneratedClass);
             }
 
             // Reached the end on an attribute. Add the attribute to whatever the current class is.
             if (qName.compareToIgnoreCase("attribute") == 0) {
-                //System.out.println("     end attribute");
+                // System.out.println(" end attribute");
                 currentGeneratedClass.addClassAttribute(currentClassAttribute);
             }
         }

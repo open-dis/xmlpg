@@ -3,9 +3,8 @@ package edu.nps.moves.xmlpg;
 import java.util.*;
 
 /**
- * Represents one generated class. A generated class has a series of attributes,
- * the order of which is significant. These attributes are used to create
- * instance variables, getters and setters, and serialization code.
+ * Represents one generated class. A generated class has a series of attributes, the order of which is significant.
+ * These attributes are used to create instance variables, getters and setters, and serialization code.
  *
  * @author DMcG
  */
@@ -113,8 +112,8 @@ public class GeneratedClass {
 
         for (int idx = 0; idx < classAttributes.size(); idx++) {
             ClassAttribute attribute = (ClassAttribute) classAttributes.get(idx);
-            String anAttribute = "  Name: " + attribute.getName() + " Comment: " + attribute.getComment()
-                    + " Kind: " + attribute.getAttributeKind() + " Type:" + attribute.getType() + "\n";
+            String anAttribute = "  Name: " + attribute.getName() + " Comment: " + attribute.getComment() + " Kind: "
+                    + attribute.getAttributeKind() + " Type:" + attribute.getType() + "\n";
             result = result + anAttribute;
         }
         return result;

@@ -4,16 +4,14 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Abstract superclass for all the concrete language generators, such as java,
- * c++, etc.
+ * Abstract superclass for all the concrete language generators, such as java, c++, etc.
  *
  * @author DMcG
  */
 public abstract class Generator {
 
     /**
-     * Contains abstract descriptions of all the classes, key = name, value =
-     * object
+     * Contains abstract descriptions of all the classes, key = name, value = object
      */
     protected HashMap classDescriptions;
 
@@ -37,23 +35,15 @@ public abstract class Generator {
         // Directory is set in the subclasses
 
         /*
-        try
-        {
-            directory = (String)languageProperties.getProperty("directory");
-        }
-        catch(Exception e)
-        {
-            System.out.println("Missing language property, probably the directory in which the source code should be placed");
-            System.out.println("add directory = aDir in the properties for the language");
-            System.out.println(e);
-        }
-         
+         * try { directory = (String)languageProperties.getProperty("directory"); } catch(Exception e) { System.out.
+         * println("Missing language property, probably the directory in which the source code should be placed");
+         * System.out.println("add directory = aDir in the properties for the language"); System.out.println(e); }
+         * 
          */
     }
 
     /**
-     * Overridden by the subclasses to generate the code specific to that
-     * language.
+     * Overridden by the subclasses to generate the code specific to that language.
      */
     public abstract void writeClasses();
 
@@ -61,8 +51,8 @@ public abstract class Generator {
      * Create the directory in which to put the generated source code files
      */
     protected void createDirectory() {
-        //System.out.println("creating directory");
-        //System.out.println("directory=" + this.getDirectory());
+        // System.out.println("creating directory");
+        // System.out.println("directory=" + this.getDirectory());
         boolean success = (new File(this.getDirectory())).mkdirs();
 
     }
@@ -79,7 +69,8 @@ public abstract class Generator {
     /**
      * Directory in which to write the class code
      *
-     * @param directory the directory to set
+     * @param directory
+     *            the directory to set
      */
     public void setDirectory(String directory) {
         this.directory = directory;
@@ -106,9 +97,8 @@ public abstract class Generator {
     }
 
     /**
-     * This is ugly and brute force, but I don't see an easier way to do it.
-     * Given a mask (like 0xf0) we want to know how many bits to shift an
-     * integer when masking in a new value.
+     * This is ugly and brute force, but I don't see an easier way to do it. Given a mask (like 0xf0) we want to know
+     * how many bits to shift an integer when masking in a new value.
      *
      * @param anAttribute
      * @param mask
@@ -164,11 +154,11 @@ public abstract class Generator {
                 break;
             }
 
-            // Zero-fill the left-most slot when shifting. Otherwise a sign 
+            // Zero-fill the left-most slot when shifting. Otherwise a sign
             // can result in a 1 in the leftmost slot
             intMask = intMask >>> 1;
 
-        }    // end of loop through bits   
+        } // end of loop through bits
 
         return startBit;
 

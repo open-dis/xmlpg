@@ -19,13 +19,10 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>format</goal>
+                            <goal>format</goal> <!-- The source files will be formatted prior to compilation in the build lifecycle. -->
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <configFile>formatter-settings.xml</configFile>
-                </configuration>
             </plugin>
         </plugins>
     </build>
