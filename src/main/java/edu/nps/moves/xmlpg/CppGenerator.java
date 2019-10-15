@@ -187,13 +187,6 @@ public class CppGenerator extends Generator {
             // Write includes for any classes we may reference. this generates multiple #includes if we
             // use a class multiple times, but that's innocuous. We could sort and do a unqiue to prevent
             // this if so inclined.
-            String namespace = languageProperties.getProperty("namespace");
-            if (namespace == null) {
-                namespace = "";
-            } else {
-                namespace = namespace + "/";
-            }
-
             boolean hasVariableLengthList = false;
 
             for (int idx = 0; idx < aClass.getClassAttributes().size(); idx++) {
@@ -201,14 +194,14 @@ public class CppGenerator extends Generator {
 
                 // If this attribute is a class, we need to do an import on that class
                 if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.CLASSREF) {
-                    pw.println("#include <" + namespace + anAttribute.getType() + ".h>");
+                    pw.println("#include <" + anAttribute.getType() + ".h>");
                 }
 
                 // If this attribute is a list with class type, we also need to do an import on that class
                 if ((anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.FIXED_LIST
                         || anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.VARIABLE_LIST)
                         && !anAttribute.getUnderlyingTypeIsPrimitive()) {
-                    pw.println("#include <" + namespace + anAttribute.getType() + ".h>");
+                    pw.println("#include <" + anAttribute.getType() + ".h>");
                 }
 
                 // if this attribute is a variable-length list that holds a class, we need to
@@ -224,17 +217,17 @@ public class CppGenerator extends Generator {
 
             // if we inherit from another class we need to do an include on it
             if (!(aClass.getParentClass().equalsIgnoreCase("root"))) {
-                pw.println("#include <" + namespace + aClass.getParentClass() + ".h>");
+                pw.println("#include <" + aClass.getParentClass() + ".h>");
             }
 
             // "the usual" includes.
-            pw.println("#include <" + namespace + "DataStream.h>");
+            pw.println("#include <utils/DataStream.h>");
 
             // This is a macro file included only for microsoft compilers. set in the cpp properties tag.
-            String msMacroFile = "msLibMacro";
+            String msMacroFile = "dis6/msLibMacro";
 
             if (msMacroFile != null) {
-                pw.println("#include <" + namespace + msMacroFile + ".h>");
+                pw.println("#include <" + msMacroFile + ".h>");
             }
 
             pw.println();
@@ -242,7 +235,7 @@ public class CppGenerator extends Generator {
             pw.println();
 
             // Print out namespace, if any
-            namespace = languageProperties.getProperty("namespace");
+            String namespace = languageProperties.getProperty("namespace");
             if (namespace != null) {
                 pw.println("namespace " + namespace);
                 pw.println("{");
@@ -290,7 +283,7 @@ public class CppGenerator extends Generator {
                     }
 
                     pw.println(
-                            "  " + types.get(anAttribute.getType()) + " " + IVAR_PREFIX + anAttribute.getName() + "; ");
+                            "  " + types.get(anAttribute.getType()) + " " + IVAR_PREFIX + anAttribute.getName() + ";");
                     pw.println();
 
                 }
@@ -300,7 +293,7 @@ public class CppGenerator extends Generator {
                         pw.println("  " + "/** " + anAttribute.getComment() + " */");
                     }
 
-                    pw.println("  " + anAttribute.getType() + " " + IVAR_PREFIX + anAttribute.getName() + "; ");
+                    pw.println("  " + anAttribute.getType() + " " + IVAR_PREFIX + anAttribute.getName() + ";");
                     pw.println();
                 }
 
@@ -311,10 +304,10 @@ public class CppGenerator extends Generator {
 
                     if (anAttribute.getUnderlyingTypeIsPrimitive())
                         pw.println("  " + types.get(anAttribute.getType()) + " " + IVAR_PREFIX + anAttribute.getName()
-                                + "[" + anAttribute.getListLength() + "]; ");
+                                + "[" + anAttribute.getListLength() + "];");
                     else
                         pw.println("  " + anAttribute.getType() + " " + IVAR_PREFIX + anAttribute.getName() + "["
-                                + anAttribute.getListLength() + "]; ");
+                                + anAttribute.getListLength() + "];");
                     pw.println();
                 }
 
@@ -325,10 +318,10 @@ public class CppGenerator extends Generator {
 
                     if (anAttribute.getUnderlyingTypeIsPrimitive())
                         pw.println("  std::vector<" + types.get(anAttribute.getType()) + "> " + IVAR_PREFIX
-                                + anAttribute.getName() + "; ");
+                                + anAttribute.getName() + ";");
                     else
                         pw.println("  std::vector<" + anAttribute.getType() + "> " + IVAR_PREFIX + anAttribute.getName()
-                                + "; ");
+                                + ";");
                     pw.println();
                 }
             }
@@ -362,9 +355,9 @@ public class CppGenerator extends Generator {
 
                 if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.CLASSREF) {
                     pw.println("    " + anAttribute.getType() + "& " + "get" + this.initialCap(anAttribute.getName())
-                            + "(); ");
+                            + "();");
                     pw.println("    const " + anAttribute.getType() + "&  get" + this.initialCap(anAttribute.getName())
-                            + "() const; ");
+                            + "() const;");
                     pw.println("    void set" + this.initialCap(anAttribute.getName()) + "(const "
                             + anAttribute.getType() + "    &pX);");
                 }
@@ -372,9 +365,9 @@ public class CppGenerator extends Generator {
                 if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.FIXED_LIST) {
                     // Sleaze. We need to figure out what type of array we are, and this is slightly complex.
                     String arrayType = this.getArrayType(anAttribute.getType());
-                    pw.println("    " + arrayType + "*  get" + this.initialCap(anAttribute.getName()) + "(); ");
+                    pw.println("    " + arrayType + "*  get" + this.initialCap(anAttribute.getName()) + "();");
                     pw.println("    const " + arrayType + "*  get" + this.initialCap(anAttribute.getName())
-                            + "() const; ");
+                            + "() const;");
                     pw.println("    void set" + this.initialCap(anAttribute.getName()) + "( const " + arrayType
                             + "*    pX);");
                     if (anAttribute.getCouldBeString() == true) {
@@ -392,9 +385,9 @@ public class CppGenerator extends Generator {
                         attributeType = anAttribute.getType();
                     }
                     pw.println("    std::vector<" + attributeType + ">& " + "get"
-                            + this.initialCap(anAttribute.getName()) + "(); ");
+                            + this.initialCap(anAttribute.getName()) + "();");
                     pw.println("    const std::vector<" + attributeType + ">& " + "get"
-                            + this.initialCap(anAttribute.getName()) + "() const; ");
+                            + this.initialCap(anAttribute.getName()) + "() const;");
                     pw.println("    void set" + this.initialCap(anAttribute.getName()) + "(const std::vector<"
                             + attributeType + ">&    pX);");
                 }
@@ -440,17 +433,10 @@ public class CppGenerator extends Generator {
             outputFile.createNewFile();
             PrintWriter pw = new PrintWriter(outputFile);
 
-            String namespace = languageProperties.getProperty("namespace");
-            if (namespace == null) {
-                namespace = "";
-            } else {
-                namespace = namespace + "/";
-            }
-
-            pw.println("#include <" + namespace + aClass.getName() + ".h> ");
+            pw.println("#include <" + aClass.getName() + ".h>");
             pw.println();
 
-            namespace = languageProperties.getProperty("namespace");
+            String namespace = languageProperties.getProperty("namespace");
             if (namespace != null) {
                 pw.println("using namespace " + namespace + ";\n");
             }
