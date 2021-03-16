@@ -180,8 +180,8 @@ public class CppGenerator extends Generator {
             PrintWriter pw = new PrintWriter(outputFile);
 
             // Write the usual #ifdef to prevent multiple inclusions by the preprocessor
-            pw.println("#ifndef " + aClass.getName().toUpperCase() + "_H");
-            pw.println("#define " + aClass.getName().toUpperCase() + "_H");
+            pw.println("#ifndef " + languageProperties.getProperty("namespace") + "_" + aClass.getName().toUpperCase() + "_H");
+            pw.println("#define " + languageProperties.getProperty("namespace") + "_" + aClass.getName().toUpperCase() + "_H");
             pw.println();
 
             // Write includes for any classes we may reference. this generates multiple #includes if we
