@@ -179,9 +179,16 @@ public class CppGenerator extends Generator {
             outputFile.createNewFile();
             PrintWriter pw = new PrintWriter(outputFile);
 
+            final String namespace = languageProperties.getProperty("namespace");
+
             // Write the usual #ifdef to prevent multiple inclusions by the preprocessor
-            pw.println("#ifndef " + languageProperties.getProperty("namespace") + "_" + aClass.getName().toUpperCase() + "_H");
-            pw.println("#define " + languageProperties.getProperty("namespace") + "_" + aClass.getName().toUpperCase() + "_H");
+            if (namespace != null) {
+                pw.println("#ifndef " + namespace + "_" + aClass.getName().toUpperCase() + "_H");
+                pw.println("#define " + namespace + "_" + aClass.getName().toUpperCase() + "_H");
+            } else {
+                pw.println("#ifndef " + aClass.getName().toUpperCase() + "_H");
+                pw.println("#define " + aClass.getName().toUpperCase() + "_H");
+            }
             pw.println();
 
             // Write includes for any classes we may reference. this generates multiple #includes if we
@@ -235,7 +242,6 @@ public class CppGenerator extends Generator {
             pw.println();
 
             // Print out namespace, if any
-            String namespace = languageProperties.getProperty("namespace");
             if (namespace != null) {
                 pw.println("namespace " + namespace);
                 pw.println("{");
