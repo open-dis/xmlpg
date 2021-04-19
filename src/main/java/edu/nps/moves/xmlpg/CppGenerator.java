@@ -179,9 +179,8 @@ public class CppGenerator extends Generator {
             outputFile.createNewFile();
             PrintWriter pw = new PrintWriter(outputFile);
 
-            // Write the usual #ifdef to prevent multiple inclusions by the preprocessor
-            pw.println("#ifndef " + aClass.getName().toUpperCase() + "_H");
-            pw.println("#define " + aClass.getName().toUpperCase() + "_H");
+            // prevent multiple inclusions by the preprocessor
+            pw.println("#pragma once");
             pw.println();
 
             // Write includes for any classes we may reference. this generates multiple #includes if we
@@ -409,9 +408,6 @@ public class CppGenerator extends Generator {
             if (namespace != null) {
                 pw.println("}");
             }
-
-            // Close if #ifndef statement that prevents multiple #includes
-            pw.println("\n#endif");
 
             this.writeLicenseNotice(pw);
 
