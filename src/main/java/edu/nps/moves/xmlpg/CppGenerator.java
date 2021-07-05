@@ -193,14 +193,14 @@ public class CppGenerator extends Generator {
 
                 // If this attribute is a class, we need to do an import on that class
                 if (anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.CLASSREF) {
-                    pw.println("#include <" + anAttribute.getType() + ".h>");
+                    pw.println("#include \"" + anAttribute.getType() + ".h\"");
                 }
 
                 // If this attribute is a list with class type, we also need to do an import on that class
                 if ((anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.FIXED_LIST
                         || anAttribute.getAttributeKind() == ClassAttribute.ClassAttributeType.VARIABLE_LIST)
                         && !anAttribute.getUnderlyingTypeIsPrimitive()) {
-                    pw.println("#include <" + anAttribute.getType() + ".h>");
+                    pw.println("#include \"" + anAttribute.getType() + ".h\"");
                 }
 
                 // if this attribute is a variable-length list that holds a class, we need to
@@ -216,7 +216,7 @@ public class CppGenerator extends Generator {
 
             // if we inherit from another class we need to do an include on it
             if (!(aClass.getParentClass().equalsIgnoreCase("root"))) {
-                pw.println("#include <" + aClass.getParentClass() + ".h>");
+                pw.println("#include \"" + aClass.getParentClass() + ".h\"");
             }
 
             // "the usual" includes.
@@ -429,7 +429,7 @@ public class CppGenerator extends Generator {
             outputFile.createNewFile();
             PrintWriter pw = new PrintWriter(outputFile);
 
-            pw.println("#include <" + aClass.getName() + ".h>");
+            pw.println("#include \"" + aClass.getName() + ".h\"");
             pw.println();
 
             String namespace = languageProperties.getProperty("namespace");
