@@ -1,7 +1,5 @@
 # XMLPG (XML Multi-Language Protocol Generator)
 
-[![Build Status](https://app.travis-ci.com/open-dis/xmlpg.svg?branch=master)](https://app.travis-ci.com/open-dis/xmlpg)
-
 Define your binary protocol in an XML file and then use this tool to generate network message marshalling code for Java, C++, C#, Objective-C, Python, and JavaScript languages.
 
 An example XML specification file is [DIS2012.xml](DIS2012.xml).
