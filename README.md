@@ -15,7 +15,7 @@ Xmlpg was used to auto-generate the initial source code for the PDU's of the fol
 - [open-dis-objectivec](https://github.com/open-dis/open-dis-objectivec)
 
 The original XML specification file for Open DIS is [DIS2012.xml](DIS2012.xml).
-This specification file and is not maintained.
+This specification file is currently not maintained.
 Any corrections to the generated Open DIS source code are now being made directly to the downstream projects referenced above.
 
 ## Compiling
